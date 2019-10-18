@@ -12,7 +12,7 @@
 		
 		}
 		else{
-			$db="atoshka";
+			$db="glifoerp";
 			$usuario="sistemas";
 			$pass="Glifom3dia";
 			$set_local = "SET time_zone = '-05:00'";
