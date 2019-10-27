@@ -12,8 +12,7 @@
 	
 	$consulta = "SELECT *, 
 	COALESCE (entradas, 0) AS entradas,
-	COALESCE (salidas, 0) AS salidas,
-	COALESCE (entradas, 0) - COALESCE (salidas, 0) AS existencia
+	COALESCE (salidas, 0) AS salidas
 	
 	FROM productos
 	LEFT JOIN departamentos USING (id_departamentos) 
@@ -46,7 +45,7 @@
 	if($_GET["id_departamentos"] != '') {        
 		$consulta.= " AND  id_departamentos = '{$_GET["id_departamentos"]}'";
 	}
-	if($_GET["existencia"] != '') {        
+	if($_GET["existencia_productos"] != '') {        
 		$consulta.= " AND existencia_productos < min_productos ";
 	}
 	
@@ -78,8 +77,8 @@
 	}
 	
 	foreach($arrResult as $i=> $producto){
-		$semaforo = $producto["existencia"] < $producto["min_productos"] ? "bg-danger": "";
-		$badge =  $producto["existencia"] < $producto["min_productos"] ? "danger": "success";
+		$semaforo = $producto["existencia_productos"] < $producto["min_productos"] ? "bg-danger": "";
+		$badge =  $producto["existencia_productos"] < $producto["min_productos"] ? "danger": "success";
 		
 		
 	?>
@@ -89,9 +88,12 @@
 		</div>
 		
 		<div class="col-4 h4 col-sm-2 text-center">
-			<span class="badge  badge-<?php echo $badge?>">	<?php echo $producto["existencia"]?></span>
+			<span class="badge  badge-<?php echo $badge?>">	<?php echo number_format($producto["existencia_productos"])?></span>
 		</div>
 		
+		<div class="col-sm-2 d-none <?php echo $permiso?>" >
+			<?php echo $producto["nombre_departamentos"]?> 
+		</div>
 		<div class="col-sm-2 d-none <?php echo $permiso?>" >
 			<?php echo $producto["ubicacion"]?> 
 		</div>

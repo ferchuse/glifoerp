@@ -66,7 +66,7 @@
 		<div class="container-fluid d-print-none">
 			<div class="row">
 				
-				<div class="col-md-3" hidden>
+				<div class="col-md-3" >
 					<label for="">Código del Producto:</label>
 					
 					<input id="codigo_producto" form="form_agregar_producto"   type="search" class="form-control" placeholder="Presiona Enter para agregar" >

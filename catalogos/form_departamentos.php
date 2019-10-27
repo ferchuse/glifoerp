@@ -16,9 +16,9 @@
 							<label for="nombre_departamentos">Departamento</label>
 							<input required type="text" class="form-control" id="nombre_departamentos" name="nombre_departamentos" placeholder="">
 						</div>
-						<div class="form-group">
+						<div class="form-group" hidden>
 							<label for="notas">Características</label>
-							<input required type="text" class="form-control" id="notas" name="notas" >
+							<input  type="text" class="form-control" id="notas" name="notas" >
 						</div>
 					</form>
 				</div>

@@ -83,8 +83,13 @@
 								</a>
 							</div>
 							<div class="col-sm-2">
-								<a class="sort" href="#!" data-columna="existencia">
+								<a class="sort" href="#!" data-columna="existencia_productos">
 									Existencia
+								</a>
+							</div>
+							<div class="col-sm-2 " >
+								<a class="sort" href="#!" data-columna="departamento">
+									Departamento
 								</a>
 							</div>
 							<div class="col-sm-2 " <?php echo $permiso; ?>>
