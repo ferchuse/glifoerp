@@ -4,25 +4,32 @@
 	$link = Conectarse();
 	$respuesta = Array();
 	
-	$codigo_productos = $_POST['codigo_productos'];
-	$descripcion_productos = $_POST['descripcion_productos'];
-	$unidad_productos = $_POST['unidad_productos'];
-	
 	$guardarProductos = "INSERT INTO productos SET 
+	
+	
 	id_productos = '{$_POST["id_productos"]}',
-	codigo_productos = '$codigo_productos',
-	descripcion_productos = '$descripcion_productos',
-	unidad_productos = '$unidad_productos',
+	existencia_productos = '{$_POST["existencia_productos"]}',
+	codigo_productos = '{$_POST['codigo_productos']}',
+	costo_proveedor = '{$_POST['costo_proveedor']}',
+	precio_menudeo = '{$_POST['precio_menudeo']}',
+	descripcion_productos = '{$_POST['descripcion_productos']}',
+	unidad_productos = '{$_POST['unidad_productos']}',
 	min_productos = '{$_POST["min_productos"]}',
+	
+	
+	
 	id_departamentos = '{$_POST["id_departamentos"]}',
 	ubicacion = '{$_POST["ubicacion"]}',
 	estatus_productos = '{$_POST["estatus_productos"]}'
 	
 	ON DUPLICATE KEY UPDATE 
 	
-	codigo_productos = '$codigo_productos',
-	descripcion_productos = '$descripcion_productos',
-	unidad_productos = '$unidad_productos',
+	existencia_productos = '{$_POST["existencia_productos"]}',
+	codigo_productos = '{$_POST['codigo_productos']}',
+	costo_proveedor = '{$_POST['costo_proveedor']}',
+	precio_menudeo = '{$_POST['precio_menudeo']}',
+	descripcion_productos = '{$_POST['descripcion_productos']}',
+	unidad_productos = '{$_POST['unidad_productos']}',
 	min_productos = '{$_POST["min_productos"]}',
 	id_departamentos = '{$_POST["id_departamentos"]}',
 	ubicacion = '{$_POST["ubicacion"]}',

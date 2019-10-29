@@ -193,7 +193,7 @@ function agregarProducto(producto){
 				<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
 		</td>	
 		<td class="text-center venta">
-				<input type="number"  step="any" class="importe form-control text-right">
+				<input type="number" readonly step="any" class="importe form-control text-right">
 		</td>
 		
 		<td class="w-25">	
@@ -215,6 +215,8 @@ function agregarProducto(producto){
 		//Asigna Callbacks de eventos
 		$(".cantidad").keyup(sumarImportes);
 		$(".cantidad").change(sumarImportes);
+		$(".precio").keyup(sumarImportes);
+		$(".precio").change(sumarImportes);
 		$("input").focus(function(){
 			$(this).select();
 		});

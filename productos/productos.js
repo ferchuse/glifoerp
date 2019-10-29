@@ -20,6 +20,7 @@ $(document).ready(function () {
 	}
 	
 	function listaProductos() {
+		console.log("listaProductos() ");
 		let tableTemplate;
 		let semaforo, badge = '';
 		let $boton = $("#form_filtros").find(":submit");
@@ -151,6 +152,9 @@ $(document).ready(function () {
 				alertify.error('Error al guardar');
 				//console.log(respuesta.mensaje);
 			}
+			}).fail(function(jqXHR, textStatus, errorThrown){
+				alertify.error("Ocurrió un Error"+ errorThrown);
+			
 			}).always(function () {
 			boton.prop('disabled', false);
 			icono.toggleClass('fa-save fa-spinner fa-spin');

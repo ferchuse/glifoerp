@@ -116,7 +116,7 @@
 							<tr>
 								<th class="text-center">Cantidad</th>
 								
-								<th class="text-center">Descripcion del Producto</th>
+								<th class="text-center">Descripción</th>
 								
 								<th class="text-center venta">Precio</th>
 								<th class="text-center venta">Importe</th>

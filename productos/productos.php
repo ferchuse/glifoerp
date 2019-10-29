@@ -53,25 +53,25 @@
 							<input type="hidden" id="order" name="order" value="ASC">
 							
 							<div class="form-group mx-1 d-none d-sm-inline-flex">
-								<label for="fecha_inicio">Departamento:</label>
+								<label for="id_departamentos">Departamento:</label>
 								<?php echo generar_select($link, "departamentos", "id_departamentos", "nombre_departamentos", true) ?>
 							</div>
 							<div class="form-group mx-1 d-none d-sm-inline-flex">
-								<label for="fecha_fin">Existencias:</label>
-								<select class="form-control" name="existencia">
+								<label for="existencia_productos">Existencias:</label>
+								<select class="form-control" name="existencia_productos">
 									<option value="">TODAS</option>
 									<option value="minimo">DEBAJO DEL MÍNIMO</option>
 								</select>
 							</div>
 							<div class="form-group">
-								<label for="">Buscar:</label>
-								<input class="form-control buscar" type="search">
+								<label class="d-none d-sm-block" for="buscar">Buscar:</label>
+								<input class="form-control buscar" id="buscar" type="search">
 							</div>
 							<div class="form-check form-check-inline ml-2">
 								<input class="estatus_productos form-check-input" type="checkbox" id="inactivos" name="estatus_productos" value="INACTIVO">
 								<label class="form-check-label" for="inactivos">Mostrar Inactivos</label>
 							</div>
-							<button class="btn btn-success" type="submit">
+							<button class="btn btn-success d-none" type="submit">
 								<i class="fas fa-search"></i>
 							</button>
 						</form>

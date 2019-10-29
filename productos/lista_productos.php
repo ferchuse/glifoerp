@@ -85,6 +85,8 @@
 	<div class="row p-2 m-1 border ">
 		<div class="col-8 col-sm-4">
 			<?php echo $producto["descripcion_productos"]?>
+			
+			<a class="btn_editar d-sm-none" data-id_producto="<?php echo $producto["id_productos"]?>">	<?php echo $producto["descripcion_productos"]?></a>
 		</div>
 		
 		<div class="col-4 h4 col-sm-2 text-center">

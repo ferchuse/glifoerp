@@ -20,7 +20,7 @@
 					</div>
 					<div class="form-group col-sm-12">
 						<label for="unidad_granel">Cantidad:</label>
-						<input  type="number" value="10"  step="0.001" class="form-control input-lg text-center" name="cantidad" id="cantidad">
+						<input  type="number" value="1"  step="0.001" class="form-control input-lg text-center" name="cantidad" id="cantidad">
 					</div>
 					<div class="form-group col-sm-6 " hidden>
 						<label for="costo_granel">Importe:</label>
