@@ -38,6 +38,11 @@
 					</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" href="../cotizaciones/index.php">
+						<i class="fas fa-dollar-sign"></i> Cotizaciones
+					</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="../inventarios/movimientos.php?tipo_movimiento=ENTRADA">
 						<i class="fas fa-arrow-left"></i> Entradas
 					</a>

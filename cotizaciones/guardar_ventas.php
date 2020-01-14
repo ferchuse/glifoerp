@@ -10,13 +10,12 @@
 	fecha_ventas = '{$_POST["fecha_ventas"]}',
 	hora_ventas = '{$_POST["hora_ventas"]}',
 	id_usuarios = '{$_COOKIE['id_usuarios']}',
+	
 	estatus_ventas = 'APROBACIÓN PENDIENTE',
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
 	subtotal = '{$_POST['subtotal']}',
 	iva = '{$_POST['iva']}',
-	anticipo = '{$_POST['anticipo']}',
-	saldo = '{$_POST['saldo']}',
 	total = '{$_POST['total']}',
 	articulos = '{$_POST['articulos']}'
 	";
@@ -37,36 +36,6 @@
 		$respuesta['mensaje_movimiento'] = "Error en $insertar_venta :".mysqli_error($link);
 	}
 	
-	
-	//SI EL anticipo > 0 agregar un abono 
-	
-	
-	if($_POST["anticipo"] > 0){
-		
-		$insertar_anticipo = "INSERT INTO abonos SET
-		fecha = '{$_POST["fecha_ventas"]}',
-		id_clientes = '{$_POST["id_clientes"]}',
-		importe = '{$_POST["anticipo"]}',
-		concepto = 'ANTICIPO VENTA #$folio'
-		";
-		
-		
-		$respuesta['insertar_anticipo'] = $insertar_anticipo;
-		
-		$result_anticipo = mysqli_query($link, $insertar_anticipo);
-		
-		if($result_anticipo){
-			$respuesta['estatus_anticipo'] = 'success';
-			$respuesta['mensaje_anticipo'] = 'Anticipo Guardado';
-		}
-		else{
-			$respuesta['estatus_anticipo'] = 'error';
-			$respuesta['mensaje_anticipo'] = "Error en insertar_anticipo :".mysqli_error($link);
-		}
-		
-	}
-	
-	//INSERTA LOS Producto
 	
 	foreach($_POST['productos'] as $indice => $producto){
 		
@@ -94,19 +63,18 @@
 		$result_productos = mysqli_query( $link, $insertar_producto );
 		
 		$respuesta["result_productos"] = $result_productos.": ".mysqli_error($link) ;
-		$respuesta["insertar_producto"][] = $insertar_producto ;
 		
 		
-		// actualiza existencias
+		//actualiza existencias
 		
-		$update_existencia = "UPDATE productos SET existencia_productos = '$exist_nueva''
-		WHERE id_productos = '{$producto["id_productos"]}'	"; 
+		// $update_existencia = "UPDATE productos SET existencia_productos = '$exist_nueva''
+		// WHERE id_productos = '{$producto["id_productos"]}'	"; 
 		
-		$result_existencia = mysqli_query( $link, $update_existencia );
+		// $result_existencia = mysqli_query( $link, $update_existencia );
 		
 		$respuesta["result_existencia"] = $result_existencia ;
 		
 	}
 	
 	echo json_encode($respuesta);
-	?>			
+?>		

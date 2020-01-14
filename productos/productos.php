@@ -115,7 +115,8 @@
 			
 			<?php include('form_productos.php'); ?>
 			<?php include('../scripts.php'); ?>
-			<script src="productos.js"></script>
+			<script src="productos.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
+			<script src="editar_producto.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
 			<script src="https://unpkg.com/sticky-table-headers"></script>
 		</body>
 		

@@ -19,15 +19,19 @@
 	}
 	
 	$consulta_detalle = "SELECT
-	cantidad,
-	descripcion,
+	SUM(cantidad) AS cantidad,
+	GROUP_CONCAT(codigo_productos,'/', cantidad, ' ') AS codigo_productos,
+	nombre_departamentos AS descripcion_productos,
 	precio,
-	importe
+	SUM(importe) AS importe
 	FROM
 	ventas_detalle
+	LEFT JOIN productos USING (id_productos)
+	LEFT JOIN departamentos USING (id_departamentos)
 	WHERE
 	id_ventas = {$_GET["id_registro"]}
-	";
+	GROUP BY
+	id_departamentos";
 	
 	$result_detalle = mysqli_query($link, $consulta_detalle);
 	
@@ -35,7 +39,7 @@
 		$fila_detalle[] = $fila;
 	}
 	
-	$nombre_empresa= "GLIFO MEDIA";
+	
 	
 ?>
 
@@ -58,14 +62,13 @@
 	
 	<body>
 		<div class="container h4">
-			
 			<section class="mt-3 ">
 				<div class="row">
 					
 					
 					<div class="col-9">
 						<h3 class="text-center">
-							<strong><?= $nombre_empresa?></strong>
+							<strong>ESTAMBRES ATOSHKA SA DE CV</strong>
 						</h3>
 						
 						<h3 class="text-center">
@@ -73,21 +76,21 @@
 						</h3>
 						
 						<div class="row">
-							<div class="col-3"><strong>Folio:</strong></div>
-							<div class="col-8"><?php echo $filas[0]["id_ventas"] ?></div>
+							<div class="col-sm-3"><strong>Folio:</strong></div>
+							<div class="col-sm-8"><?php echo $filas[0]["id_ventas"] ?></div>
 						</div>
 						
 						<div class="row">
-							<div class="col-3"><strong>Fecha:</strong></div>
-							<div class="col-8"><?php echo date("d/m/Y", strtotime($filas[0]["fecha_ventas"])); ?></div>
+							<div class="col-sm-3"><strong>Fecha:</strong></div>
+							<div class="col-sm-8"><?php echo date("d/m/Y", strtotime($filas[0]["fecha_ventas"])); ?></div>
 						</div>
 						<div class="row">
-							<div class="col-3"><strong>Cliente:</strong></div>
-							<div class="col-8"><?php echo($filas[0]["razon_social_clientes"]); ?></div>
+							<div class="col-sm-3"><strong>Cliente:</strong></div>
+							<div class="col-sm-8"><?php echo($filas[0]["razon_social_clientes"]); ?></div>
 						</div>
 						<div class="row">
-							<div class="col-3"><strong>Vendedor:</strong></div>
-							<div class="col-8"><?php echo($filas[0]["nombre_vendedores"]); ?></div>
+							<div class="col-sm-3"><strong>Vendedor:</strong></div>
+							<div class="col-sm-8"><?php echo($filas[0]["nombre_vendedores"]); ?></div>
 						</div>
 						
 						
@@ -103,7 +106,7 @@
 				<div class="mt-3 row">
 					<table id="tabla_venta" class="col-12 table table-hover table-bordered table-condensed">
 						
-						<thead class="bg-info text-white">
+						<thead class="bg-info">
 							
 							<tr>
 								<th class="text-center">Cantidad</th>
@@ -120,7 +123,7 @@
 										<?php echo number_format($producto["cantidad"]) ?>
 									</th>
 									<th class="text-center">
-										<?php echo $producto["descripcion"] ?>
+										<?php echo $producto["descripcion_productos"] ?>
 										<br> 
 										<?php echo $producto["codigo_productos"] ?>
 										
@@ -138,22 +141,22 @@
 			
 			<section class="mt-5 lead">
 				<div class="row">
-					<div class="col-2 h3 ">
-						Artículos:
+					<div class="col-sm-2 col-6 h3 text-right">
+						<label for="">Artículos: </label> 
 					</div>
-					<div class="col-2 h3">
+					<div class="col-sm-2 col-6 h3">
 						<?php echo $filas[0]["articulos"]?>
 					</div>
 					
 					
-					<div class="col-6  h3 text-right ">
-						Total:<br>
-						Anticipo:<br>
-						Saldo:
+					<div class="col-sm-6 col-6 h3 text-right ">
+						Subtotal: <br>
+						IVA: <br>
+						Total:
 					</div>
-					<div class="col-2 col-sm-2 h3 text-right">
-						<?php echo number_format($filas[0]["total"],2)?><br>
-						<?php echo number_format($filas[0]["anticipo"],2)?><br>
+					<div class="col-sm-2 col-6 h3 text-right">
+						<?php echo number_format($filas[0]["subtotal"],2)?> <br>
+						<?php echo number_format($filas[0]["iva"],2)?> <br>
 						<?php echo number_format($filas[0]["total"],2)?>
 					</div>
 					
@@ -161,19 +164,11 @@
 					
 				</div>
 			</section>
-			<div class="row">
-				<div class="col-4"></div>
-				<div class="text-center col-4 fixed-bottom">
-					<button class="btn btn-info btn-block d-print-none" type="button" onclick="window.print()">
-						<i class="fas fa-print"> </i> Imprimir
-					</button>
-				</div>
-			</div>
 			<pre hidden>
 				<?php print_r($filas)?>
 			</pre>
 			
-			</div>
-		</body>
-		
-	</html>							
+		</div>
+	</body>
+	
+</html>						

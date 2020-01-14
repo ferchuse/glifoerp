@@ -28,10 +28,7 @@
 		
     <link rel="stylesheet" type="text/css" href="login.css" />
 		
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../lib/alertify.min.js"></script>
-    <script type="text/javascript" src="login.js"></script>
+		
 		
 	</head>
 	
@@ -66,10 +63,10 @@
 										
 										$q_select="SELECT 
 										
-											id_usuarios,
-											nombre_usuarios
-											
-											FROM usuarios 
+										id_usuarios,
+										nombre_usuarios
+										
+										FROM usuarios 
 										
 										UNION 
 										SELECT 
@@ -88,7 +85,7 @@
 											<?php echo $value;?>
 										</option>
 										<?php
-											}
+										}
 									?>
 								</select>
 							</div>
@@ -110,6 +107,11 @@
 				</div>
 			</div>
 		</div>
+		
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../lib/alertify.min.js"></script>
+    <script type="text/javascript" src="login.js"></script>
 	</body>
 	
 </html>

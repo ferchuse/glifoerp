@@ -1,40 +1,12 @@
 
 var producto_elegido ;
 
-
-function mostrarNuevoProducto(){
-	
-	$("#modal_productos").modal("show");
-	
-}
-function calculaSaldo(){
-	
-	let total = Number($("#total").val());
-	let anticipo = Number($(this).val());
-	
-	let saldo= total - anticipo;
-	$("#saldo").val(saldo);
-	
-	
-}
-
-
-
 $(document).ready( function onLoad(){
-	
-	$(window).on('beforeunload', function(){
-		return '¿Estás seguro que deseas salir?';
-	});
-	
-	$("#btn_nueva_partida").click( function agregarPartida(){
-		agregarProducto({cantidad: 0, descripcion_productos: "" , saldo : 0})
-	});
-	
-	$("#anticipo").keyup(calculaSaldo);
 	$('.bg-info').keydown(navegarFilas);
 	$("#modal_granel").on("shown.bs.modal",  ()=> { 
     $("#cantidad").focus();
 	});
+	$('#nueva_partida').click(nuevaPartida);
 	$('#form_granel').submit(agregarGranel);
 	$('#form_agregar_producto').submit(function(event){
 		
@@ -45,8 +17,6 @@ $(document).ready( function onLoad(){
 	
 	alertify.set('notifier','position', 'top-right');
 	
-	
-	$("#btn_nuevo_producto").click( mostrarNuevoProducto);
 	
 	$(".buscar").keyup( buscarDescripcion);
 	
@@ -186,6 +156,67 @@ function buscarProducto(campobd,tablabd,id_campobd){
 	});
 }
 
+function nuevaPartida(){
+	console.log("nuevaPartida()", producto);
+	
+	
+	$fila_producto = `<tr class="">
+	<td class="w-25">
+	
+	<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
+	</td>
+	
+	<td >
+	<input type="text" class="descripcion" class="form-control" >
+	</td>
+	<td class="">
+	<input type="number" readonly step="any" class="costo form-control text-right">
+	</td>
+	<td class="">
+	<input type="number" readonly step="any" class="importe_compra form-control text-right">
+	</td>	
+	<td >
+	<input type="number"  step="any" class="precio form-control text-right"  >
+	</td>	
+	</td>
+	<td class="">
+	<input type="number" readonly step="any" class="importe form-control text-right">
+	</td>
+	
+	
+	<td class="text-center">
+	<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
+	<i class="fa fa-trash"></i>
+	</button> 
+	</td>
+	</tr>`;
+	
+	
+	$("#tabla_venta tbody").append($fila_producto);
+	
+	
+	
+	//Asigna Callbacks de eventos
+	$(".cantidad").keyup(sumarImportes);
+	$(".cantidad").change(sumarImportes);
+	$(".precio").keyup(sumarImportes);
+	$(".precio").change(sumarImportes);
+	$("input").focus(function(){
+		$(this).select();
+	});
+	$(".btn_eliminar").click(eliminarProducto);
+	// $("#buscar_producto").val("");
+	
+	
+	alertify.success("Producto Agregado")
+	
+	sumarImportes();
+	
+	$("#buscar_producto").val("");
+	$("#buscar_producto").focus();
+}
+
+
 function agregarProducto(producto){
 	console.log("agregarProducto()", producto);
 	
@@ -195,77 +226,74 @@ function agregarProducto(producto){
 	console.log("existe", $existe);
 	
 	if($existe.length > 0){
-		console.log("El producto ya existe");
-		let cantidad_anterior = Number($existe.closest("tr").find(".cantidad").val());
-		console.log("cantidad_anterior", cantidad_anterior)
-		cantidad_nueva = cantidad_anterior+ 1;
-		console.log("cantidad_nueva", cantidad_nueva)
+	console.log("El producto ya existe");
+	let cantidad_anterior = Number($existe.closest("tr").find(".cantidad").val());
+	console.log("cantidad_anterior", cantidad_anterior)
+	cantidad_nueva = cantidad_anterior+ 1;
+	console.log("cantidad_nueva", cantidad_nueva)
+	
+	$existe.closest("tr").find(".cantidad").val(cantidad_nueva);
+}
+else{
+	if(!producto['cantidad']){
 		
-		$existe.closest("tr").find(".cantidad").val(cantidad_nueva);
+		producto['cantidad'] = 1;
 	}
-	else{
-		if(!producto['cantidad']){
-			
-			producto['cantidad'] = 1;
-		}
-		console.log("El producto no existe, agregarlo a la tabla");
-		$fila_producto = `<tr class="">
-		<td >
-		<input hidden class="id_productos"  value="${producto['id_productos']}">
-		
-		<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
-		<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
-		<input hidden class="costo_proveedor" value='${producto['costo_proveedor']}'>
-		<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
-		</td>
-		
-		<td class="w-25">
-		
-		<input  class="descripcion form-control"  value='${producto['descripcion_productos']}'>
-		</td>
-		<td class="text-center venta">
-		<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
-		</td>	
-		<td class="text-center venta">
-		<input type="number" readonly step="any" class="importe form-control text-right">
-		</td>
-		
-		<td class="w-25">	
-		<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
-		</td>
-		<td class="text-center">
-		<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
-		<i class="fa fa-trash"></i>
-		</button> 
-		</td>
-		</tr>`;
-		
-		resetFondo();
-		
-		$("#tabla_venta tbody").append($fila_producto);
-		
-		
-		
-		//Asigna Callbacks de eventos
-		$(".cantidad").keyup(sumarImportes);
-		$(".cantidad").change(sumarImportes);
-		$(".precio").keyup(sumarImportes);
-		$(".precio").change(sumarImportes);
-		$("input").focus(function(){
-			$(this).select();
-		});
-		$(".btn_eliminar").click(eliminarProducto);
-		// $("#buscar_producto").val("");
-		
-		
-	}
+	console.log("El producto no existe, agregarlo a la tabla");
+	$fila_producto = `<tr class="">
+	<td class="w-25">
+	<input hidden class="id_productos"  value="${producto['id_productos']}">
+	<input hidden class="descripcion" value='${producto['descripcion_productos']}'>
+	<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
+	<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
+	<input hidden class="costo_proveedor" value='${producto['costo_proveedor']}'>
+	<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
+	</td>
 	
-	alertify.success("Producto Agregado")
+	<td class="text-center">${producto['descripcion_productos']}</td>
+	<td class="text-center venta">
+	<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
+	</td>	
+	<td class="text-center venta">
+	<input type="number" readonly step="any" class="importe form-control text-right">
+	</td>
 	
-	sumarImportes();
+	<td class="w-25">	
+	<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
+	</td>
+	<td class="text-center">
+	<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
+	<i class="fa fa-trash"></i>
+	</button> 
+	</td>
+	</tr>`;
 	
-	$("#buscar_producto").val("");
-	$("#buscar_producto").focus();
+	resetFondo();
+	
+	$("#tabla_venta tbody").append($fila_producto);
+	
+	
+	
+	//Asigna Callbacks de eventos
+	$(".cantidad").keyup(sumarImportes);
+	$(".cantidad").change(sumarImportes);
+	$(".precio").keyup(sumarImportes);
+	$(".precio").change(sumarImportes);
+	$("input").focus(function(){
+		$(this).select();
+	});
+	$(".btn_eliminar").click(eliminarProducto);
+	// $("#buscar_producto").val("");
+	
+	
+}
+
+alertify.success("Producto Agregado")
+
+sumarImportes();
+
+$("#buscar_producto").val("");
+$("#buscar_producto").focus();
 }
 
 function guardarVenta(event){
@@ -300,8 +328,6 @@ function guardarVenta(event){
 			})
 		});
 		
-		$("#cerrar_venta").prop("disabled", true);
-		
 		$.ajax({
 			url: 'guardar_ventas.php',
 			method: 'POST',
@@ -314,14 +340,14 @@ function guardarVenta(event){
 				articulos: $('#articulos').val(),
 				id_vendedores: $('#id_vendedores').val(),
 				id_clientes: $('#id_clientes').val(),
+				subtotal: $("#subtotal").val(),
+				iva: $("#iva").val(),
 				total: $("#total").val(),
-				anticipo: $("#anticipo").val(),
-				saldo: $("#saldo").val(),
 				productos: productos
 			}
 			}).done(function(respuesta){
 			if(respuesta.estatus_movimiento == "success"){
-				alertify.success('Venta Guardada');
+				alertify.success('Movimiento Guardado');
 				imprimirTicket( respuesta.folio)
 				// window.location.reload(true);
 				
@@ -329,8 +355,6 @@ function guardarVenta(event){
 			}).fail(function(xhr, error, ernum){
 			alertify.error("Ocurrio un error:"+ error + ernum );
 			}).always(function(){
-			$("#cerrar_venta").prop("disabled", false);
-			
 			boton.prop('disabled',false);
 			icono.toggleClass('fa fa-usd fa fa-spinner fa-pulse fa-fw');
 		});
@@ -354,25 +378,23 @@ $("input").focus(function(){
 
 function sumarImportes(){
 	console.log("sumarImportes");
-	let total = 0;
+	let subtotal = 0;
 	let articulos = 0;
 	$(".id_productos").each(function(indice, fila ){
 		let cantidad = Number($(this).closest("tr").find(".cantidad").val());
 		let precio = Number($(this).closest("tr").find(".precio").val());
 		articulos+=cantidad;
 		importe= cantidad * precio;
-		total+= importe;
+		subtotal+= importe;
 		$(this).closest("tr").find(".importe").val(importe.toFixed(2))
 	});
 	
-	anticipo = total;
-	saldo = total - anticipo;
-	
-	$("#articulos").val(articulos);
-	
+	iva = subtotal * .16;
+	total = subtotal + iva;
+	$("#subtotal").val(subtotal.toFixed(2));
+	$("#iva").val(iva.toFixed(2) );
 	$("#total").val(total.toFixed(2));
-	$("#anticipo").val(anticipo.toFixed(2) );
-	$("#saldo").val(saldo.toFixed(2));
+	$("#articulos").val(articulos);
 	
 }
 
@@ -383,7 +405,7 @@ function sumarImportes(){
 function imprimirTicket(id_registro){
 	console.log("imprimirTicket()");
 	
-	document.title = "Venta " + id_registro;
+	
 	$.ajax({
 		url: "imprimir_ventas.php",
 		data:{
@@ -413,7 +435,7 @@ function beforePrint() {
 	//Antes de Imprimir
 }
 function afterPrint() {
-	// window.location.reload(true);
+	window.location.reload(true);
 }
 
 
@@ -537,4 +559,4 @@ function navegarFilas(e){
 	{        
 		$next.focus();
 	}
-}	
+	}			
