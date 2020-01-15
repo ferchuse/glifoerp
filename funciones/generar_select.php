@@ -1,9 +1,17 @@
 <?php
 	
-	// include("../conexi.php");
+	if(isset($_GET["pk"])){
+		
+		include("../conexi.php");
+		
+		$link = Conectarse();
+	 	
+		echo generar_select($link, $_GET["tabla"], $_GET["pk"], $_GET["label"]);
+		
+		
+	}
 	
-	// $link = Conectarse();
-	 
+	
 	function generar_select($link, $tabla, $llave_primaria, $campo_etiqueta ,$filtro = false, $disabled = false ,$required = false , $id_selected = 0, $data_indice = 0, $name = ""){
 		$consulta = "SELECT * FROM $tabla ORDER BY $campo_etiqueta ";
 		
@@ -11,7 +19,7 @@
 			$name = $llave_primaria;
 		}
 		
-		 
+		
 		$select = "<select data-indice='$data_indice'";
 		
 		$select .= $required ? " required " : " ";

@@ -65,8 +65,13 @@
 		</form>
 		<div class="container-fluid d-print-none">
 			<div class="row">
-				
-				<div class="col-2 d-none d-sm-block" >
+				<div class="col-sm-1">
+					<div class="form-group">
+						<label for="">Folio:</label>  	
+						<input readonly type="number" class="form-control" id="folio_ventas" name="folio_ventas" value="<?php echo $_GET["folio_ventas"]?>">
+					</div>
+				</div>
+				<div class="col-2 d-none " >
 					<label for="">Código:</label>
 					
 					<input id="codigo_producto" form="form_agregar_producto"   type="search" class="form-control" placeholder="Presiona Enter para agregar" >
@@ -184,10 +189,14 @@
 		<div id="ticket" class="d-none d-print-block">
 			
 		</div>
-		<?php  include('../scripts.php'); ?>
+		<?php include('../scripts.php'); ?>
 		<?php include('modal_cantidad.php'); ?>
 		<?php include('../productos/form_productos.php'); ?>
+		<?php include('../clientes/form_clientes.php'); ?>
+		
+		
 		<script src="../productos/editar_producto.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
+		<script src="../clientes/clientes.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
 		<script src="nueva_venta.js"></script>
 		
 	</body>

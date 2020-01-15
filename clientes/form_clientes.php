@@ -1,4 +1,4 @@
-<form id="form_clientes" autocomplete="off" class="is-validated">
+<form id="form_clientes" autocomplete="off" class="was-validated">
 	<div id="modal_clientes" class="modal fade" role="dialog">
 		<div class="modal-dialog ">
 			<div class="modal-content">
@@ -11,6 +11,10 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<div class="form-group">
+								<label for="alias_clientes">Nombre Comercial:</label>
+								<input  type="text" class="form-control" name="alias_clientes" id="alias_clientes" required>
+							</div>
+							<div class="form-group">
 								<label for="razon_social_clientes">Razón Social:</label>
 								<input  class="form-control" type="text" name="razon_social_clientes" id="razon_social_clientes">
 							</div>
@@ -18,10 +22,7 @@
 								<label for="rfc_clientes">RFC:</label>
 								<input  class="form-control" type="text" name="rfc_clientes" id="rfc_clientes">
 							</div>
-							<div class="form-group">
-								<label for="alias_clientes">Nombre Corto o Alias:</label>
-								<input  type="text" class="form-control" name="alias_clientes" id="alias_clientes" required>
-							</div>
+							
 							<div class="form-group">
 								<label for="id_vendedores">Vendedor:</label>
 								<?php echo generar_select($link, "vendedores", "id_vendedores", "nombre_vendedores")?>
@@ -36,7 +37,7 @@
 							</div>
 							<div class="form-group">
 								<label for="direccion">Dirección:</label>
-								<input  required class="form-control" type="text" name="direccion" id="direccion">
+								<input  class="form-control" type="text" name="direccion" id="direccion">
 							</div>
 							
 						</div>

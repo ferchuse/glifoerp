@@ -110,7 +110,7 @@
 					<?php 
 						$total = 0;
 						foreach($movimientos AS $i => $fila){
-							
+							$total+=$fila["total"];
 						?>
 						<tr class="text-center">
 							<td><?php echo $fila["id_ventas"];?></td>
@@ -154,13 +154,11 @@
 								</a>
 								
 								
-								<button class="btn btn-sm btn-warning btn_editar" type="button" 
-								data-id_registro="<?php echo $fila["id_ventas"]?>"
-								data-tabla="ventas" 
-								data-id_campo="id_ventas" 
+								<a href="nueva_venta.php?tipo_movimiento=VENTA&tabla=ventas&folio_ventas=<?php echo $fila["id_ventas"]?>" class="btn btn-sm btn-warning convertir_a_salida" type="button" 
+								
 								>
-									<i class="fas fa-edit" ></i> Editar
-								</button>
+									<i class="fas fa-edit" ></i>  Editar
+								</a>
 								
 								<button class="btn btn-sm btn-danger btn_borrar" type="button" 
 								data-id_registro="<?php echo $fila["id_ventas"]?>"
@@ -180,8 +178,10 @@
 					?>
 					<tfoot class="bg-secondary text-white"> 
 						<tr class="text-left">
-							<td colspan="5"><b><?php echo $registros;?> Registro(s)</b></td>
-							
+							<td colspan="2"><b><?php echo $registros;?> Registro(s)</b></td>
+							<td colspan=""><b>Total:</b></td>
+							<td class="text-right"><b>$ <?= number_format($total,2);?></b></td>
+							<td colspan="3"></td>
 						</tr>
 					</tfoot>
 				</table>

@@ -18,9 +18,49 @@ function calculaSaldo(){
 	
 }
 
+function nuevoCliente() {
+	console.log("nuevoCliente");
+	$('#form_clientes')[0].reset();
+	
+	$("#modal_clientes").modal("show");
+	
+}
 
+
+function	listarClientes(){
+	
+	console.log("listarClientes( js)");
+	
+	$.ajax({
+		url : "../funciones/generar_select.php",
+		data:{
+			"tabla": "clientes",
+			"pk": "id_clientes",
+			"label": "nombre_clientes"
+		}
+		
+		}).done(function(respuesta){
+		
+		$("#id_clientes").html(respuesta);
+		
+		
+	})
+	
+}
 
 $(document).ready( function onLoad(){
+	
+	if($("#folio_ventas").val() != ""){
+		console.log("Editar Venta")
+		cargarVenta({
+			"tabla": "ventas",
+			"pk": "id_ventas",
+			"folio": $("#folio_ventas").val(),
+			"tabla_productos": "ventas_detalle"
+		});
+		
+	}
+	
 	
 	$(window).on('beforeunload', function(){
 		return '¿Estás seguro que deseas salir?';
@@ -29,6 +69,8 @@ $(document).ready( function onLoad(){
 	$("#btn_nueva_partida").click( function agregarPartida(){
 		agregarProducto({cantidad: 0, descripcion_productos: "" , saldo : 0})
 	});
+	
+	$("#btn_nuevo_cliente").click(nuevoCliente);
 	
 	$("#anticipo").keyup(calculaSaldo);
 	$('.bg-info').keydown(navegarFilas);
@@ -146,6 +188,94 @@ $(document).ready( function onLoad(){
 }); 
 
 
+
+function cargarVenta(parametros){
+	console.log("cargarVenta");
+	
+	$.ajax({
+		url: "../ventas/cargar_venta.php",
+		data: parametros,
+		dataType: "JSON"
+	})
+	.done(renderProductos);
+	
+}
+
+
+
+
+function renderProductos(respuesta){
+	console.log("renderProductos");
+	console.log("venta", respuesta);
+	console.log("productos", respuesta.productos);
+	var productos_html = "";
+	
+	
+	$.each(respuesta.productos, function(i, producto){
+		productos_html+= `<tr class="">
+		<td >
+		<input hidden class="id_productos"  value="${producto['id_productos']}">
+		
+		<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
+		<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
+		<input hidden class="costo_proveedor" value='${producto['costo_proveedor']}'>
+		<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
+		</td>
+		
+		<td class="w-25">
+		
+		<input  class="descripcion form-control"  value='${producto['descripcion_productos']}'>
+		</td>
+		<td class="text-center venta">
+		<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
+		</td>	
+		<td class="text-center venta">
+		<input type="number" readonly step="any" class="importe form-control text-right">
+		</td>
+		
+		<td class="w-25">	
+		<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
+		</td>
+		<td class="text-center">
+		<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
+		<i class="fa fa-trash"></i>
+		</button> 
+		</td>
+		</tr>`;
+		
+	});
+	
+	
+	
+	
+	$("#tabla_venta tbody").append(productos_html);
+	
+	console.log("datos Venta:",  respuesta.ventas)
+	//Imprime datos de la Venta
+	$("#id_vendedores").val(respuesta.ventas[0].ventas_id_vendedores);
+	$("#fecha_movimiento").val(respuesta.ventas[0].fecha_ventas);
+	$("#span_id_clientes").text(respuesta.ventas[0].id_clientes);
+	$("#id_clientes").val(respuesta.ventas[0].id_clientes);
+	$("#buscar_clientes").val(respuesta.ventas[0].razon_social_clientes);
+	
+	//Asigna Callbacks de eventos
+	// $(".mayoreo").change(aplicarMayoreoProducto);
+	$(".cantidad").keyup(sumarImportes);
+	$(".cantidad").change(sumarImportes);
+	$(".btn_eliminar").click(eliminarProducto);
+	
+	
+	
+	$("input").focus( function selecciona_input(){
+		$(this).select();
+	});
+	sumarImportes();
+	
+}
+
+
+
+
 function calcularGranel(event){
 	let precio = Number($("#precio").val());
 	let cantidad = Number($("#cantidad").val());
@@ -194,7 +324,8 @@ function agregarProducto(producto){
 	var $existe= $(".id_productos[value='"+producto.id_productos+"']");
 	console.log("existe", $existe);
 	
-	if($existe.length > 0){
+	// if($existe.length > 0){
+	if(false){
 		console.log("El producto ya existe");
 		let cantidad_anterior = Number($existe.closest("tr").find(".cantidad").val());
 		console.log("cantidad_anterior", cantidad_anterior)

@@ -220,7 +220,7 @@ function editarCliente() {
 }
 
 
-function guardarCliente() {
+function guardarCliente(event) {
 	
 	event.preventDefault();
 	
@@ -231,7 +231,7 @@ function guardarCliente() {
 	icono.toggleClass("fa-save fa-spinner fa-spin");
 	
 	$.ajax({
-		url: "guardar_clientes.php",
+		url: "../clientes/guardar_clientes.php",
 		method: "POST",
 		dataType: "JSON",
 		data: $("#form_clientes").serialize()
