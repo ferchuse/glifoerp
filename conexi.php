@@ -4,17 +4,18 @@
 		
 		$host="localhost";
 		
-		if($_SERVER["SERVER_NAME"] == "estambresatoshka.com"){
+		if($_SERVER["SERVER_NAME"] == "localhost"){
 			
-			$db="microsit_atoshka";
-			$usuario="microsit_practic";
-			$pass="UAEH@2018";
-		
-		}
-		else{
 			$db="glifoerp";
 			$usuario="sistemas";
 			$pass="Glifom3dia";
+		
+		}
+		else
+		{
+			$db="glifo_app";
+			$usuario="glifo_sistemas";
+			$pass="Gl1fom3di@";
 			$set_local = "SET time_zone = '-05:00'";
 			// $set_names = "SET NAMES 'utf8'";
 		}
