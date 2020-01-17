@@ -452,6 +452,7 @@ function guardarVenta(event){
 			}
 			}).done(function(respuesta){
 			if(respuesta.estatus_movimiento == "success"){
+				$("#folio_ventas").val(respuesta.folio)
 				alertify.success('Venta Guardada');
 				imprimirTicket( respuesta.folio)
 				// window.location.reload(true);

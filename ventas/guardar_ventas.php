@@ -6,7 +6,10 @@
 	//TODO Separar por funciones
 	
 	
-	$insertar_venta = "INSERT INTO ventas SET
+	$insertar_venta = "
+	
+	INSERT INTO ventas SET
+	id_ventas = '{$_POST["id_ventas"]}',
 	fecha_ventas = '{$_POST["fecha_ventas"]}',
 	hora_ventas = '{$_POST["hora_ventas"]}',
 	id_usuarios = '{$_COOKIE['id_usuarios']}',
@@ -14,9 +17,23 @@
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
 	subtotal = '{$_POST['subtotal']}',
+
 	iva = '{$_POST['iva']}',
-	anticipo = '{$_POST['anticipo']}',
-	saldo = '{$_POST['saldo']}',
+	total = '{$_POST['total']}',
+	articulos = '{$_POST['articulos']}'
+	
+	ON DUPLICATE KEY UPDATE
+	
+	id_ventas = '{$_POST["id_ventas"]}',
+	fecha_ventas = '{$_POST["fecha_ventas"]}',
+	hora_ventas = '{$_POST["hora_ventas"]}',
+	id_usuarios = '{$_COOKIE['id_usuarios']}',
+	estatus_ventas = 'APROBACIÓN PENDIENTE',
+	id_vendedores = '{$_POST['id_vendedores']}',
+	id_clientes = '{$_POST['id_clientes']}',
+	subtotal = '{$_POST['subtotal']}',
+	
+	iva = '{$_POST['iva']}',
 	total = '{$_POST['total']}',
 	articulos = '{$_POST['articulos']}'
 	";
