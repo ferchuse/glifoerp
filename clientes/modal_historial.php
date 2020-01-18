@@ -75,7 +75,11 @@
 							<tr class="text-center">
 								
 								<td><?php echo date("d/m/Y", strtotime($transaccion["fecha"]));?></td>
-								<td><?php echo $transaccion["concepto"];?></td>
+								<td>
+									<a target="_blank" href="../ventas/imprimir_ventas.php?id_registro=<?= $transaccion["id_transaccion"] ?>">
+										<?php echo $transaccion["concepto"];?>
+									</a>
+								</td>
 								
 								<?php if($transaccion["tipo"] == "CARGO"){
 									$cargos+=$transaccion["importe"];
@@ -110,37 +114,37 @@
 									
 								</td>
 								
-							</tr>
-							<?php
-							}
-						?>
-						<tfoot class="h5 text-white bg-secondary text-right">
-							<tr>
-								<td>TOTALES:</td>
-								<td></td>
-								<td>$<?php echo number_format($cargos);?></td>
-								<td>$<?php echo number_format($abonos);?></td>
-								<td>$<?php echo number_format($saldo);?></td>
-								
-							</tr>
-						</tfoot>
-					</table>
-					<?php
-					}
-					else{
-						
-						echo "<div class='alert alert-warning'>No hay Transacciones</div>";
-					}
-				?>
-			</div>
-			<div class="modal-footer d-print-none">
-				<button type="button" class="btn btn-danger" data-dismiss="modal">
-					<i class="fa fa-times"></i> Cerrar
-				</button>
-				<button type="button" class="btn btn-info" onclick="window.print();">
-					<i class="fa fa-print"></i> Imprimir
-				</button>
+								</tr>
+								<?php
+								}
+							?>
+							<tfoot class="h5 text-white bg-secondary text-right">
+								<tr>
+									<td>TOTALES:</td>
+									<td></td>
+									<td>$<?php echo number_format($cargos);?></td>
+									<td>$<?php echo number_format($abonos);?></td>
+									<td>$<?php echo number_format($saldo);?></td>
+									
+								</tr>
+							</tfoot>
+						</table>
+						<?php
+						}
+						else{
+							
+							echo "<div class='alert alert-warning'>No hay Transacciones</div>";
+						}
+					?>
+				</div>
+				<div class="modal-footer d-print-none">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">
+						<i class="fa fa-times"></i> Cerrar
+					</button>
+					<button type="button" class="btn btn-info" onclick="window.print();">
+						<i class="fa fa-print"></i> Imprimir
+					</button>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
+	</div>	

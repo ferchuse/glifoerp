@@ -68,7 +68,7 @@
 				<div class="col-sm-1">
 					<div class="form-group">
 						<label for="">Folio:</label>  	
-						<input readonly type="number" class="form-control" id="folio_ventas" name="folio_ventas" value="<?php echo $_GET["folio_ventas"]?>">
+						<input readonly type="number" class="form-control" id="id_ventas" name="id_ventas" value="<?php echo $_GET["folio_ventas"]?>">
 					</div>
 				</div>
 				<div class="col-2 d-none " >
@@ -106,7 +106,7 @@
 						<button class="btn btn-success btn-sm float-right" id="btn_nuevo_cliente"> 
 							+ Nuevo
 						</button>
-						<?php echo generar_select($link, "clientes", "id_clientes", "razon_social_clientes");?>
+						<?php echo generar_select($link, "clientes", "id_clientes", "alias_clientes");?>
 					</div>
 				</div>
 				

@@ -154,7 +154,7 @@
 					<div class="col-2 col-sm-2 h3 text-right">
 						<?php echo number_format($filas[0]["total"],2)?><br>
 						<?php echo number_format($filas[0]["anticipo"],2)?><br>
-						<?php echo number_format($filas[0]["total"],2)?>
+						<?php echo number_format($filas[0]["saldo"],2)?>
 					</div>
 					
 					

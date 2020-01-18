@@ -50,12 +50,12 @@ function	listarClientes(){
 
 $(document).ready( function onLoad(){
 	
-	if($("#folio_ventas").val() != ""){
+	if($("#id_ventas").val() != ""){
 		console.log("Editar Venta")
 		cargarVenta({
 			"tabla": "ventas",
 			"pk": "id_ventas",
-			"folio": $("#folio_ventas").val(),
+			"folio": $("#id_ventas").val(),
 			"tabla_productos": "ventas_detalle"
 		});
 		
@@ -438,6 +438,7 @@ function guardarVenta(event){
 			method: 'POST',
 			dataType: 'JSON',
 			data:{
+				id_ventas: $('#id_ventas').val(),
 				fecha_ventas: $('#fecha_movimiento').val(),
 				tipo_movimiento: $('#tipo_movimiento').val(),
 				id_usuarios: $('#id_usuarios').val(),
@@ -452,7 +453,7 @@ function guardarVenta(event){
 			}
 			}).done(function(respuesta){
 			if(respuesta.estatus_movimiento == "success"){
-				$("#folio_ventas").val(respuesta.folio)
+				$("#id_ventas").val(respuesta.folio)
 				alertify.success('Venta Guardada');
 				imprimirTicket( respuesta.folio)
 				// window.location.reload(true);

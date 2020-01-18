@@ -16,10 +16,9 @@
 	estatus_ventas = 'APROBACIÓN PENDIENTE',
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
-	subtotal = '{$_POST['subtotal']}',
-
-	iva = '{$_POST['iva']}',
 	total = '{$_POST['total']}',
+	anticipo = '{$_POST['anticipo']}',
+	saldo = '{$_POST['saldo']}',
 	articulos = '{$_POST['articulos']}'
 	
 	ON DUPLICATE KEY UPDATE
@@ -32,9 +31,9 @@
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
 	subtotal = '{$_POST['subtotal']}',
-	
-	iva = '{$_POST['iva']}',
 	total = '{$_POST['total']}',
+	anticipo = '{$_POST['anticipo']}',
+	saldo = '{$_POST['saldo']}',
 	articulos = '{$_POST['articulos']}'
 	";
 	
@@ -46,7 +45,12 @@
 	if($result_movimiento){
 		$respuesta['estatus_movimiento'] = 'success';
 		$respuesta['mensaje_movimiento'] = 'Venta Guardada';
-		$folio = mysqli_insert_id($link);
+		if($_POST["id_ventas"] == ''){
+			$folio = mysqli_insert_id($link);
+		}
+		else{
+			$folio = $_POST["id_ventas"];
+		}
 		$respuesta['folio'] = $folio;
 	}
 	else{
@@ -83,6 +87,17 @@
 		
 	}
 	
+	//Borra los productos anteriores si la venta ya existe
+	if($_POST["id_ventas"] != ''){
+		
+		$borrar_productos = "DELETE FROM ventas_detalle WHERE id_ventas = '{$_POST["id_ventas"]}';
+		";
+		
+		$result_borrar = mysqli_query( $link, $borrar_productos );
+		
+		$respuesta["result_borrar"] = $result_borrar.": ".mysqli_error($link) ;
+	}
+	
 	//INSERTA LOS Producto
 	
 	foreach($_POST['productos'] as $indice => $producto){
@@ -111,19 +126,21 @@
 		$result_productos = mysqli_query( $link, $insertar_producto );
 		
 		$respuesta["result_productos"] = $result_productos.": ".mysqli_error($link) ;
+		
 		$respuesta["insertar_producto"][] = $insertar_producto ;
 		
 		
-		// actualiza existencias
-		
-		$update_existencia = "UPDATE productos SET existencia_productos = '$exist_nueva''
-		WHERE id_productos = '{$producto["id_productos"]}'	"; 
-		
-		$result_existencia = mysqli_query( $link, $update_existencia );
-		
-		$respuesta["result_existencia"] = $result_existencia ;
+		// actualiza existencias si es nueva venta
+		if($_POST["id_ventas"] == ''){
+			$update_existencia = "UPDATE productos SET existencia_productos = '$exist_nueva''
+			WHERE id_productos = '{$producto["id_productos"]}'	"; 
+			
+			$result_existencia = mysqli_query( $link, $update_existencia );
+			
+			$respuesta["result_existencia"] = $result_existencia ;
+		}
 		
 	}
 	
 	echo json_encode($respuesta);
-	?>			
+?>				
