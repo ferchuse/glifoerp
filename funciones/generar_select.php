@@ -1,5 +1,5 @@
 <?php
-	
+	//si se manda llamar por ajax 
 	if(isset($_GET["pk"])){
 		
 		include("../conexi.php");

@@ -114,14 +114,11 @@ function confirmaBorrar() {
 		boton.prop("disabled", true);
 		icono.toggleClass("fa-trash fa-spinner fa-spin");
 		$.ajax({
-			url: "../funciones/fila_delete.php",
+			url: "consultas/borrar.php",
 			method: "POST",
 			dataType: "JSON",
 			data: {
-				"tabla": tabla,
-				"id_campo": id_campo,
-				"id_valor": id_registro
-				
+				"id_registro": id_registro
 			}
 			
 			}).done(function (respuesta) {
