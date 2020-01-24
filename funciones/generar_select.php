@@ -42,6 +42,13 @@
 		}
 		$select.="</select>";
 		
+		if(isset($_SESSION["debug"])){
+			
+			$select+="	<pre>
+			$$consulta
+		</pre>";
+			}
+		
 		return $select;
 	}
 	

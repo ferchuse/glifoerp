@@ -1,7 +1,8 @@
 <?php 
 	include("../conexi.php");
 	$link = Conectarse();
-	$tipo_cambio = 19.57;
+	// $tipo_cambio = 19.57;
+	 $tipo_cambio = 1;
 	
 	//TODO Separar por funciones
 	

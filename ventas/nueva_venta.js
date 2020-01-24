@@ -218,6 +218,44 @@ function renderProductos(respuesta){
 		
 		<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
 		<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
+		
+		<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
+		</td>
+		
+		<td class="w-25">
+		
+		<input  class="descripcion form-control"  value='${producto['descripcion']}'>
+		</td>
+		<td class="text-center venta">
+		<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio']}'>
+		</td>	
+		<td class="text-center venta">
+		<input type="number" readonly step="any" class="importe form-control text-right">
+		</td>
+		
+		<td class="w-25">	
+		<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
+		<input type="number" class="costo_proveedor" value='${producto['costo_proveedor']}'>
+		</td>
+		<td class="text-center">
+		<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
+		<i class="fa fa-trash"></i>
+		</button> 
+		</td>
+		</tr>`;
+		
+		
+		
+		
+		
+		/*
+		
+		<tr class="">
+		<td >
+		<input hidden class="id_productos"  value="${producto['id_productos']}">
+		
+		<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
+		<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
 		<input hidden class="costo_proveedor" value='${producto['costo_proveedor']}'>
 		<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
 		</td>
@@ -241,7 +279,13 @@ function renderProductos(respuesta){
 		<i class="fa fa-trash"></i>
 		</button> 
 		</td>
-		</tr>`;
+		</tr>
+		
+		
+		*/
+		
+		
+		
 		
 	});
 	

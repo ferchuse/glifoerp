@@ -1,12 +1,9 @@
 <?php 
 header("Content-Type: application/json");
-include('../conexi.php');
+include('../../conexi.php');
 $link = Conectarse();
 $respuesta = array();
 
-$tabla = "ventas";
-$id_campo = "id_ventas";
-$id_registro = $_POST['id_registro'];
 
 $consulta = "DELETE ventas,
  ventas_detalle
@@ -14,7 +11,7 @@ FROM
 	ventas
 INNER JOIN ventas_detalle USING (id_ventas)
 WHERE
-	id_ventas = '{id_registro}'";
+	id_ventas = '{$_POST['id_registro']}'";
 
 $respuesta['consulta'] = $consulta;
 

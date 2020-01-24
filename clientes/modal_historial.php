@@ -32,7 +32,7 @@
 	WHERE id_clientes = '{$_GET["id_clientes"]}'
 	
 	ORDER BY
-	fecha
+	fecha 
 	";
 	
 	

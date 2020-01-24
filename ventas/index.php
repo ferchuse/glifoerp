@@ -154,7 +154,7 @@
 								</a>
 								
 								
-								<a href="nueva_venta.php?tipo_movimiento=VENTA&tabla=ventas&folio_ventas=<?php echo $fila["id_ventas"]?>" class="btn btn-sm btn-warning convertir_a_salida" type="button" 
+								<a href="nueva_venta.php?tipo_movimiento=VENTA&tabla=ventas&folio_ventas=<?php echo $fila["id_ventas"]?>" class="btn btn-sm btn-warning " type="button" 
 								
 								>
 									<i class="fas fa-edit" ></i>  Editar
