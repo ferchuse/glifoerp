@@ -1,3 +1,55 @@
+function listaProductos() {
+	console.log("listaProductos() ");
+	let tableTemplate;
+	let semaforo, badge = '';
+	let $boton = $("#form_filtros").find(":submit");
+	let $icono = $boton.find(".fa");
+	$boton.prop("disabled", true)
+	$icono.toggleClass("fa-search fa-spinner fa-spin");
+	$.ajax({
+		url: 'lista_productos.php',
+		data: $("#form_filtros").serializeArray()
+		}).done(function (respuesta) {
+		
+		
+		$('#bodyProductos').html(respuesta)
+		contarProductos();
+		$("#tabla_productos").stickyTableHeaders();
+		$boton.prop("disabled", false)
+		$icono.toggleClass("fa-search fa-spinner fa-spin");
+		
+		//----FILTROS DE BUSCAR------
+		$(".buscar_codigo").keyup( function filtro_buscar() {
+			var indice = $(this).data("indice");
+			var valor_filtro = $(this).val();
+			var num_rows = buscar(valor_filtro, 'tabla_productos', indice);
+			if (num_rows == 0) {
+				$('#mensaje').html("<div class='alert alert-warning text-center'><strong>No se ha encontrado.</strong></div>");
+				} else {
+				$('#mensaje').html('');
+			}
+			
+		});
+		
+		$(".buscar").on("keyup", function buscarFila(event) {
+			var value = $(this).val().toLowerCase();
+			console.log("buscando", value);
+			$("#bodyProductos .row").filter(function() {
+				$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			});
+		});
+		
+		
+		$('.btn_eliminar').click(confirmaEliminar);
+		
+		$('.btn_editar').click( editarRegistro);
+		
+		
+	});
+}
+
+
+
 $(document).ready(function () {
 	$('.sort').click(ordenarTabla);
 	
@@ -19,87 +71,6 @@ $(document).ready(function () {
 		var permiso = "d-sm-flex";
 	}
 	
-	function listaProductos() {
-		console.log("listaProductos() ");
-		let tableTemplate;
-		let semaforo, badge = '';
-		let $boton = $("#form_filtros").find(":submit");
-		let $icono = $boton.find(".fa");
-		$boton.prop("disabled", true)
-		$icono.toggleClass("fa-search fa-spinner fa-spin");
-		$.ajax({
-			url: 'lista_productos.php',
-			data: $("#form_filtros").serializeArray()
-			}).done(function (respuesta) {
-			
-			
-			// $.each(respuesta, function (index, producto) {
-				
-				// semaforo = producto.saldo < producto.min_productos ? "bg-danger": "";
-				// badge = producto.saldo < producto.min_productos ? "danger": "success";
-				
-				// tableTemplate += `
-				// <div class="row p-2 m-1 shadow">
-				// <div class="col-8 col-sm-4">
-				// ${producto.descripcion_productos}
-				// </div>
-				
-				// <div class="col-4 h4 col-sm-2 text-center">
-				// <span class="badge  badge-${badge}">${producto.saldo}</span>
-				// </div>
-				
-				// <div class="col-sm-2 d-none ${permiso}" >
-				// ${producto.ubicacion}
-				// </div>
-				// <div class="col-sm-2 d-none ${permiso} ">
-				// <button class="btn btn-warning btn_editar" data-id_producto="${producto.id_productos}">
-				// <i class="fa fa-edit"></i>
-				// </button>
-				// <button class="btn btn-danger btn_eliminar" data-id_producto="${producto.id_productos}">
-				// <i class="fa fa-trash"></i>
-				// </button>
-				// </div>
-				
-				// </div>
-				// `;
-				
-			// });
-			
-			$('#bodyProductos').html(respuesta)
-			contarProductos();
-			$("#tabla_productos").stickyTableHeaders();
-			$boton.prop("disabled", false)
-			$icono.toggleClass("fa-search fa-spinner fa-spin");
-			
-			//----FILTROS DE BUSCAR------
-			$(".buscar_codigo").keyup( function filtro_buscar() {
-				var indice = $(this).data("indice");
-				var valor_filtro = $(this).val();
-				var num_rows = buscar(valor_filtro, 'tabla_productos', indice);
-				if (num_rows == 0) {
-					$('#mensaje').html("<div class='alert alert-warning text-center'><strong>No se ha encontrado.</strong></div>");
-					} else {
-					$('#mensaje').html('');
-				}
-				
-			});
-			
-			$(".buscar").on("keyup", function buscarFila(event) {
-				var value = $(this).val().toLowerCase();
-				console.log("buscando", value);
-				$("#bodyProductos .row").filter(function() {
-					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-				});
-			});
-		
-			
-			$('.btn_eliminar').click(confirmaEliminar);
-			
-			$('.btn_editar').click( editarRegistro);
-			
-			
-		});
-	}
 	
 	
 	listaProductos();
@@ -240,7 +211,7 @@ function ordenarTabla() {
 		$("#order").val("DESC");
 		$(this).addClass("asc");
 		$(this).removeClass("desc");
-	
+		
 	}
 	else{
 		$("#order").val("ASC");
