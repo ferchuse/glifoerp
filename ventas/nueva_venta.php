@@ -178,7 +178,10 @@
 						
 						
 						<div class="col-sm-2 col-12 text-right">
-							<button class="btn btn-success btn-lg btn-block" type="submit" id="cerrar_venta">F12 - Guardar</button>
+							<button class="btn btn-success btn-lg btn-block" type="submit" id="cerrar_venta">F12 - Guardar
+							</button>	
+							<button class="btn btn-primary btn-lg btn-block" type="button" id="btn_cotizacion">Cotización
+							</button>
 						</div>
 					</div>
 				</form>

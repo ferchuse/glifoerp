@@ -11,30 +11,28 @@
 	
 	INSERT INTO cotizaciones SET
 	id_cotizaciones = '{$_POST["id_ventas"]}',
-	fecha_ventas = '{$_POST["fecha_ventas"]}',
-	hora_ventas = '{$_POST["hora_ventas"]}',
+	fecha_cotizaciones = '{$_POST["fecha_ventas"]}',
+	hora_cotizaciones = '{$_POST["hora_ventas"]}',
 	id_usuarios = '{$_COOKIE['id_usuarios']}',
 	estatus_ventas = 'APROBACIÓN PENDIENTE',
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
 	total = '{$_POST['total']}',
-	anticipo = '{$_POST['anticipo']}',
-	saldo = '{$_POST['saldo']}',
+	
 	articulos = '{$_POST['articulos']}'
 	
 	ON DUPLICATE KEY UPDATE
 	
 	id_cotizaciones = '{$_POST["id_ventas"]}',
-	fecha_ventas = '{$_POST["fecha_ventas"]}',
-	hora_ventas = '{$_POST["hora_ventas"]}',
+	fecha_cotizaciones = '{$_POST["fecha_ventas"]}',
+	hora_cotizaciones = '{$_POST["hora_ventas"]}',
 	id_usuarios = '{$_COOKIE['id_usuarios']}',
 	estatus_ventas = 'APROBACIÓN PENDIENTE',
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
 	subtotal = '{$_POST['subtotal']}',
 	total = '{$_POST['total']}',
-	anticipo = '{$_POST['anticipo']}',
-	saldo = '{$_POST['saldo']}',
+	
 	articulos = '{$_POST['articulos']}'
 	";
 	

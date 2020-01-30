@@ -2,15 +2,14 @@
 	
 	include("../conexi.php");
 	$link = Conectarse();
-	$menu_activo = "compras";
+	$empresa = "Glifo Media";
 	
 	
-	$consulta = "SELECT * FROM ventas
-	LEFT JOIN vendedores USING (id_vendedores)
-	LEFT JOIN ventas_detalle USING (id_ventas)
-	LEFT JOIN productos USING (id_productos)
+	$consulta = "SELECT * FROM cotizaciones
 	LEFT JOIN clientes USING (id_clientes)
-	WHERE id_ventas={$_GET["id_registro"]}";
+	LEFT JOIN vendedores USING (id_vendedores)
+	LEFT JOIN productos USING (id_productos)
+	WHERE id_cotizaciones ={$_GET["id_registro"]}";
 	
 	$result = mysqli_query($link, $consulta);
 	
@@ -19,19 +18,14 @@
 	}
 	
 	$consulta_detalle = "SELECT
-	SUM(cantidad) AS cantidad,
-	GROUP_CONCAT(codigo_productos,'/', cantidad, ' ') AS codigo_productos,
-	nombre_departamentos AS descripcion_productos,
-	precio,
-	SUM(importe) AS importe
+	*
 	FROM
-	ventas_detalle
+	cotizaciones_detalle
 	LEFT JOIN productos USING (id_productos)
 	LEFT JOIN departamentos USING (id_departamentos)
 	WHERE
-	id_ventas = {$_GET["id_registro"]}
-	GROUP BY
-	id_departamentos";
+	id_cotizaciones = {$_GET["id_registro"]}
+	";
 	
 	$result_detalle = mysqli_query($link, $consulta_detalle);
 	
@@ -39,7 +33,8 @@
 		$fila_detalle[] = $fila;
 	}
 	
-	
+	echo "<pre>".$consulta."</pre>";
+	echo "<pre>".$consulta_detalle."</pre>";
 	
 ?>
 
@@ -53,7 +48,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		
-		<title>Nota de Remisión</title>
+		<title>Cotización</title>
 		
 		
 		<?php include("../styles.php"); ?>
@@ -68,21 +63,21 @@
 					
 					<div class="col-9">
 						<h3 class="text-center">
-							<strong>ESTAMBRES ATOSHKA SA DE CV</strong>
+							<strong><?= $empresa?></strong>
 						</h3>
 						
 						<h3 class="text-center">
-							<strong>Nota de Remisión</strong>
+							<strong>Cotización</strong>
 						</h3>
 						
 						<div class="row">
 							<div class="col-sm-3"><strong>Folio:</strong></div>
-							<div class="col-sm-8"><?php echo $filas[0]["id_ventas"] ?></div>
+							<div class="col-sm-8"><?php echo $filas[0]["id_cotizaciones"] ?></div>
 						</div>
 						
 						<div class="row">
 							<div class="col-sm-3"><strong>Fecha:</strong></div>
-							<div class="col-sm-8"><?php echo date("d/m/Y", strtotime($filas[0]["fecha_ventas"])); ?></div>
+							<div class="col-sm-8"><?php echo date("d/m/Y", strtotime($filas[0]["fecha_cotizaciones"])); ?></div>
 						</div>
 						<div class="row">
 							<div class="col-sm-3"><strong>Cliente:</strong></div>

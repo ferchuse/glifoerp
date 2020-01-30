@@ -184,6 +184,7 @@ $(document).ready( function onLoad(){
 	
 	
 	$('#form_movimientos').submit( guardarVenta);
+	$('#btn_cotizacion').click( guardarCotizacion);
 	
 }); 
 
@@ -443,6 +444,80 @@ function agregarProducto(producto){
 	$("#buscar_producto").focus();
 }
 
+function guardarCotizacion(event){
+	event.preventDefault();
+	console.log("guardarVenta");
+	
+	if($("#id_vendedores").val() == "" || $("#id_clientes").val() == ""){
+		
+		alertify.error("Elige un Vendedor y el Cliente");
+		return false;
+	}
+	
+	if($("#tabla_venta tbody tr").length != 0){
+		var boton = $(this);
+		var icono = boton.find('.fa');
+		boton.prop('disabled',true);
+		icono.toggleClass('fa fa-usd fa fa-spinner fa-pulse fa-fw');
+		
+		let productos = [];
+		
+		
+		$("#tabla_venta tbody tr").each(function(index, item){
+			productos.push({
+				"id_productos": $(item).find(".id_productos").val(),
+				"cantidad": $(item).find(".cantidad").val(),
+				"precio": $(item).find(".precio").val(),
+				"descripcion": $(item).find(".descripcion").val(),
+				"importe": $(item).find(".importe").val(),
+				"existencia_anterior": $(item).find(".existencia_anterior").val(),
+				"costo_proveedor": $(item).find(".costo_proveedor").val()
+				
+			})
+		});
+		
+		$("#cerrar_venta").prop("disabled", true);
+		
+		$.ajax({
+			url: '../cotizaciones/guardar_cotizacion.php',
+			method: 'POST',
+			dataType: 'JSON',
+			data:{
+				id_ventas: $('#id_ventas').val(),
+				fecha_ventas: $('#fecha_movimiento').val(),
+				tipo_movimiento: $('#tipo_movimiento').val(),
+				id_usuarios: $('#id_usuarios').val(),
+				id_turnos: $('#id_turnos').val(),
+				articulos: $('#articulos').val(),
+				id_vendedores: $('#id_vendedores').val(),
+				id_clientes: $('#id_clientes').val(),
+				total: $("#total").val(),
+				anticipo: $("#anticipo").val(),
+				saldo: $("#saldo").val(),
+				productos: productos
+			}
+			}).done(function(respuesta){
+			if(respuesta.estatus_movimiento == "success"){
+				$("#id_ventas").val(respuesta.folio)
+				alertify.success('Venta Guardada');
+				imprimirTicket( respuesta.folio)
+				// window.location.reload(true);
+				
+			}
+			}).fail(function(xhr, error, ernum){
+			alertify.error("Ocurrio un error:"+ error + ernum );
+			}).always(function(){
+			$("#cerrar_venta").prop("disabled", false);
+			
+			boton.prop('disabled',false);
+			icono.toggleClass('fa fa-usd fa fa-spinner fa-pulse fa-fw');
+		});
+	}
+	else{
+		alertify.error('No hay productos');
+	}
+	
+}
 function guardarVenta(event){
 	event.preventDefault();
 	console.log("guardarVenta");

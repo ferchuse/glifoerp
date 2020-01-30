@@ -99,7 +99,7 @@
 				</div>
 				
 				<div class="col-sm-2 ">
-					<button class="btn btn-success btn-sm" type="button" id="nueva_partida">Nueva Partida
+					<button class="btn btn-success btn-sm" type="button" id="btn_nueva_partida">Nueva Partida
 					</button>
 					<div class="form-group d-none">
 						<label for="">Movimiento:</label>

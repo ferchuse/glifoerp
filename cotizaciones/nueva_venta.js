@@ -17,7 +17,9 @@ $(document).ready( function onLoad(){
 	
 	alertify.set('notifier','position', 'top-right');
 	
-	
+	$("#btn_nueva_partida").click( function agregarPartida(){
+		agregarProducto({cantidad: 0, descripcion_productos: "" , saldo : 0})
+	});
 	$(".buscar").keyup( buscarDescripcion);
 	
 	//Autocomplete Productos https://github.com/devbridge/jQuery-Autocomplete
@@ -225,7 +227,7 @@ function agregarProducto(producto){
 	var $existe= $(".id_productos[value='"+producto.id_productos+"']");
 	console.log("existe", $existe);
 	
-	if($existe.length > 0){
+	if(false){
 	console.log("El producto ya existe");
 	let cantidad_anterior = Number($existe.closest("tr").find(".cantidad").val());
 	console.log("cantidad_anterior", cantidad_anterior)
@@ -241,7 +243,7 @@ else{
 	}
 	console.log("El producto no existe, agregarlo a la tabla");
 	$fila_producto = `<tr class="">
-	<td class="w-25">
+	<td class="">
 	<input hidden class="id_productos"  value="${producto['id_productos']}">
 	<input hidden class="descripcion" value='${producto['descripcion_productos']}'>
 	<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
@@ -250,7 +252,10 @@ else{
 	<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
 	</td>
 	
-	<td class="text-center">${producto['descripcion_productos']}</td>
+	<td class="">
+		
+		<input  class="descripcion form-control"  value='${producto['descripcion_productos']}'>
+		</td>
 	<td class="text-center venta">
 	<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
 	</td>	

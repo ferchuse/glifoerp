@@ -110,13 +110,13 @@
 							
 						?>
 						<tr class="text-center">
-							<td><?php echo $fila["id_ventas"];?></td>
+							<td><?php echo $fila["id_cotizaciones"];?></td>
 							<td><?php echo date("d/m/Y", strtotime($fila["fecha_ventas"]));?></td>
 							<td><?php echo $fila["razon_social_clientes"];?></td>
 							<td class="text-right"><?php echo number_format($fila["total"],2);?></td>
 							<td>
 								
-								<select class="form-control estatus_ventas" data-id_registro="<?php echo $fila["id_ventas"];?>">
+								<select class="form-control estatus_ventas" data-id_registro="<?php echo $fila["id_cotizaciones"];?>">
 									<option <?php echo $fila["estatus_ventas"] == "APROBACIÓN PENDIENTE" ? "selected" : "";?>>
 										APROBACIÓN PENDIENTE 
 									</option>
@@ -133,18 +133,18 @@
 							
 							
 							<td>
-								<a href="imprimir_ventas.php?id_registro=<?php echo $fila["id_ventas"];?>" class="btn btn-sm btn-info btn_imprimir" target="_blank" 
+								<a href="imprimir_ventas.php?id_registro=<?php echo $fila["id_cotizaciones"];?>" class="btn btn-sm btn-info btn_imprimir" target="_blank" 
 								>
 									<i class="fas fa-print" ></i> Reimprimir
 								</a>
 								
-								<a href="../facturacion/facturas_nueva.php?id_ventas=<?php echo $fila["id_ventas"];?>" class="btn btn-sm btn-primary" target="_blank" 
+								<a href="../facturacion/facturas_nueva.php?id_cotizaciones=<?php echo $fila["id_cotizaciones"];?>" class="btn btn-sm btn-primary" target="_blank" 
 								
 								>
 									<i class="fas fa-dollar-sign" ></i> Facturar
 								</a>
 								
-								<a href="../inventarios/nuevo_movimiento.php?tipo_movimiento=SALIDA&tabla=ventas&folio=<?php echo $fila["id_ventas"]?>" class="btn btn-sm btn-success convertir_a_salida" type="button" 
+								<a href="../inventarios/nuevo_movimiento.php?tipo_movimiento=SALIDA&tabla=ventas&folio=<?php echo $fila["id_cotizaciones"]?>" class="btn btn-sm btn-success convertir_a_salida" type="button" 
 								
 								>
 									<i class="fas fa-arrow-right" ></i>  Vale de Salida
@@ -152,17 +152,17 @@
 								
 								
 								<button class="btn btn-sm btn-warning btn_editar" type="button" 
-								data-id_registro="<?php echo $fila["id_ventas"]?>"
+								data-id_registro="<?php echo $fila["id_cotizaciones"]?>"
 								data-tabla="ventas" 
-								data-id_campo="id_ventas" 
+								data-id_campo="id_cotizaciones" 
 								>
 									<i class="fas fa-edit" ></i> Editar
 								</button>
 								
 								<button class="btn btn-sm btn-danger btn_borrar" type="button" 
-								data-id_registro="<?php echo $fila["id_ventas"]?>"
+								data-id_registro="<?php echo $fila["id_cotizaciones"]?>"
 								data-tabla="ventas" 
-								data-id_campo="id_ventas" 
+								data-id_campo="id_cotizaciones" 
 								>
 									<i class="fas fa-trash" ></i> Eliminar
 								</button>
