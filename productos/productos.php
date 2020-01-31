@@ -11,6 +11,12 @@
 		$permiso = "";
 	}
 	
+	$consulta_inventario = "SELECT SUM(costo_proveedor * existencia_productos) AS costo_inventario FROM productos";
+	$result_inventario = mysqli_query($link, $consulta_inventario);
+	while ($fila = mysqli_fetch_assoc($result_inventario)) {
+		$fila_inventario[] = $fila;
+	}
+	
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -37,7 +43,16 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
-					<h2 class="text-center">Productos
+					<div class="col-md-3 input-group">
+							<h5>
+								Costo Inventario: $
+								<?php echo number_format($fila_inventario[0]["costo_inventario"],0); ?>
+							</h5>
+							
+						</div>
+					<h2 class="text-center">
+						
+						Productos
 						<small>
 							<span id="cantidad_productos" class="badge badge-success"></span>
 						</small>
@@ -120,4 +135,4 @@
 			<script src="https://unpkg.com/sticky-table-headers"></script>
 		</body>
 		
-	</html>			
+	</html>						
