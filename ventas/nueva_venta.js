@@ -67,7 +67,7 @@ $(document).ready( function onLoad(){
 	});
 	
 	$("#btn_nueva_partida").click( function agregarPartida(){
-		agregarProducto({cantidad: 0, descripcion_productos: "" , saldo : 0})
+		agregarProducto({cantidad: 1, descripcion_productos: "" , saldo : 0})
 	});
 	
 	$("#btn_nuevo_cliente").click(nuevoCliente);
@@ -250,39 +250,39 @@ function renderProductos(respuesta){
 		
 		
 		/*
-		
-		<tr class="">
-		<td >
-		<input hidden class="id_productos"  value="${producto['id_productos']}">
-		
-		<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
-		<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
-		<input hidden class="costo_proveedor" value='${producto['costo_proveedor']}'>
-		<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
-		</td>
-		
-		<td class="w-25">
-		
-		<input  class="descripcion form-control"  value='${producto['descripcion_productos']}'>
-		</td>
-		<td class="text-center venta">
-		<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
-		</td>	
-		<td class="text-center venta">
-		<input type="number" readonly step="any" class="importe form-control text-right">
-		</td>
-		
-		<td class="w-25">	
-		<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
-		</td>
-		<td class="text-center">
-		<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
-		<i class="fa fa-trash"></i>
-		</button> 
-		</td>
-		</tr>
-		
-		
+			
+			<tr class="">
+			<td >
+			<input hidden class="id_productos"  value="${producto['id_productos']}">
+			
+			<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
+			<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
+			<input hidden class="costo_proveedor" value='${producto['costo_proveedor']}'>
+			<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
+			</td>
+			
+			<td class="w-25">
+			
+			<input  class="descripcion form-control"  value='${producto['descripcion_productos']}'>
+			</td>
+			<td class="text-center venta">
+			<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
+			</td>	
+			<td class="text-center venta">
+			<input type="number" readonly step="any" class="importe form-control text-right">
+			</td>
+			
+			<td class="w-25">	
+			<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
+			</td>
+			<td class="text-center">
+			<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
+			<i class="fa fa-trash"></i>
+			</button> 
+			</td>
+			</tr>
+			
+			
 		*/
 		
 		
@@ -405,8 +405,13 @@ function agregarProducto(producto){
 		<td class="text-center venta">
 		<input type="number" readonly step="any" class="importe form-control text-right">
 		</td>
-		
-		<td class="w-25">	
+		<td class="">	
+		<input type="number" class="descuento form-control"   value='0'> 
+		</td>
+		<td class="">	
+		<input class="cant_descuento form-control"  > 
+		</td>
+		<td class="">	
 		<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
 		</td>
 		<td class="text-center">
@@ -423,15 +428,24 @@ function agregarProducto(producto){
 		
 		
 		//Asigna Callbacks de eventos
+		
+		$(".descuento").change(calcularDescuento);
+		$(".descuento").keyup(calcularDescuento);
+		
+		$(".cant_descuento ").change(sumarImportes);
+		$(".cant_descuento ").keyup(sumarImportes);
+		
 		$(".cantidad").keyup(sumarImportes);
 		$(".cantidad").change(sumarImportes);
+		
 		$(".precio").keyup(sumarImportes);
 		$(".precio").change(sumarImportes);
+		
 		$("input").focus(function(){
 			$(this).select();
 		});
 		$(".btn_eliminar").click(eliminarProducto);
-		// $("#buscar_producto").val("");
+		$("#buscar_producto").val("");
 		
 		
 	}
@@ -442,6 +456,13 @@ function agregarProducto(producto){
 	
 	$("#buscar_producto").val("");
 	$("#buscar_producto").focus();
+}
+
+function calcularDescuento(){
+	$fila =  $(this).closest("tr");
+	//Si event .target has class .descuento calcula descuento sino calcula porcentaje
+	let porc_descuento = $(this);
+	sumarImportes();
 }
 
 function guardarCotizacion(event){
@@ -604,28 +625,62 @@ $("input").focus(function(){
 });
 
 
-function sumarImportes(){
-	console.log("sumarImportes");
+function sumarImportes(event){
+	console.log("sumarImportes()");
+	
+	let subtotal = 0;
+	let descuento = 0;
 	let total = 0;
 	let articulos = 0;
-	$(".id_productos").each(function(indice, fila ){
-		let cantidad = Number($(this).closest("tr").find(".cantidad").val());
-		let precio = Number($(this).closest("tr").find(".precio").val());
-		articulos+=cantidad;
+	let importe = 0;
+	let ahorro = 0;
+	let porc_descuento = 0;
+	let total_descuento = 0;
+	let anticipo = Number($("#anticipo").val());
+	
+	$("#tabla_venta tbody tr").each(function(indice, item ){
+		let fila = $(this);
+		let descuento = Number(fila.find(".descuento").val());
+		let cant_descuento = Number(fila.find(".cant_descuento").val());
+		let cantidad = Number(fila.find(".cantidad").val());
+		let precio =  Number(fila.find(".precio").val());
+		
 		importe= cantidad * precio;
-		total+= importe;
-		$(this).closest("tr").find(".importe").val(importe.toFixed(2))
+		subtotal+= importe;
+		total_descuento+= cant_descuento;
+		
+		
+		//Si la unidad es a granel solo contar 1 articulo
+		if($(this).find(".unidad").val() == 'KG'){
+			articulos+= 1;
+		}
+		else{
+			articulos+= Math.round(cantidad);
+		}
+		
+		console.log("importe", importe)
+		fila.find(".importe").val(importe.toFixed(2))
+		
 	});
 	
-	anticipo = total;
+	//preguntar sobre redondeo
+	
+	total = subtotal - total_descuento;
 	saldo = total - anticipo;
+	
+	
+	
+	// $(".nav-tabs .active .badge").text(articulos);
+	$("#articulos:visible").val(articulos);
+	$("#total").val(total.toFixed(2));
+	$("#descuento:visible").val(total_descuento.toFixed(2));
+	$("#subtotal:visible").val(subtotal.toFixed(2));
+	$("#anticipo").val(anticipo.toFixed(2) );
+	
 	
 	$("#articulos").val(articulos);
 	
-	$("#total").val(total.toFixed(2));
-	$("#anticipo").val(anticipo.toFixed(2) );
 	$("#saldo").val(saldo.toFixed(2));
-	
 }
 
 
@@ -725,42 +780,42 @@ if (window.matchMedia) {
 			beforePrint();
 		} 
 		else {
-			afterPrint();
+		afterPrint();
 		}
-	});
-}
-
-// window.onbeforeprint = beforePrint;
-//window.onafterprint = afterPrint;
-function buscarDescripcion(){
-	var indice = $(this).data("indice");
-	var valor_filtro = $(this).val();
-	
-	var num_rows = buscar(valor_filtro,'tabla_productos',indice);
-	
-	$("#cantidad_productos").text(num_rows);
-	
-	if(num_rows == 0){
+		});
+		}
+		
+		// window.onbeforeprint = beforePrint;
+		//window.onafterprint = afterPrint;
+		function buscarDescripcion(){
+		var indice = $(this).data("indice");
+		var valor_filtro = $(this).val();
+		
+		var num_rows = buscar(valor_filtro,'tabla_productos',indice);
+		
+		$("#cantidad_productos").text(num_rows);
+		
+		if(num_rows == 0){
 		$('#mensaje').html("<div class='alert alert-warning text-center'><strong>No se ha encontrado.</strong></div>");
 		}else{
 		$('#mensaje').html('');
-	}
-}
-
-function resetFondo(){
-	
-	$("#tabla_venta tbody tr").removeClass("bg-info");
-	
-}
-
-function navegarFilas(e){
-	var $table = $(this);
-	var $active = $('input:focus,select:focus',$table);
-	var $next = null;
-	var focusableQuery = 'input:visible,select:visible,textarea:visible';
-	var position = parseInt( $active.closest('td').index()) + 1;
-	console.log('position :',position);
-	switch(e.keyCode){
+		}
+		}
+		
+		function resetFondo(){
+		
+		$("#tabla_venta tbody tr").removeClass("bg-info");
+		
+		}
+		
+		function navegarFilas(e){
+		var $table = $(this);
+		var $active = $('input:focus,select:focus',$table);
+		var $next = null;
+		var focusableQuery = 'input:visible,select:visible,textarea:visible';
+		var position = parseInt( $active.closest('td').index()) + 1;
+		console.log('position :',position);
+		switch(e.keyCode){
 		case 37: // <Left>
 		$next = $active.parent('td').prev().find(focusableQuery);   
 		break;
@@ -784,9 +839,9 @@ function navegarFilas(e){
 		.find(focusableQuery)
 		;
 		break;
-	}       
-	if($next && $next.length)
-	{        
+		}       
+		if($next && $next.length)
+		{        
 		$next.focus();
-	}
-}	
+		}
+		}												

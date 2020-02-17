@@ -130,6 +130,8 @@
 								<th class="text-center">Descripción</th>
 								<th class="text-center venta px-4">Precio  </th>
 								<th class="text-center venta px-3">Importe</th>
+								<th class="text-center">% Desc</th>
+								<th class="text-center">Descuento</th>
 								<th class="text-center">Existencia</th>
 								<th class="text-center">Acciones</th>
 							</tr>
@@ -166,12 +168,16 @@
 						
 						
 						<div class="col-sm-6 col-6 h3 text-right ">
-							<label class="venta" for="">Total:</label>  <br>
+							<label class="venta" for="">Subtotal:</label>  <br>
+							<label class="venta" for="">Descuento:</label> <br>
+							<label class="venta" for="">Total:</label> <br>
 							<label class="venta" for="">Anticipo:</label> <br>
 							<label class="venta" for="">Saldo:</label> 
 						</div>
 						<div class="col-sm-2 col-6 h3 venta">
-							<input   id="total" type="number" class="form-control input-lg text-right venta" value="0" >
+							<input   id="subtotal" type="number" class="form-control input-lg text-right venta" value="0" >
+							<input   id="descuento" type="number" class="form-control input-lg text-right venta" value="0">
+							<input   id="total" type="number" class="form-control input-lg text-right venta" value="0">
 							<input   id="anticipo" type="number" class="form-control input-lg text-right venta" value="0">
 							<input   id="saldo" type="number" class="form-control input-lg text-right venta" value="0" >
 						</div>
@@ -200,7 +206,7 @@
 		
 		<script src="../productos/editar_producto.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
 		<script src="../clientes/clientes.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
-		<script src="nueva_venta.js"></script>
+		<script src="nueva_venta.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
 		
 	</body>
 </html>				
