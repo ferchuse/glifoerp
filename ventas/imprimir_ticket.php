@@ -108,7 +108,7 @@
 						Mail: zumpango@fixferreterias.com <BR>
 						Telefono: 59-1100-1294 <BR><BR>
 						
-						<strong>ANTICIPO 16678</strong>
+						<strong>VENTA 16678</strong>
 						
 					</div>
 				</div>
@@ -171,7 +171,7 @@
 					<div class="col-4"><b>$5.00 </b> 	</div>
 					
 					
-					Fecha 17/02/2020 08:35:28 a.m. <br>
+					Fecha 17/02/2020 09:25:28 a.m. <br>
 					CLIENTE FERNANDO GUZMAN AGUADO <br>
 					RFC: GUAF880601NA6 <br>
 					Lista de Precios 3 <br>
@@ -189,7 +189,7 @@
 					Folio: FAAA33F5-5BFD-5F47-A433-7FF6D72C0142 <br>
 					
 					FECHA Y HORA DE CERTIFICACIÓN DEL CFDI:  <br>
-					2020-02-017T09:20:57 <br>
+					2020-02-017T09:25:57 <br>
 					CADENA ORIGINAL DEL COMPLEMENTO DE CERTIFICACIÓN DEL SAT 
 					||1.0|FAAA33F5-5BFD-5F47-A433-7FF6D72C0142|2020-02-07T17:20:57|AcwM1WoDC8TWeXIXKfw4l+OY1Be5fpkxTmLSsWEWfNf3Y3PtwlS9ysN2qWrfGZ0v
 					QChkgHeg4wO1kUv2pOOzOndvoc2bEGtvz33iPQARBlf2hzY7ry474E7cWNH87IH5LzrNRZZz2x4MtkVmdR6HhNkD2UzT8WH32NJOwSjYGejriNWZyL/zR0Di0
