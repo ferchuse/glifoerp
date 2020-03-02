@@ -1,13 +1,23 @@
-$(document).ready(function(){
-	// $('#form_reportes').submit(enviarFormulario);
+$(document).ready(onLoad);
+
+function onLoad(){
+	
 	$('.btn_borrar').click(confirmaBorrar);
 	$('.btn_nota').click(nuevaRemisión);
 	$('#form_remision').submit(guardarRemision);
 	$('.estatus_ventas').change(cambiarEstatus);
 	$('.convertir_a_salida').click(convertirASalida);
 	
-});
-
+	listarRegistros();
+	
+	$("#form_filtros").submit(function(event){
+		
+		event.preventDefault();
+		
+		listarRegistros();
+	});
+	
+}
 
 function nuevaRemisión(event){
 	
@@ -16,11 +26,13 @@ function nuevaRemisión(event){
 }
 
 
+
+
 function convertirASalida(event){
 	console.log("convertirASalida");
 	
 	var id_registro = $(this).data('id_registro');
-
+	
 	
 	$.ajax({
 		url: 'convertir_a_salida.php',
@@ -38,6 +50,28 @@ function convertirASalida(event){
 			
 		}
 		}).always(function (){
+		
+		
+	});
+}
+
+function listarRegistros(){
+	console.log("listarRegistros()")
+	$("#form_filtros").find(":submit").prop("disabled", true);
+	$("#form_filtros").find(":submit .fas").toggleClass("fa-search fa-spinner fa-spin");
+	
+	
+	
+	$.ajax({
+		url: 'consultas/listar.php',
+		method: 'GET',
+		data: $("#form_filtros").serialize()
+		}).done(function(respuesta){
+		$("#lista_registros").html(respuesta)
+		}).always(function (){
+		
+		$("#form_filtros").find(":submit").prop("disabled", false);
+		$("#form_filtros").find(":submit .fas").toggleClass("fa-search fa-spinner fa-spin");
 		
 		
 	});
