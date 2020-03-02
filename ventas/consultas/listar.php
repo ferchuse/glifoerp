@@ -18,7 +18,7 @@
 	
 	if($_GET["id_clientes"] != ""){
 		
-		$consulta.="AND ventas.id_clientes' = '{$_GET["id_clientes"]}'";
+		$consulta.="AND ventas.id_clientes = '{$_GET["id_clientes"]}'";
 		
 	}
 	
