@@ -12,10 +12,18 @@
 	*,
 	
 	
-	COALESCE ( suma_cargos, 0 ) - COALESCE ( suma_abonos, 0 ) AS saldo 
+	COALESCE ( suma_ventas, 0 ) + COALESCE ( suma_cargos, 0 ) - COALESCE ( suma_abonos, 0 ) AS saldo 
 	FROM
 	clientes
-	LEFT JOIN ( SELECT id_clientes, SUM( total ) AS suma_cargos FROM ventas GROUP BY id_clientes ) AS t_cargos USING ( id_clientes )
+	LEFT JOIN ( 
+	SELECT id_clientes, SUM( total ) AS suma_ventas FROM ventas GROUP BY id_clientes 
+	) AS t_ventas USING ( id_clientes )
+	
+	LEFT JOIN ( 
+	SELECT id_clientes, SUM( importe ) AS suma_cargos FROM cargos GROUP BY id_clientes 
+	) AS t_cargos USING ( id_clientes )
+	
+	
 	LEFT JOIN ( SELECT id_clientes, SUM( importe ) AS suma_abonos FROM abonos GROUP BY id_clientes ) AS t_abonos USING ( id_clientes ) 
 	LEFT JOIN vendedores USING(id_vendedores)
 	WHERE 1 
