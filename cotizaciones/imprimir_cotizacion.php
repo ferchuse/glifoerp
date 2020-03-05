@@ -22,7 +22,6 @@
 	FROM
 	cotizaciones_detalle
 	LEFT JOIN productos USING (id_productos)
-	LEFT JOIN departamentos USING (id_departamentos)
 	WHERE
 	id_cotizaciones = {$_GET["id_registro"]}
 	";
@@ -33,8 +32,8 @@
 		$fila_detalle[] = $fila;
 	}
 	
-	echo "<pre>".$consulta."</pre>";
-	echo "<pre>".$consulta_detalle."</pre>";
+	// echo "<pre>".$consulta."</pre>";
+	// echo "<pre>".$consulta_detalle."</pre>";
 	
 ?>
 

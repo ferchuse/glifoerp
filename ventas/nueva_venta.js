@@ -520,10 +520,9 @@ function guardarCotizacion(event){
 			}).done(function(respuesta){
 			if(respuesta.estatus_movimiento == "success"){
 				$("#id_ventas").val(respuesta.folio)
-				alertify.success('Venta Guardada');
-				imprimirTicket( respuesta.folio)
-				// window.location.reload(true);
-				
+				alertify.success('Cotización Guardada');
+				imprimirCotizacion( respuesta.folio)
+				//ir a editar cotizacion despues de imprimir
 			}
 			}).fail(function(xhr, error, ernum){
 			alertify.error("Ocurrio un error:"+ error + ernum );
@@ -693,6 +692,32 @@ function imprimirTicket(id_registro){
 	document.title = "Venta " + id_registro;
 	$.ajax({
 		url: "imprimir_ventas.php",
+		data:{
+			id_registro : id_registro
+			
+		}
+		}).done(function (respuesta){
+		
+		$("#ticket").html(respuesta); 
+		
+		setTimeout(function(){
+			
+			window.print();
+		}, 1000 )
+		
+		}).always(function(){
+		
+		// boton.prop("disabled", false);
+		// icono.toggleClass("fa-print fa-spinner fa-spin");
+		
+	});
+}
+function imprimirCotizacion(id_registro){
+	console.log("imprimirTicket()");
+	
+	document.title = "Venta " + id_registro;
+	$.ajax({
+		url: "../cotizaciones/imprimir_cotizacion.php",
 		data:{
 			id_registro : id_registro
 			
