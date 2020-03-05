@@ -11,7 +11,11 @@
 		$permiso = "";
 	}
 	
-	$consulta_inventario = "SELECT SUM(costo_proveedor * existencia_productos) AS costo_inventario FROM productos";
+	$consulta_inventario = "SELECT 
+	SUM(costo_proveedor * existencia_productos) AS costo_inventario,
+	SUM(precio_menudeo * existencia_productos) AS precio_venta
+	
+	FROM productos";
 	$result_inventario = mysqli_query($link, $consulta_inventario);
 	while ($fila = mysqli_fetch_assoc($result_inventario)) {
 		$fila_inventario[] = $fila;
@@ -43,10 +47,19 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-12">
-					<div class="col-md-3 input-group">
+					<div class="col-md-12 input-group">
 							<h5>
 								Costo Inventario: $
 								<?php echo number_format($fila_inventario[0]["costo_inventario"],0); ?>
+								
+								Precio de Venta:
+								
+								$ <?php echo number_format($fila_inventario[0]["precio_venta"],0); ?>
+								
+								Ganancia Esperada:
+								
+								$ <?php echo number_format($fila_inventario[0]["precio_venta"] - $fila_inventario[0]["costo_inventario"],0); ?>
+								
 							</h5>
 							
 						</div>

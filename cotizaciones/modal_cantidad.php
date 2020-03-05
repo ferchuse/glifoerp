@@ -1,4 +1,4 @@
-<form id="form_granel" autocomplete="off">
+<form id="form_granel" class="was-validated" autocomplete="off">
 	<div id="modal_granel" class="modal fade">
 		<div class="modal-dialog modal-sm">
 			<div class="modal-content">
