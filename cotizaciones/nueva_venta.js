@@ -233,6 +233,12 @@ function renderProductos(respuesta){
 		<td class="text-center venta">
 		<input type="number" readonly step="any" class="importe form-control text-right">
 		</td>
+		<td class="">	
+		<input type="number" class="descuento form-control"   value='0'> 
+		</td>
+		<td class="">	
+		<input class="cant_descuento form-control"  > 
+		</td>
 		
 		<td class="w-25">	
 		<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
@@ -245,49 +251,6 @@ function renderProductos(respuesta){
 		</td>
 		</tr>`;
 		
-		
-		
-		
-		
-		/*
-			
-			<tr class="">
-			<td >
-			<input hidden class="id_productos"  value="${producto['id_productos']}">
-			
-			<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
-			<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
-			<input hidden class="costo_proveedor" value='${producto['costo_proveedor']}'>
-			<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
-			</td>
-			
-			<td class="w-25">
-			
-			<input  class="descripcion form-control"  value='${producto['descripcion_productos']}'>
-			</td>
-			<td class="text-center venta">
-			<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
-			</td>	
-			<td class="text-center venta">
-			<input type="number" readonly step="any" class="importe form-control text-right">
-			</td>
-			
-			<td class="w-25">	
-			<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
-			</td>
-			<td class="text-center">
-			<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
-			<i class="fa fa-trash"></i>
-			</button> 
-			</td>
-			</tr>
-			
-			
-		*/
-		
-		
-		
-		
 	});
 	
 	
@@ -298,7 +261,7 @@ function renderProductos(respuesta){
 	console.log("datos Venta:",  respuesta.ventas)
 	//Imprime datos de la Venta
 	$("#id_vendedores").val(respuesta.ventas[0].ventas_id_vendedores);
-	$("#fecha_movimiento").val(respuesta.ventas[0].fecha_ventas);
+	$("#fecha_movimiento").val(respuesta.ventas[0].fecha_cotizaciones);
 	$("#span_id_clientes").text(respuesta.ventas[0].id_clientes);
 	$("#id_clientes").val(respuesta.ventas[0].id_clientes);
 	$("#buscar_clientes").val(respuesta.ventas[0].razon_social_clientes);
@@ -307,13 +270,22 @@ function renderProductos(respuesta){
 	// $(".mayoreo").change(aplicarMayoreoProducto);
 	$(".cantidad").keyup(sumarImportes);
 	$(".cantidad").change(sumarImportes);
-	$(".btn_eliminar").click(eliminarProducto);
-	
-	
 	
 	$("input").focus( function selecciona_input(){
 		$(this).select();
 	});
+	
+	$(".descuento").change(calcularDescuento);
+	$(".descuento").keyup(calcularDescuento);
+	
+	$(".cant_descuento ").change(sumarImportes);
+	$(".cant_descuento ").keyup(sumarImportes);
+	
+	$(".precio").keyup(sumarImportes);
+	$(".precio").change(sumarImportes);
+	
+	$(".btn_eliminar").click(eliminarProducto);
+	
 	sumarImportes();
 	
 }
@@ -731,42 +703,42 @@ if (window.matchMedia) {
 			beforePrint();
 		} 
 		else {
-		afterPrint();
+			afterPrint();
 		}
-		});
-		}
-		
-		// window.onbeforeprint = beforePrint;
-		//window.onafterprint = afterPrint;
-		function buscarDescripcion(){
-		var indice = $(this).data("indice");
-		var valor_filtro = $(this).val();
-		
-		var num_rows = buscar(valor_filtro,'tabla_productos',indice);
-		
-		$("#cantidad_productos").text(num_rows);
-		
-		if(num_rows == 0){
+	});
+}
+
+// window.onbeforeprint = beforePrint;
+//window.onafterprint = afterPrint;
+function buscarDescripcion(){
+	var indice = $(this).data("indice");
+	var valor_filtro = $(this).val();
+	
+	var num_rows = buscar(valor_filtro,'tabla_productos',indice);
+	
+	$("#cantidad_productos").text(num_rows);
+	
+	if(num_rows == 0){
 		$('#mensaje').html("<div class='alert alert-warning text-center'><strong>No se ha encontrado.</strong></div>");
 		}else{
 		$('#mensaje').html('');
-		}
-		}
-		
-		function resetFondo(){
-		
-		$("#tabla_venta tbody tr").removeClass("bg-info");
-		
-		}
-		
-		function navegarFilas(e){
-		var $table = $(this);
-		var $active = $('input:focus,select:focus',$table);
-		var $next = null;
-		var focusableQuery = 'input:visible,select:visible,textarea:visible';
-		var position = parseInt( $active.closest('td').index()) + 1;
-		console.log('position :',position);
-		switch(e.keyCode){
+	}
+}
+
+function resetFondo(){
+	
+	$("#tabla_venta tbody tr").removeClass("bg-info");
+	
+}
+
+function navegarFilas(e){
+	var $table = $(this);
+	var $active = $('input:focus,select:focus',$table);
+	var $next = null;
+	var focusableQuery = 'input:visible,select:visible,textarea:visible';
+	var position = parseInt( $active.closest('td').index()) + 1;
+	console.log('position :',position);
+	switch(e.keyCode){
 		case 37: // <Left>
 		$next = $active.parent('td').prev().find(focusableQuery);   
 		break;
@@ -790,9 +762,9 @@ if (window.matchMedia) {
 		.find(focusableQuery)
 		;
 		break;
-		}       
-		if($next && $next.length)
-		{        
+	}       
+	if($next && $next.length)
+	{        
 		$next.focus();
-		}
-		}												
+	}
+}												

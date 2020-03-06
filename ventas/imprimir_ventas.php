@@ -2,7 +2,7 @@
 	
 	include("../conexi.php");
 	$link = Conectarse();
-	$menu_activo = "compras";
+	$empresa = "Glifo Media";
 	
 	
 	$consulta = "SELECT * FROM ventas

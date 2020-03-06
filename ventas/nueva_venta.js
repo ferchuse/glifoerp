@@ -233,6 +233,12 @@ function renderProductos(respuesta){
 		<td class="text-center venta">
 		<input type="number" readonly step="any" class="importe form-control text-right">
 		</td>
+		<td class="">	
+		<input type="number" class="descuento form-control"   value='0'> 
+		</td>
+		<td class="">	
+		<input class="cant_descuento form-control"  > 
+		</td>
 		
 		<td class="w-25">	
 		<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
@@ -307,13 +313,22 @@ function renderProductos(respuesta){
 	// $(".mayoreo").change(aplicarMayoreoProducto);
 	$(".cantidad").keyup(sumarImportes);
 	$(".cantidad").change(sumarImportes);
-	$(".btn_eliminar").click(eliminarProducto);
-	
-	
 	
 	$("input").focus( function selecciona_input(){
 		$(this).select();
 	});
+	
+	$(".descuento").change(calcularDescuento);
+	$(".descuento").keyup(calcularDescuento);
+	
+	$(".cant_descuento ").change(sumarImportes);
+	$(".cant_descuento ").keyup(sumarImportes);
+	
+	$(".precio").keyup(sumarImportes);
+	$(".precio").change(sumarImportes);
+	
+	$(".btn_eliminar").click(eliminarProducto);
+	
 	sumarImportes();
 	
 }
@@ -805,42 +820,42 @@ if (window.matchMedia) {
 			beforePrint();
 		} 
 		else {
-		afterPrint();
+			afterPrint();
 		}
-		});
-		}
-		
-		// window.onbeforeprint = beforePrint;
-		//window.onafterprint = afterPrint;
-		function buscarDescripcion(){
-		var indice = $(this).data("indice");
-		var valor_filtro = $(this).val();
-		
-		var num_rows = buscar(valor_filtro,'tabla_productos',indice);
-		
-		$("#cantidad_productos").text(num_rows);
-		
-		if(num_rows == 0){
+	});
+}
+
+// window.onbeforeprint = beforePrint;
+//window.onafterprint = afterPrint;
+function buscarDescripcion(){
+	var indice = $(this).data("indice");
+	var valor_filtro = $(this).val();
+	
+	var num_rows = buscar(valor_filtro,'tabla_productos',indice);
+	
+	$("#cantidad_productos").text(num_rows);
+	
+	if(num_rows == 0){
 		$('#mensaje').html("<div class='alert alert-warning text-center'><strong>No se ha encontrado.</strong></div>");
 		}else{
 		$('#mensaje').html('');
-		}
-		}
-		
-		function resetFondo(){
-		
-		$("#tabla_venta tbody tr").removeClass("bg-info");
-		
-		}
-		
-		function navegarFilas(e){
-		var $table = $(this);
-		var $active = $('input:focus,select:focus',$table);
-		var $next = null;
-		var focusableQuery = 'input:visible,select:visible,textarea:visible';
-		var position = parseInt( $active.closest('td').index()) + 1;
-		console.log('position :',position);
-		switch(e.keyCode){
+	}
+}
+
+function resetFondo(){
+	
+	$("#tabla_venta tbody tr").removeClass("bg-info");
+	
+}
+
+function navegarFilas(e){
+	var $table = $(this);
+	var $active = $('input:focus,select:focus',$table);
+	var $next = null;
+	var focusableQuery = 'input:visible,select:visible,textarea:visible';
+	var position = parseInt( $active.closest('td').index()) + 1;
+	console.log('position :',position);
+	switch(e.keyCode){
 		case 37: // <Left>
 		$next = $active.parent('td').prev().find(focusableQuery);   
 		break;
@@ -864,9 +879,9 @@ if (window.matchMedia) {
 		.find(focusableQuery)
 		;
 		break;
-		}       
-		if($next && $next.length)
-		{        
+	}       
+	if($next && $next.length)
+	{        
 		$next.focus();
-		}
-		}												
+	}
+}												

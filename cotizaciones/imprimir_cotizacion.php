@@ -6,9 +6,8 @@
 	
 	
 	$consulta = "SELECT * FROM cotizaciones
-	LEFT JOIN clientes USING (id_clientes)
 	LEFT JOIN vendedores USING (id_vendedores)
-	LEFT JOIN productos USING (id_productos)
+	LEFT JOIN clientes USING (id_clientes)
 	WHERE id_cotizaciones ={$_GET["id_registro"]}";
 	
 	$result = mysqli_query($link, $consulta);
@@ -143,13 +142,10 @@
 					
 					
 					<div class="col-sm-6 col-6 h3 text-right ">
-						Subtotal: <br>
-						IVA: <br>
 						Total:
 					</div>
 					<div class="col-sm-2 col-6 h3 text-right">
-						<?php echo number_format($filas[0]["subtotal"],2)?> <br>
-						<?php echo number_format($filas[0]["iva"],2)?> <br>
+					
 						<?php echo number_format($filas[0]["total"],2)?>
 					</div>
 					
