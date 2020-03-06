@@ -153,8 +153,7 @@
 					
 				</div>
 			</section>
-			<pre hidden>
-				<?php print_r($filas)?>
+			<pre >Se requiere anticipo del 50%. <br>Tiempo de Entrega 4 días habiles a partir del anticipo.<br>Precio incluye IVA
 			</pre>
 			
 		</div>
