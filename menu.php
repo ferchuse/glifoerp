@@ -67,11 +67,7 @@
 						<i class="fas fa-list"></i> Categorías
 					</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="../catalogos/vendedores.php">
-						<i class="fas fa-user-tie"></i> Vendedores
-					</a>
-				</li>
+				
 				<li class="nav-item">
 					<a class="nav-link" href="../facturacion/facturas.php">
 						<i class="fas fa-qrcode"></i> Facturación

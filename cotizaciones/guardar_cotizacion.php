@@ -71,25 +71,25 @@
 		";
 		
 		
-		$respuesta['insertar_anticipo'] = $insertar_anticipo;
+		// $respuesta['insertar_anticipo'] = $insertar_anticipo;
 		
-		$result_anticipo = mysqli_query($link, $insertar_anticipo);
+		// $result_anticipo = mysqli_query($link, $insertar_anticipo);
 		
-		if($result_anticipo){
-			$respuesta['estatus_anticipo'] = 'success';
-			$respuesta['mensaje_anticipo'] = 'Anticipo Guardado';
-		}
-		else{
-			$respuesta['estatus_anticipo'] = 'error';
-			$respuesta['mensaje_anticipo'] = "Error en insertar_anticipo :".mysqli_error($link);
-		}
+		// if($result_anticipo){
+			// $respuesta['estatus_anticipo'] = 'success';
+			// $respuesta['mensaje_anticipo'] = 'Anticipo Guardado';
+		// }
+		// else{
+			// $respuesta['estatus_anticipo'] = 'error';
+			// $respuesta['mensaje_anticipo'] = "Error en insertar_anticipo :".mysqli_error($link);
+		// }
 		
 	}
 	
 	//Borra los productos anteriores si la venta ya existe
 	if($_POST["id_ventas"] != ''){
 		
-		$borrar_productos = "DELETE FROM ventas_detalle WHERE id_ventas = '{$_POST["id_ventas"]}';
+		$borrar_productos = "DELETE FROM cotizaciones_detalle WHERE id_cotizaciones = '{$_POST["id_ventas"]}';
 		";
 		
 		$result_borrar = mysqli_query( $link, $borrar_productos );
