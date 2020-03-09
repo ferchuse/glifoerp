@@ -19,7 +19,7 @@
 		
 		<?php include("../styles.php"); ?>
 		<style>
-			.ascdsds::after {
+			.asc::after {
 			content: "<i class='fas fa-arrow-down'></i>";
 				
 				}
@@ -36,11 +36,11 @@
 					</div>
 				
 				<div class="row col-12 mb-4">
-				<div class="col-3" >
+				<div class="col-12 col-sm-3" >
 					<input class="buscar  form-control float-left" type="search" placeholder="Buscar Cliente">
 					
 				</div>
-				<div class="col-7">
+				<div class="col-sm-7">
 					<form class="form-inline" id="form_filtros">
 						<input type="hidden" id="sort" name="sort" value="alias_clientes">
 						<input type="hidden" id="order" name="order" value="ASC">
@@ -65,7 +65,7 @@
 				
 				
 				
-				<div class="text-center" id="lista_registros">
+				<div class="text-center table-responsive" id="lista_registros" >
 					
 				</div>
 				

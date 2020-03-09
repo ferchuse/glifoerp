@@ -55,7 +55,7 @@
 		<tr>
 			<th class="text-center"><a class="sort" href="#!" data-columna="razon_social_clientes">Razón Social</a> </th>
 			<th class="text-center"><a class="sort" href="#!" data-columna="rfc_clientes">RFC</a> </th>
-			<th class="text-center"><a class="sort" href="#!" data-columna="nombre_vendedores">Vendedor</a> </th>
+		
 			<th class="text-center"><a class="sort" href="#!" data-columna="saldo">Saldo</a> </th>
 			<th class="text-center">Acciones</th>
 		</tr>
@@ -69,7 +69,7 @@
 			<tr class="text-center">
 				<td><?php echo $cliente["razon_social_clientes"]; ?></td>
 				<td><?php echo $cliente["rfc_clientes"]; ?></td>
-				<td><?php echo $cliente["nombre_vendedores"]; ?></td>
+			
 				<td>$<?php echo number_format($cliente["saldo"]); ?></td>
 				<td>
 					<button class="btn btn-success btn_cargos" data-id_registro="<?php echo $cliente["id_clientes"] ?>" data-saldo="<?php echo $cliente["saldo"] ?>">
