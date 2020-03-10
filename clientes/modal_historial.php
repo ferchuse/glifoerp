@@ -8,6 +8,7 @@
 	SELECT
 	id_ventas AS id_transaccion,
 	'CARGO' as tipo,
+	'ventas' AS tabla,
 	fecha_ventas AS fecha,
 	CONCAT('VENTA #', id_ventas) as concepto,
 	total AS importe,
@@ -22,6 +23,7 @@
 	SELECT
 	id_abonos AS id_transaccion,
 	'ABONO' as tipo,
+	'abonos' as tabla,
 	fecha,
 	concepto,
 	importe,
@@ -36,6 +38,7 @@
 	SELECT
 	id_cargos AS id_transaccion,
 	'CARGO' as tipo,
+	'cargos' as tabla,
 	fecha,
 	concepto,
 	importe,
@@ -90,9 +93,32 @@
 								
 								<td><?php echo date("d/m/Y", strtotime($transaccion["fecha"]));?></td>
 								<td>
-									<a target="_blank" href="../ventas/imprimir_ventas.php?id_registro=<?= $transaccion["id_transaccion"] ?>">
-										<?php echo $transaccion["concepto"];?>
-									</a>
+									<?php
+										switch($transaccion["tabla"]){
+											case "ventas":
+										?>
+										<a target="_blank" href="../ventas/imprimir_ventas.php?id_registro=<?= $transaccion["id_transaccion"] ?>">
+											<?php echo $transaccion["concepto"];?>
+										</a>
+										<?php
+											break;
+											case "cargos":
+										?>
+										<a target="_blank" href="imprimir_cargos.php?id_registro=<?= $transaccion["id_transaccion"] ?>">
+											<?php echo $transaccion["concepto"];?>
+										</a>
+										<?php
+											break;
+											case "abonos":
+										?>
+										<a target="_blank" href="imprimir_abonos.php?id_registro=<?= $transaccion["id_transaccion"] ?>">
+											<?php echo $transaccion["concepto"];?>
+										</a>
+										<?php
+											break;
+										}
+									?>
+									
 								</td>
 								
 								<?php if($transaccion["tipo"] == "CARGO"){
