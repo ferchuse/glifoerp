@@ -50,7 +50,7 @@
 		
 		
 		<?php include("../styles.php"); ?>
-		<link rel="stylesheet" href="imprimir_movimiento.css">
+		
 	</head>
 	
 	<body>
@@ -115,13 +115,15 @@
 									<td class="text-center">
 										<?php echo number_format($producto["cantidad"]) ?>
 									</td>
-									<td class="text-center">
-										<?php echo $producto["descripcion"] ?>
+									<td class="">
+										<b><?php echo $producto["descripcion"] ?></b> <br>
+										<?php echo nl2br($producto["notas"]) ?>
+										
 										
 										
 									</td>
-									<td class="text-center"><?php echo $producto["precio"] ?></td>
-									<td class="text-center"><?php echo $producto["importe"] ?></td>
+									<td class="text-center"><?php echo number_format($producto["precio"]) ?></td>
+									<td class="text-center"><?php echo number_format($producto["importe"]) ?></td>
 								</tr>
 								<?php 
 								}
@@ -153,7 +155,8 @@
 					
 				</div>
 			</section>
-			<pre >Se requiere anticipo del 50%. <br>Tiempo de Entrega 4 días habiles a partir del anticipo.<br>Precio incluye IVA
+			<pre >
+					<?php echo ($filas[0]["condiciones_pago"],2)?>
 			</pre>
 			
 		</div>

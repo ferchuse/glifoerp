@@ -3,7 +3,7 @@
 	include("../funciones/generar_select.php");
 	include("../conexi.php");
 	$link = Conectarse();
-	$menu_activo = "reportes";
+	$menu_activo = "cotizaciones";
 	
 	$dt_fecha_inicial = new DateTime("first day of this month");
 	$dt_fecha_final = new DateTime("last day of this month");
@@ -20,7 +20,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
-		<title>Ventas</title>
+		<title>Cotizaciones</title>
 		
 		<?php include("../styles.php");?>
 		
@@ -35,7 +35,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<h3 class="text-center">
-						VENTAS
+						Cotizaciones
 						
 					</h3>
 					<a href="nueva_venta.php?tipo_movimiento=VENTA" class="btn btn-success" >

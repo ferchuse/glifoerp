@@ -114,6 +114,7 @@
 		id_cotizaciones = 	'$folio', 
 		id_productos = 	'{$producto["id_productos"]}', 
 		descripcion = 	'{$producto["descripcion"]}',
+		notas = 	'{$producto["notas"]}',
 		ganancia = 	'{$ganancia}',
 		cantidad = 	'{$producto["cantidad"]}',
 		importe = 	'{$producto["importe"]}',

@@ -226,6 +226,7 @@ function renderProductos(respuesta){
 		<td class="w-25">
 		
 		<input  class="descripcion form-control"  value='${producto['descripcion']}'>
+<textarea placeholder="Descripción detallada" name="notas" class="notas form-control mt-2">${producto['notas']}</textarea>
 		</td>
 		<td class="text-center venta">
 		<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio']}'>
@@ -369,7 +370,8 @@ function agregarProducto(producto){
 		
 		<td class="w-25">
 		
-		<input  class="descripcion form-control"  value='${producto['descripcion_productos']}'>
+		<input placeholder="Nombre del Producto o Servicio" class="descripcion form-control"  value='${producto['descripcion_productos']}'>
+		<textarea placeholder="Descripción detallada" name="notas" class="notas form-control mt-2"></textarea>
 		</td>
 		<td class="text-center venta">
 		<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
@@ -462,6 +464,7 @@ function guardarCotizacion(event){
 				"cantidad": $(item).find(".cantidad").val(),
 				"precio": $(item).find(".precio").val(),
 				"descripcion": $(item).find(".descripcion").val(),
+				"notas": $(item).find(".notas").val(),
 				"importe": $(item).find(".importe").val(),
 				"existencia_anterior": $(item).find(".existencia_anterior").val(),
 				"costo_proveedor": $(item).find(".costo_proveedor").val()
@@ -487,6 +490,7 @@ function guardarCotizacion(event){
 				total: $("#total").val(),
 				anticipo: $("#anticipo").val(),
 				saldo: $("#saldo").val(),
+				condiciones_pago: $("#condiciones_pago").val(),
 				productos: productos
 			}
 			}).done(function(respuesta){
