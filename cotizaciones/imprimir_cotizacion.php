@@ -156,7 +156,7 @@
 				</div>
 			</section>
 			<pre >
-					<?php echo ($filas[0]["condiciones_pago"],2)?>
+					<?php echo $filas[0]["condiciones_pago"]?>
 			</pre>
 			
 		</div>
