@@ -155,9 +155,7 @@
 					
 				</div>
 			</section>
-			<pre >
-					<?php echo $filas[0]["condiciones_pago"]?>
-			</pre>
+			<pre ><?php echo $filas[0]["condiciones_pago"]?></pre>
 			
 		</div>
 	</body>
