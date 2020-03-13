@@ -18,7 +18,7 @@
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
 	total = '{$_POST['total']}',
-	
+	condiciones_pago = '{$_POST['condiciones_pago']}',
 	articulos = '{$_POST['articulos']}'
 	
 	ON DUPLICATE KEY UPDATE
@@ -32,7 +32,7 @@
 	id_clientes = '{$_POST['id_clientes']}',
 	subtotal = '{$_POST['subtotal']}',
 	total = '{$_POST['total']}',
-	
+	condiciones_pago = '{$_POST['condiciones_pago']}',
 	articulos = '{$_POST['articulos']}'
 	";
 	
