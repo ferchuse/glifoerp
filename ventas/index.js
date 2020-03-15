@@ -2,8 +2,8 @@ $(document).ready(onLoad);
 
 function onLoad(){
 	
-	$('.btn_borrar').click(confirmaBorrar);
-	$('.btn_nota').click(nuevaRemisión);
+	$('#lista_registros').on("click",".btn_borrar",confirmaBorrar);
+	// $('.btn_nota').click(nuevaRemisión);
 	$('#form_remision').submit(guardarRemision);
 	$('.estatus_ventas').change(cambiarEstatus);
 	$('.convertir_a_salida').click(convertirASalida);
@@ -167,7 +167,7 @@ function confirmaBorrar() {
 			boton.prop("disabled", false);
 			icono.toggleClass("fa-trash fa-spinner fa-spin");
 			
-		});
+			});
 	}
 	
 	
