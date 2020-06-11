@@ -97,7 +97,7 @@
 				<div class="col-sm-2">
 					<div class="form-group " >
 						<label for="">Vendedor</label>
-						<?php echo generar_select($link, "vendedores", "id_vendedores", "nombre_vendedores", false,false, false, 1);?>
+						<?php echo generar_select($link, "vendedores", "id_vendedores", "nombre_vendedores", false,false, false, 2);?>
 					</div>
 				</div>
 				<div class="col-sm-3">
