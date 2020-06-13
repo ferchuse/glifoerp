@@ -28,7 +28,14 @@
 							</div>
 							<div class="form-group">
 								<label required for="id_departamentos">Categoría:</label>
+								<button class="btn btn-sm btn-success" type="button" ><i class="fas fa-plus"></i></button>
 								<?php echo generar_select($link, "departamentos", "id_departamentos", "nombre_departamentos", false, false, true) ?>
+							</div>
+							<div class="form-group">
+								<label required for="id_proveedores">Proveedor: </label>
+								<button class="btn btn-sm btn-success" type="button" ><i class="fas fa-plus"></i></button>
+								
+								<?php echo generar_select($link, "proveedores", "id_proveedores", "nombre_proveedores", false, false) ?>
 							</div>
 							<div class="form-group">
 								<label required for="estatus_productos">Estatus:</label>
@@ -45,8 +52,17 @@
 							<section id="precios" >
 								<div class="form-group">
 									<label for="costo_proveedor">Costo de compra:</label>
-									<input placeholder="" required type="number" min="0" step=".01" class="form-control" id="costo_proveedor" name="costo_proveedor">
+									<input placeholder="" required type="number" min="0" step=".01" class="form-control" id="costo_proveedor" name="costo_proveedor" >
 								</div>
+								<div class="form-group">
+									<label for="costo_proveedor">Factor(Piezas Incluidas):</label>
+									<input placeholder="" required type="number" min="1"  class="form-control" id="factor" name="factor" value="1">
+								</div>
+								<div class="form-group">
+									<label for="costo_proveedor">Costo Unitario:</label>
+									<input readonly placeholder="" required type="number" min="0" step=".01" class="form-control" id="costo_unitario" name="costo_unitario">
+								</div>
+								
 								<div class="form-group ">
 									<label for="">Porcentaje de Ganancia :</label>
 									<input required type="number" value="25" step=".01" class="form-control" id="ganancia_menudeo_porc" name="ganancia_menudeo_porc">

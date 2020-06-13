@@ -43,29 +43,32 @@
 					</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="../inventarios/movimientos.php?tipo_movimiento=ENTRADA">
-						<i class="fas fa-arrow-left"></i> Entradas
+					<a class="nav-link" href="../contratos/index.php">
+						<i class="fas fa-signature"></i> Contratos
 					</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="../inventarios/movimientos.php?tipo_movimiento=SALIDA">
-						<i class="fas fa-arrow-right"></i> Salidas
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-chart-bar"></i> Almacen
 					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="../inventarios/inventarios.php">
-						<i class="fas fa-boxes"></i> Inventarios
-					</a> 
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="../productos/productos.php">
-						<i class="fas fa-box-open"></i> Productos
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="../catalogos/departamentos.php">
-						<i class="fas fa-list"></i> Categorías
-					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						
+						<a class="dropdown-item" href="../inventarios/movimientos.php?tipo_movimiento=ENTRADA">
+							<i class="fas fa-arrow-left"></i> Entradas
+						</a>
+						<a class="dropdown-item" href="../inventarios/movimientos.php?tipo_movimiento=SALIDA">
+							<i class="fas fa-arrow-right"></i> Salidas
+						</a>
+						<a class="dropdown-item" href="../inventarios/inventarios.php">
+							<i class="fas fa-boxes"></i> Inventarios
+						</a> 
+						<a class="dropdown-item" href="../productos/productos.php">
+							<i class="fas fa-box-open"></i> Productos
+						</a>
+						<a class="dropdown-item" href="../catalogos/departamentos.php">
+							<i class="fas fa-list"></i> Departamentos
+						</a>
+					</div>
 				</li>
 				
 				<li class="nav-item">

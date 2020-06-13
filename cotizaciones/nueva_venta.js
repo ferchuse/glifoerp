@@ -70,12 +70,16 @@ $(document).ready( function onLoad(){
 		agregarProducto({cantidad: 1, descripcion_productos: "" , saldo : 0})
 	});
 	
+	$("#sumar_importes").change(function(){
+		$(".fila_totales").toggle($(this).prop("checked"));
+		
+	});
 	$("#btn_nuevo_cliente").click(nuevoCliente);
 	
 	$("#anticipo").keyup(calculaSaldo);
 	$('.bg-info').keydown(navegarFilas);
 	$("#modal_granel").on("shown.bs.modal",  ()=> { 
-    $("#cantidad").focus();
+		$("#cantidad").focus();
 	});
 	$('#form_granel').submit(agregarGranel);
 	$('#form_agregar_producto').submit(function(event){
@@ -226,7 +230,7 @@ function renderProductos(respuesta){
 		<td class="w-25">
 		
 		<input  class="descripcion form-control"  value='${producto['descripcion']}'>
-<textarea placeholder="Descripción detallada" name="notas" class="notas form-control mt-2">${producto['notas']}</textarea>
+		<textarea placeholder="Descripción detallada" name="notas" class="notas form-control mt-2">${producto['notas']}</textarea>
 		</td>
 		<td class="text-center venta">
 		<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio']}'>
@@ -456,6 +460,7 @@ function guardarCotizacion(event){
 		icono.toggleClass('fa fa-usd fa fa-spinner fa-pulse fa-fw');
 		
 		let productos = [];
+		let sumar_importes = $("#sumar_importes").prop("checked") ? 1 :0;
 		
 		
 		$("#tabla_venta tbody tr").each(function(index, item){
@@ -491,6 +496,7 @@ function guardarCotizacion(event){
 				anticipo: $("#anticipo").val(),
 				saldo: $("#saldo").val(),
 				condiciones_pago: $("#condiciones_pago").val(),
+				"sumar_importes": sumar_importes,
 				productos: productos
 			}
 			}).done(function(respuesta){

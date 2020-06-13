@@ -12,12 +12,11 @@
 	codigo_productos = '{$_POST['codigo_productos']}',
 	costo_proveedor = '{$_POST['costo_proveedor']}',
 	precio_menudeo = '{$_POST['precio_menudeo']}',
+	precio_mayoreo = '{$_POST['precio_mayoreo']}',
 	descripcion_productos = '{$_POST['descripcion_productos']}',
 	unidad_productos = '{$_POST['unidad_productos']}',
+	ganancia_menudeo_porc = '{$_POST['ganancia_menudeo_porc']}',
 	min_productos = '{$_POST["min_productos"]}',
-	
-	
-	
 	id_departamentos = '{$_POST["id_departamentos"]}',
 	ubicacion = '{$_POST["ubicacion"]}',
 	estatus_productos = '{$_POST["estatus_productos"]}'
@@ -28,8 +27,10 @@
 	codigo_productos = '{$_POST['codigo_productos']}',
 	costo_proveedor = '{$_POST['costo_proveedor']}',
 	precio_menudeo = '{$_POST['precio_menudeo']}',
+	precio_mayoreo = '{$_POST['precio_mayoreo']}',
 	descripcion_productos = '{$_POST['descripcion_productos']}',
 	unidad_productos = '{$_POST['unidad_productos']}',
+	ganancia_menudeo_porc = '{$_POST['ganancia_menudeo_porc']}',
 	min_productos = '{$_POST["min_productos"]}',
 	id_departamentos = '{$_POST["id_departamentos"]}',
 	ubicacion = '{$_POST["ubicacion"]}',

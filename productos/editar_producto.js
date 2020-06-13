@@ -61,7 +61,7 @@ function guardarProducto(event) {
 	$('#costo_proveedor').keyup(function modificarPrecio() {
 		console.log("modificarPrecio");
 		var costo_proveedor = Number($(this).val());
-		var cantidad_contenedora = Number($('#cantidad_contenedora').val());
+		var factor = Number($('#factor').val());
 		var ganancia_mayoreo_porc = Number($('#ganancia_mayoreo_porc').val());
 		
 		if (ganancia_mayoreo_porc != '') {
@@ -72,18 +72,16 @@ function guardarProducto(event) {
 			// $('#precio_mayoreo').val((costo_proveedor+ganancia_mayoreo_pesos).toFixed(2));
 		}
 		
-		if (cantidad_contenedora != '') {
-			var costo_pz = costo_proveedor / cantidad_contenedora;
+		if (factor != '') {
+			var costo_pz = costo_proveedor / factor;
 			$('#costo_unitario').val(costo_pz.toFixed(2));
 			
 			if (costo_pz != '') {
 				
-				//ganancia menudeo
 				var ganancia_menudeo_porc = Number($('#ganancia_menudeo_porc').val());
 				var ganancia_menudeo_pesos = (ganancia_menudeo_porc * costo_pz) / 100;
 				$('#ganancia_menudeo_pesos').val(ganancia_menudeo_pesos.toFixed(2));
 				
-				//precio mayoreo
 				var precio_menudeo = costo_pz + ganancia_menudeo_pesos;
 				$('#precio_menudeo').val(precio_menudeo.toFixed(2));
 				

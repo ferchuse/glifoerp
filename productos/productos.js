@@ -1,3 +1,75 @@
+
+
+
+
+$(document).ready(function () {
+	$('.sort').click(ordenarTabla);
+	$('#factor').keyup(calculaCosto);
+	$('#costo_proveedor').keyup(calculaCosto);
+	
+	
+	$("#form_filtros select").change(function() {
+		$("#form_filtros").submit();
+	});
+	
+	$("#form_filtros").submit(function () {
+		listaProductos();
+		return false;
+	})
+	
+	if($("#cookie_permiso_usuarios").val() == "vendedor"){
+		var permiso = "d-none";
+	}
+	else{
+		var permiso = "d-sm-flex";
+	}
+	
+	
+	
+	listaProductos();
+	
+	$('#btn_nuevo').click(function () {
+		$('#form_productos')[0].reset();
+		$('h3.modal-title').text('Nuevo Producto');
+		$('#modal_productos').modal('show');
+	});
+	//--------CHECAR DUPLICADOS------
+	// $('#codigo_productos').keyup(function () {
+	// var producto = $(this).val();
+	// $.ajax({
+	// url: 'control/checar_repetidos.php',
+	// method: 'POST',
+	// dataType: 'JSON',
+	// data: { producto: producto }
+	// }).done(function (respuesta) {
+	// if (respuesta.repetidos > 0) {
+	// $('#btn_formAlta').prop('disabled', true);
+	// $('#respuesta_rep').text('(Existentente)');
+	// } else {
+	// $('#btn_formAlta').prop('disabled', false);
+	// $('#respuesta_rep').text('');
+	// }
+	// });
+	// });
+	//-------ALTA DE PRODUCTOS-----
+	
+	
+	
+});
+
+
+function calculaCosto(eve) {
+	
+	var costo_compra = Number($("#costo_proveedor").val());
+	var factor = Number($("#factor").val());
+	var costo_unitario = costo_compra / factor;
+	
+	$("#costo_unitario").val(costo_unitario.toFixed(2));
+	
+	
+}
+
+
 function listaProductos() {
 	console.log("listaProductos() ");
 	let tableTemplate;
@@ -47,62 +119,6 @@ function listaProductos() {
 		
 	});
 }
-
-
-
-$(document).ready(function () {
-	$('.sort').click(ordenarTabla);
-	
-	
-	$("#form_filtros select").change(function() {
-		
-		$("#form_filtros").submit();
-	});
-	
-	$("#form_filtros").submit(function () {
-		listaProductos();
-		return false;
-	})
-	
-	if($("#cookie_permiso_usuarios").val() == "vendedor"){
-		var permiso = "d-none";
-	}
-	else{
-		var permiso = "d-sm-flex";
-	}
-	
-	
-	
-	listaProductos();
-	
-	$('#btn_nuevo').click(function () {
-		$('#form_productos')[0].reset();
-		$('h3.modal-title').text('Nuevo Producto');
-		$('#modal_productos').modal('show');
-	});
-	//--------CHECAR DUPLICADOS------
-	// $('#codigo_productos').keyup(function () {
-	// var producto = $(this).val();
-	// $.ajax({
-	// url: 'control/checar_repetidos.php',
-	// method: 'POST',
-	// dataType: 'JSON',
-	// data: { producto: producto }
-	// }).done(function (respuesta) {
-	// if (respuesta.repetidos > 0) {
-	// $('#btn_formAlta').prop('disabled', true);
-	// $('#respuesta_rep').text('(Existentente)');
-	// } else {
-	// $('#btn_formAlta').prop('disabled', false);
-	// $('#respuesta_rep').text('');
-	// }
-	// });
-	// });
-	//-------ALTA DE PRODUCTOS-----
-	
-	
-	
-});
 
 function editarRegistro() {
 	$('#form_productos')[0].reset();

@@ -26,10 +26,10 @@
 ?>
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		<style>
 			.tabla_totales .row{
@@ -55,10 +55,10 @@
 		
 		
 		
-    <title>Nueva Venta</title>
-    <?php include("../styles.php");?>
+		<title>Nueva Venta</title>
+		<?php include("../styles.php");?>
 	</head>
-  <body>
+	<body>
 		<?php include("../menu.php");?>
 		
 		<form id="form_agregar_producto" class="" autocomplete="off">
@@ -170,14 +170,15 @@
 						<div class="col-sm-3">
 							<textarea placeholder="Condiciones de Pago" name="condiciones_pago" id="condiciones_pago" class="notas form-control mt-2">Se requiere anticipo del 50%. 							Tiempo de Entrega 4 días habiles a partir del anticipo.							Precio incluye IVA</textarea>
 						</div>
-						<div class="col-sm-3 col-6 h3 text-right ">
+						<div class="col-sm-3 col-6 h3 text-right fila_totales">
+							
 							<label class="venta" for="">Subtotal:</label>  <br>
 							<label class="venta" for="">Descuento:</label> <br>
 							<label class="venta" for="">Total:</label> <br>
 							<label class="venta" for="">Anticipo:</label> <br>
 							<label class="venta" for="">Saldo:</label> 
 						</div>
-						<div class="col-sm-2 col-6 h3 venta">
+						<div class="col-sm-2 col-6 h3 venta fila_totales">
 							<input   id="subtotal" type="number" class="form-control input-lg text-right venta" value="0" >
 							<input   id="descuento" type="number" class="form-control input-lg text-right venta" value="0">
 							<input   id="total" type="number" class="form-control input-lg text-right venta" value="0">
@@ -188,9 +189,12 @@
 						
 						<div class="col-sm-2 col-12 text-right">
 							<button class="btn btn-success btn-lg btn-block" type="submit" id="cerrar_venta">F12 - Guardar
-							</button>	
-							<button class="btn btn-primary btn-lg btn-block" type="button" id="btn_cotizacion">Cotización
 							</button>
+							<label>
+								<input checked type="checkbox" name="sumar_importes"
+								id="sumar_importes" value="1" > Sumar Importes 
+							</label>	
+							
 						</div>
 					</div>
 				</form>
