@@ -61,6 +61,17 @@ $(document).ready( function onLoad(){
 		
 	}
 	
+	if($("#tabla_copia").val() != ""){
+		console.log("Copiar Registro")
+		cargarVenta({
+			"tabla": $("#tabla_copia").val(),
+			"pk": "id_cotizaciones",
+			"folio": $("#folio_copia").val(),
+			"tabla_productos": "cotizaciones_detalle"
+		});
+		
+	}
+	
 	
 	$(window).on('beforeunload', function(){
 		return '¿Estás seguro que deseas salir?';

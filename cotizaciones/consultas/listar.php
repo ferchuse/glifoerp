@@ -9,7 +9,7 @@
 	FROM
 	cotizaciones
 	LEFT JOIN clientes USING(id_clientes)
-
+	
 	WHERE
 	DATE(fecha_cotizaciones) BETWEEN '{$_GET["fecha_inicial"]}'
 	AND '{$_GET["fecha_final"]}'
@@ -85,9 +85,7 @@
 				</a>
 				
 				
-				<a href="../inventarios/nuevo_movimiento.php?tipo_movimiento=SALIDA&tabla=ventas&folio=<?php echo $fila["id_cotizaciones"]?>" class="btn btn-sm btn-success convertir_a_salida" type="button" 
-				
-				>
+				<a href="../ventas/nueva_venta.php?tipo_movimiento=VENTA&tabla_copia=cotizaciones&folio_copia=<?php echo $fila["id_cotizaciones"]?>" class="btn btn-sm btn-success " type="button" >
 					<i class="fas fa-arrow-right" ></i>  Convertir en Venta
 				</a>
 				

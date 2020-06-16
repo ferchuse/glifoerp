@@ -63,6 +63,10 @@
 		
 		<form id="form_agregar_producto" class="" autocomplete="off">
 		</form>
+		
+		<input   class="" id="tabla_copia"  value="<?php echo $_GET["tabla_copia"]?>">
+		<input   class="" id="folio_copia"  value="<?php echo $_GET["folio_copia"]?>">
+		
 		<div class="container-fluid d-print-none">
 			<div class="row">
 				<div class="col-sm-1">
