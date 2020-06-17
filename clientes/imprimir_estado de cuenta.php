@@ -80,9 +80,6 @@
 <?php
 	if(count($lista_transacciones) > 0){
 	?>
-	
-	<h4 class="d-none d-print-block">Estado de Cuenta <?=$lista_transacciones[0]["razon_social_clientes"] ?>
-	</h4>
 	<div class="table-responsive">
 		<table class="table table-hover ">
 			<tr>
@@ -106,7 +103,7 @@
 					<td>
 						<?php
 							switch($transaccion["tabla"]){
-							case "ventas":
+								case "ventas":
 							?>
 							<a target="_blank" href="../ventas/imprimir_ventas.php?id_registro=<?= $transaccion["id_transaccion"] ?>">
 								<?php echo $transaccion["concepto"];?>

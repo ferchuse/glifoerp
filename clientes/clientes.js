@@ -16,6 +16,7 @@ function onLoad() {
 	$("#form_filtros").submit(listarClientes);
 	
 	$("#form_filtros").submit();
+	$("#btn_imprimir_edo_cuenta").click(imprimirEstadoCuenta);
 	
 	
 	$(".buscar").keyup(buscarFila);
@@ -23,6 +24,13 @@ function onLoad() {
 	
 	
 	$('#form_clientes').submit(guardarCliente);
+	
+}
+
+function imprimirEstadoCuenta(){
+	window.print();
+	$("#modal_historial");
+	
 	
 }
 function listarClientes(event) {
@@ -119,7 +127,8 @@ function cargarHistorial() {
 		
 		}).done(function (respuesta) {
 		
-		$("#historial").html(respuesta);
+		$("#imprimir_estado_cuenta").html(respuesta);
+		$("#modal_historial .modal-body").html(respuesta);
 		$("#modal_historial").modal("show");
 		$(".btn_borrar_transaccion").click(borrarTransaccion);
 		$("#nombre_historial").text(nombre);
@@ -133,8 +142,6 @@ function cargarHistorial() {
 		icono.toggleClass("fa-history fa-spinner fa-spin");
 		
 	});
-	
-	
 }
 
 
