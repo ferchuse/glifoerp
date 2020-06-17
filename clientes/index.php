@@ -101,7 +101,7 @@
 		<?php include('../scripts.php'); ?>
 		<?php include('form_cargos.php'); ?>
 		<?php include('form_clientes.php'); ?>
-		<script src="clientes.js"></script>
+		<script src="clientes.js?v=<?= date("dmYHis")?>"></script>
 		<script src="cargos.js"></script>
 		
 					</body>
