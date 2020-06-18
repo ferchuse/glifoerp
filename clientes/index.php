@@ -72,7 +72,7 @@
 			</div>
 		</div>
 		
-		<div class="" id="imprimir_estado_cuenta">
+		<div class="d-none d-print-block" id="imprimir_estado_cuenta">
 		</div>
 		
 		<div id="modal_historial" class="modal fade d-print-none" role="dialog">
