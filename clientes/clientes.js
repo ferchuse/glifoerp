@@ -116,7 +116,7 @@ function cargarHistorial() {
 	let id_clientes = boton.data("id_registro");
 	let nombre = boton.data("nombre");
 	
-	document.title = "Estado de Cuenta " + id_registro;
+	document.title = "Estado de Cuenta " + nombre;
 	
 	boton.prop("disabled", true);
 	icono.toggleClass("fa-history fa-spinner fa-spin");
