@@ -48,24 +48,37 @@
 				<div class="row">
 					
 					
-					<div class="col-5">
-							<img class="img-fluid" src="../img/logo.png" alt="">
+					<div class="col-8">
+						
 						<form id="form_cargos" autocomplete="off" class="is-validated">
 							
-							<h3 class="modal-title text-center">Nuevo <span id="titulo"></span></h3>
-						
+							
+							
+							<div class="row">
+								<div class="col-3">
+									<img class="img-fluid" src="../img/logo.png" alt="">
+								</div>
+								<div class="col-7">
+									<h3 class="text-center">
+										Recibo de Pago 
+									</h3>
+								</div>
+							</div>
+							
 							<div class="row">
 								
-								<input  type="hidden" id="cargos_id_clientes" name="id_clientes">
-								<input  type="hidden" id="tipo" name="tipo">
+								
 								<div class="col-12">
 									<div class="form-group">
-										<label >Fecha:</label>
-										<input required type="date" class="form-control" name="fecha" value="<?= $abono["fecha"]?>"> 
+										<label >Folio:</label>
+										<input  type="number" class="form-control" name="fecha" value="<?= $abono["id_abonos"]?>"> 
+									</div><div class="form-group">
+									<label >Fecha:</label>
+									<input required type="date" class="form-control" name="fecha" value="<?= $abono["fecha"]?>"> 
 									</div>
 									<div class="form-group">
 										<label >Concepto:</label>
-										<input required type="text" class="form-control" name="concepto" placeholder="Abono" value="<?= $abono["concepto"]?>">
+										<p><?= $abono["concepto"]?></p>
 									</div>
 									<div class="form-group">
 										<label for="">Importe:</label>
@@ -83,13 +96,6 @@
 									
 								</div>
 							</div>
-							
-							<div class="modal-footer">
-								<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Cerrar</button>
-								<button type="submit" class="btn btn-success" >
-									<i class="fa fa-save"></i> Guardar
-								</button>
-							</div>
 						</form>	
 					</div>
 					
@@ -100,12 +106,12 @@
 				
 			</section>
 			
-		
+			
 			<pre hidden>
 				<?php print_r($filas)?>
 			</pre>
 			
 		</div>
 	</body>
-
+	
 </html>							
