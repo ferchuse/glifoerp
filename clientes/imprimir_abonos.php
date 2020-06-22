@@ -34,7 +34,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		
 		
-		<title>Nota de Remisión</title>
+		<title>Recibo de Pago</title>
 		
 		
 		<?php include("../styles.php"); ?>
@@ -72,9 +72,14 @@
 									<div class="form-group">
 										<label >Folio:</label>
 										<input  type="number" class="form-control" name="fecha" value="<?= $abono["id_abonos"]?>"> 
-									</div><div class="form-group">
-									<label >Fecha:</label>
-									<input required type="date" class="form-control" name="fecha" value="<?= $abono["fecha"]?>"> 
+									</div>
+									<div class="form-group">
+										<label >Fecha:</label>
+										<input required type="date" class="form-control" name="fecha" value="<?= $abono["fecha"]?>"> 
+									</div>
+									<div class="form-group">
+										<label >Ciente:</label>
+										<input required type="text" class="form-control" name="fecha" value="<?= $abono["razon_social_clientes"]?>"> 
 									</div>
 									<div class="form-group">
 										<label >Concepto:</label>
