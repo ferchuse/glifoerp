@@ -270,6 +270,7 @@ function renderProductos(respuesta){
 	$("#span_id_clientes").text(respuesta.ventas[0].id_clientes);
 	$("#id_clientes").val(respuesta.ventas[0].id_clientes);
 	$("#buscar_clientes").val(respuesta.ventas[0].razon_social_clientes);
+	$("#condiciones_pago").val(respuesta.ventas[0].condiciones_pago);
 	
 	//Asigna Callbacks de eventos
 	// $(".mayoreo").change(aplicarMayoreoProducto);

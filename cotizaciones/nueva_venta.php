@@ -68,7 +68,7 @@
 				<div class="col-sm-1">
 					<div class="form-group">
 						<label for="">Folio:</label>  	
-						<input readonly type="number" class="form-control" id="id_ventas" name="id_ventas" value="<?php echo $_GET["folio_ventas"]?>">
+						<input type="number" class="form-control" id="id_ventas" name="id_ventas" value="<?php echo $_GET["folio_ventas"]?>">
 					</div>
 				</div>
 				<div class="col-2 d-none " >
