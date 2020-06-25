@@ -145,25 +145,25 @@
 					
 					
 					<?php if($filas[0]["descuento"] > 0 ){?>
-						<div class="offset-sm-4 col-sm-6 col-6 h3 text-right ">
+						<div class="col-sm-6 col-6 h3 text-right ">
 							Subtotal:
 						</div>
 						<div class="col-sm-2 col-6 h3 text-right">
-							<?php echo number_format($filas[0]["subtotal"],2)?>
+							$<?php echo number_format($filas[0]["subtotal"],2)?>
 						</div>
 						
 						<div class="offset-sm-4 col-sm-6 colcol-6 h3 text-right ">
 							Descuento:
 						</div>
 						<div class="col-sm-2 col-6 h3 text-right">
-							<?php echo number_format($filas[0]["descuento"],2)?>
+							$<?php echo number_format($filas[0]["descuento"],2)?>
 						</div>
 						
 						<div class="offset-sm-4 col-sm-6 col-6 h3 text-right ">
 							Total:
 						</div>
 						<div class="col-sm-2 col-6 h3 text-right">
-							<?php echo number_format($filas[0]["total"],2)?>
+							$<?php echo number_format($filas[0]["total"],2)?>
 						</div>
 						
 						<?php
@@ -176,7 +176,7 @@
 							Total:
 						</div>
 						<div class="col-sm-2 col-6 h3 text-right">
-							<?php echo number_format($filas[0]["total"],2)?>
+							$<?php echo number_format($filas[0]["total"],2)?>
 						</div>
 						<?php
 							
