@@ -143,21 +143,53 @@
 					</div>
 					
 					
-					<div class="col-sm-6 col-6 h3 text-right ">
-						Total:
-					</div>
-					<div class="col-sm-2 col-6 h3 text-right">
 					
-						<?php echo number_format($filas[0]["total"],2)?>
-					</div>
-					
-					
+					<?php if($filas[0]["descuento"] > 0 ){?>
+						<div class="offset-sm-4 col-sm-6 col-6 h3 text-right ">
+							Subtotal:
+						</div>
+						<div class="col-sm-2 col-6 h3 text-right">
+							<?php echo number_format($filas[0]["subtotal"],2)?>
+						</div>
+						
+						<div class="offset-sm-4 col-sm-6 colcol-6 h3 text-right ">
+							Descuento:
+						</div>
+						<div class="col-sm-2 col-6 h3 text-right">
+							<?php echo number_format($filas[0]["descuento"],2)?>
+						</div>
+						
+						<div class="offset-sm-4 col-sm-6 col-6 h3 text-right ">
+							Total:
+						</div>
+						<div class="col-sm-2 col-6 h3 text-right">
+							<?php echo number_format($filas[0]["total"],2)?>
+						</div>
+						
+						<?php
+							
+						}
+						else{ ?>
+						
+						
+						<div class="col-sm-6 col-6 h3 text-right ">
+							Total:
+						</div>
+						<div class="col-sm-2 col-6 h3 text-right">
+							<?php echo number_format($filas[0]["total"],2)?>
+						</div>
+						<?php
+							
+							
+						}
+						
+					?>
 					
 				</div>
-			</section>
-			<pre ><?php echo $filas[0]["condiciones_pago"]?></pre>
-			
-		</div>
-	</body>
-	
-</html>						
+				</section>
+				<pre ><?php echo $filas[0]["condiciones_pago"]?></pre>
+				
+				</div>
+				</body>
+				
+					</html>											

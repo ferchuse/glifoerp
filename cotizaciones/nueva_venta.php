@@ -168,7 +168,10 @@
 						
 						
 						<div class="col-sm-3">
-							<textarea placeholder="Condiciones de Pago" name="condiciones_pago" id="condiciones_pago" class="notas form-control mt-2">Se requiere anticipo del 50%. 							Tiempo de Entrega 4 días habiles a partir del anticipo.							Precio incluye IVA</textarea>
+							<textarea placeholder="Condiciones de Pago" name="condiciones_pago" rows="4" id="condiciones_pago" class="notas form-control mt-2">Se requiere anticipo del 50%.
+							Tiempo de Entrega 4 días habiles a partir del anticipo.							
+							Precio incluye IVA
+							</textarea>
 						</div>
 						<div class="col-sm-3 col-6 h3 text-right fila_totales">
 							

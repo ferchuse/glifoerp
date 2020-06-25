@@ -17,8 +17,10 @@
 	estatus_ventas = 'APROBACIÓN PENDIENTE',
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
+	subtotal = '{$_POST['subtotal']}',
+	descuento = '{$_POST['descuento']}',
 	total = '{$_POST['total']}',
-	anticipo = '{$_POST['anticipo']}',
+	
 	saldo = '{$_POST['saldo']}',
 	articulos = '{$_POST['articulos']}'
 	
@@ -32,8 +34,9 @@
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
 	subtotal = '{$_POST['subtotal']}',
+	descuento = '{$_POST['descuento']}',
 	total = '{$_POST['total']}',
-	anticipo = '{$_POST['anticipo']}',
+	
 	saldo = '{$_POST['saldo']}',
 	articulos = '{$_POST['articulos']}'
 	";
