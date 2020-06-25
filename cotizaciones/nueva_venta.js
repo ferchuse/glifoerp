@@ -493,6 +493,8 @@ function guardarCotizacion(event){
 				articulos: $('#articulos').val(),
 				id_vendedores: $('#id_vendedores').val(),
 				id_clientes: $('#id_clientes').val(),
+				subtotal: $("#subtotal").val(),
+				descuento: $("#descuento").val(),
 				total: $("#total").val(),
 				anticipo: $("#anticipo").val(),
 				saldo: $("#saldo").val(),
