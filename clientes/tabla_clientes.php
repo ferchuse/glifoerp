@@ -33,6 +33,11 @@
 		$consulta.="AND id_vendedores = '{$_GET["id_vendedores"]}'
 	";
 	}
+	if($_GET["nombre"] != ''){
+		
+		$consulta.="AND alias_clientes LIKE '%{$_GET["id_vendedores"]}%'
+	";
+	}
 	$consulta.="
 	ORDER BY
 	{$_GET["sort"]} {$_GET["order"]}
