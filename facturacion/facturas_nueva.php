@@ -38,7 +38,7 @@
 	}	
 	
 	
-	if(isset($_GET["id_ventas"])) { $productos = cargarVenta($link, $_GET["id_ventas"]);}
+	if(isset($_GET["id_ventas"])) { $venta = cargarVenta($link, $_GET["id_ventas"]);}
 	
 	function copiarFactura($link,$id_facturas){
 		$factura = [];
@@ -87,7 +87,10 @@
 	function cargarVenta($link,$id_ventas){
 		$respuesta = [];
 		
-		$consulta = "SELECT * FROM ventas_detalle 
+		$consulta = "SELECT * FROM 
+		ventas 
+		LEFT JOIN clientes USING(id_clientes)
+		LEFT JOIN ventas_detalle USING(id_ventas)
 		LEFT JOIN productos USING(id_productos)
 		WHERE id_ventas = '$id_ventas'
 		";
@@ -101,6 +104,7 @@
 		}
 		else{
 			while($fila = mysqli_fetch_assoc($result)){
+				$respuesta["cliente"]= $fila;
 				$respuesta["productos"][] = $fila;
 				
 			}
@@ -202,7 +206,7 @@
 		<?php include("menu.php");?>
 	  <h4 class="text-center">Nueva Factura</h4>
 	<?php
-	//	echo var_dump($emisor);
+		// echo var_dump($venta);
 		?>
 		<div class="container-fluid">
 			<div class="row">
@@ -229,24 +233,24 @@
 											<div class="col-sm-4 col-sm-offset-4">
 												<div class="form-group hidden">
 													<label for="">Id</label>
-													<input type="text" readonly id="id_clientes" name="id_clientes" class="form-control" value="">
+													<input type="text" readonly id="id_clientes" name="id_clientes" class="form-control" value="<?= $venta["cliente"]["id_clientes"]?>">
 												</div>
 												<div class="form-group">
 													<label for="">Alias o Seudónimo: </label>
-													<input type="text" placeholder="(Opcional) Coloca un nombre fácil de recordar" name="alias_clientes" id="alias_clientes" class="form-control" >
+													<input type="text" placeholder="(Opcional) Coloca un nombre fácil de recordar" name="alias_clientes" id="alias_clientes" class="form-control" value="<?= $venta["cliente"]["alias_clientes"]?>" >
 												</div>
 												<div class="form-group">
 													<label for="">Razon Social: </label>
-													<input type="text" placeholder="Escribe para Buscar" name="razon_social_clientes" id="razon_social_clientes" class="form-control" required>
+													<input type="text" placeholder="Escribe para Buscar" name="razon_social_clientes" id="razon_social_clientes" class="form-control" required value="<?= $venta["cliente"]["razon_social_clientes"]?>">
 												</div>
 												<div class="form-group">
 													<label for="">RFC: </label>
-													<input type="text" name="rfc_clientes" id="rfc_clientes" class="form-control" required>
+													<input type="text" name="rfc_clientes" id="rfc_clientes" class="form-control" required value="<?= $venta["cliente"]["rfc_clientes"]?>">
 												</div>
 												
 												<div class="form-group">
 													<label for=""><input type="checkbox" id="enviar_correo" checked>Correo: </label>
-													<input type="text" name="correo_clientes" id="correo_clientes" class="form-control minus" required>
+													<input type="text" name="correo_clientes" id="correo_clientes" class="form-control minus" required value="<?= $venta["cliente"]["correo_clientes"]?>">
 												</div>
 												
 												<input disabled type="number" name="id_emisores" id="correo_clientes" class="hidden" value="<?php echo $_SESSION["id_usuarios"]?>">
@@ -469,7 +473,7 @@
 										<?php 
 										$traslados = 0;
 										$subtotal = 0;
-										foreach ($productos["productos"] as $i => $producto){
+										foreach ($venta["productos"] as $i => $producto){
 											
 											$iva = round($producto["precio_menudeo"] * .16, 2); 
 											$importe = $producto["precio_menudeo"] * $producto["cantidad"];
@@ -482,18 +486,18 @@
 														<div class="col-sm-1">
 															<input required type="number" min="0" step=".01"  name="cantidad[]" class="form-control cantidad conceptos" value="<?php echo $producto["cantidad"]?>">
 														</div>	
-														<div class="col-sm-1 hidden">
-															<input required readonly name="clave_unidad[] " class="form-control clave_unidad conceptos" value="H87">
-															
-															<!--<select required  name="clave_unidad[] " class="form-control clave_unidad conceptos">
-																<option value="">Elige...</option>
-																<?php //echo  getUnidades($link,$id_emisores );?>
-																</select>
+														<div class="col-sm-1 ">
+															<!--<input required readonly name="clave_unidad[] " class="form-control clave_unidad conceptos" value="H87">
 															-->
-															<input type="text" class="nombre_unidades hidden" name="nombre_unidades[]" value="Pieza" >
+															<select required  name="clave_unidad[] " class="form-control clave_unidad conceptos">
+																<option value="">Elige...</option>
+																<?php echo  getUnidades($link,$id_emisores );?>
+																</select>
+															
+															<input type="text" class="nombre_unidades " name="nombre_unidades[]" value="Pieza" >
 															
 														</div>	
-														<div class="col-sm-2 hidden">
+														<div class="col-sm-2 ">
 															<input readonly required  name="clave_producto[]" class="form-control  conceptos" value="11151700">
 															
 															<!-- 
@@ -507,10 +511,10 @@
 														<div class="form-group col-sm-4">
 															<textarea required cols="4"  rows="1" value="" placeholder=""  name="descripcion[]" class="form-control conceptos"><?php echo $producto["descripcion_productos"]?></textarea>
 														</div>
-														<div class="col-sm-1 hidden">
+														<div class="col-sm-1 ">
 															<input  type="number" min="0" step=".01"  name="" class="form-control precio_unitario conceptos">
 														</div>
-														<div class="col-sm-1 hidden">
+														<div class="col-sm-1 ">
 															<input   type="number" min="0" step=".01"  class="form-control iva_unitario conceptos">
 														</div>
 														<div class="col-sm-1">

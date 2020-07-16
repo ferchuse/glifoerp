@@ -31,7 +31,11 @@
 	</button>
 	<div class="collapse navbar-collapse" id="collapsibleNavbar">
 		<ul class="navbar-nav mr-auto">
-			<?php if($_COOKIE["permiso_usuarios"] == "administrador" ){?>
+				<li class="nav-item">
+					<a class="nav-link" href="../clientes">
+						<i class="fas fa-users"></i> Clientes
+					</a>
+				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="../ventas/index.php">
 						<i class="fas fa-dollar-sign"></i> Ventas
@@ -97,25 +101,21 @@
 						<a class="dropdown-item" href="../reportes/cuentas_por_cobrar.php">Cuentas Por Cobrar</a>
 					</div>
 				</li>
-				<?php
-				}
-				else{ ?>
-				<li class="nav-item">
-					<a class="nav-link" href="../productos/productos.php">
-						<i class="fas fa-box-open"></i> Productos
-					</a>
-				</li>
-				<?php	
-				}
-			?>
+				
 		</ul>
 		<ul class="navbar-nav">
+			<input type="hidden" id="cookie_id_usuarios" value="<?php echo $_COOKIE["id_usuarios"]?>">
+			<input type="hidden" id="cookie_nombre_usuarios" value="<?php echo $_COOKIE["nombre_usuarios"]?>">
+			<input type="hidden" id="cookie_permiso_usuarios" value="<?php echo $_COOKIE["permiso_usuarios"]?>">
+			
+			<li class="nav-item">
+				<a class="nav-link" href="../emisores/index.php">
+					<i class="fas fa-cog"></i>	Configuración
+				</a>
+			</li>
 			<li class="nav-item">
 				<a class="nav-link" href="#1">
-					<i class="fas fa-user"></i>	<?php echo $_COOKIE["nombre_usuarios"]?>
-					<input type="hidden" id="cookie_id_usuarios" value="<?php echo $_COOKIE["id_usuarios"]?>">
-					<input type="hidden" id="cookie_nombre_usuarios" value="<?php echo $_COOKIE["nombre_usuarios"]?>">
-					<input type="hidden" id="cookie_permiso_usuarios" value="<?php echo $_COOKIE["permiso_usuarios"]?>">
+					<i class="fas fa-user"></i>	<?php echo $_COOKIE["nombre_usuarios"]?>	
 				</a>
 			</li>
 			<li class="nav-item">
