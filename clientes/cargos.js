@@ -47,7 +47,8 @@ function guardarCargos(event) {
 			
 			alertify.success(respuesta.mensaje);
 			$("#modal_cargos").modal("hide");
-			window.location.reload(true);
+			// window.location.reload(true);
+			listarClientes();
 		}
 		}).fail(function(xht, error, errnum){
 		

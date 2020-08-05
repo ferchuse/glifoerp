@@ -33,9 +33,9 @@
 		$consulta.="AND id_vendedores = '{$_GET["id_vendedores"]}'
 	";
 	}
-	if($_GET["nombre"] != ''){
+	if($_GET["alias_clientes"] != ''){
 		
-		$consulta.="AND alias_clientes LIKE '%{$_GET["id_vendedores"]}%'
+		$consulta.="AND alias_clientes LIKE '%{$_GET["alias_clientes"]}%'
 	";
 	}
 	$consulta.="

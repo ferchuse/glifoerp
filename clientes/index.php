@@ -37,7 +37,7 @@
 				
 				<div class="row col-12 mb-4">
 					<div class="col-12 col-sm-3" >
-						<input form="form_fitros" class="buscar  form-control float-left" name="alias_clientes" type="search" placeholder="Buscar Cliente">
+						<input form="form_fitros" class="buscar  form-control float-left" name="alias_clientes" type="search" id="buscar_clientes" placeholder="Buscar Cliente">
 						
 					</div>
 					<div class="col-sm-7">

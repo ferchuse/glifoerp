@@ -13,7 +13,11 @@ function onLoad() {
 	});
 	
 	
-	$("#form_filtros").submit(listarClientes);
+	$("#form_filtros").submit(function(event){
+		
+		event.preventDefault();
+		listarClientes();
+	});
 	
 	$("#form_filtros").submit();
 	$("#btn_imprimir_edo_cuenta").click(imprimirEstadoCuenta);
@@ -33,9 +37,9 @@ function imprimirEstadoCuenta(){
 	
 	
 }
-function listarClientes(event) {
-	event.preventDefault();
-	boton = $(this).find(":submit");
+function listarClientes() {
+	
+	boton = $("#form_filtros").find(":submit");
 	icono = boton.find("i");
 	
 	boton.prop("disabled", true);
@@ -44,7 +48,7 @@ function listarClientes(event) {
 	
 	$.ajax({
 		"url": "tabla_clientes.php",
-		"data": $("#form_filtros").serialize()
+		"data": $("#form_filtros").serialize()+ "&alias_clientes=" + $("#buscar_clientes").val()
 	}).done(alCargar);
 }
 
