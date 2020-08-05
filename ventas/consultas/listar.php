@@ -63,6 +63,12 @@
 			<td>
 				
 				<select class="form-control estatus_ventas" data-id_registro="<?php echo $fila["id_ventas"];?>">
+					<option <?php echo $fila["estatus_ventas"] == "EN VIAJE PAQUETERIA" ? "selected" : "";?>>
+						EN VIAJE PAQUETERIA
+					</option>
+					<option <?php echo $fila["estatus_ventas"] == "ENTREGA PENDIENTE" ? "selected" : "";?>>
+						ENTREGA PENDIENTE
+					</option>
 					<option <?php echo $fila["estatus_ventas"] == "APROBACIÓN PENDIENTE" ? "selected" : "";?>>
 						APROBACIÓN PENDIENTE 
 					</option>
