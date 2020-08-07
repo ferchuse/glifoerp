@@ -8,6 +8,15 @@
 	*
 	FROM
 	ventas
+	LEFT JOIN (
+	SELECT
+	id_ventas,
+	SUM(importe) AS egresos
+	FROM egresos 
+	GROUP BY id_ventas
+	
+	) as t_egresos
+	USING (id_ventas)
 	LEFT JOIN clientes USING(id_clientes)
 	LEFT JOIN vendedores ON ventas.id_vendedores = vendedores.id_vendedores
 	WHERE
@@ -46,6 +55,8 @@
 		<th class="text-center">Fecha</th>
 		<th class="text-center">Cliente</th>
 		<th class="text-center">Total</th>
+		<th class="text-center">Egresos</th>
+		<th class="text-center">Ganancia</th>
 		<th class="text-center">Estatus</th>
 		<th class="text-center">Facturada</th>
 		<th class="text-center">Acciones</th>
@@ -54,12 +65,16 @@
 		$total = 0;
 		foreach($movimientos AS $i => $fila){
 			$total+=$fila["total"];
+			$total_egresos+=$fila["egresos"];
+			$total_ganancia+=$fila["total"] - $fila["egresos"];
 		?>
 		<tr class="text-center">
 			<td><?php echo $fila["id_ventas"];?></td>
 			<td><?php echo date("d/m/Y", strtotime($fila["fecha_ventas"]));?></td>
 			<td><?php echo $fila["razon_social_clientes"];?></td>
-			<td class="text-right"><?php echo number_format($fila["total"],2);?></td>
+			<td class="text-right"><?php echo number_format($fila["total"],0);?></td>
+			<td><?php echo number_format($fila["egresos"],0);?></td>
+			<td><?php echo number_format(($fila["total"] - $fila["egresos"]),0);?></td>
 			<td>
 				
 				<select class="form-control estatus_ventas" data-id_registro="<?php echo $fila["id_ventas"];?>">
@@ -81,14 +96,12 @@
 				
 				
 			</td>
+			
 			<td><?php echo $fila["facturada"] == 0 ? "NO" : "SI";?></td>
 			
 			
 			<td>
-				<a href="imprimir_ventas.php?id_registro=<?php echo $fila["id_ventas"];?>" class="btn btn-sm btn-info btn_imprimir" target="_blank" 
-				>
-					<i class="fas fa-print" ></i> Reimprimir
-				</a>
+				
 				
 				<a href="../facturacion/facturas_nueva.php?id_ventas=<?php echo $fila["id_ventas"];?>" class="btn btn-sm btn-primary" target="_blank" 
 				
@@ -99,22 +112,31 @@
 				<a href="../inventarios/nuevo_movimiento.php?tipo_movimiento=SALIDA&tabla=ventas&folio=<?php echo $fila["id_ventas"]?>" class="btn btn-sm btn-success convertir_a_salida" type="button" 
 				
 				>
-					<i class="fas fa-arrow-right" ></i>  Vale de Salida
+					<i class="fas fa-arrow-right" ></i> Salida
 				</a>
-				
+				<a href="imprimir_ventas.php?id_registro=<?php echo $fila["id_ventas"];?>" class="btn btn-sm btn-info btn_imprimir" target="_blank" 
+				>
+					<i class="fas fa-print" ></i> 
+				</a>
 				
 				<a href="nueva_venta.php?tipo_movimiento=VENTA&tabla=ventas&folio_ventas=<?php echo $fila["id_ventas"]?>" class="btn btn-sm btn-warning " type="button" 
 				
 				>
-					<i class="fas fa-edit" ></i>  Editar
+					<i class="fas fa-edit" ></i>  
 				</a>
 				
+				<button class="btn btn-sm btn-secondary btn_egresos" type="button" 
+				data-id_registro="<?php echo $fila["id_ventas"]?>"
+			
+				>
+					 - <i class="fas fa-dollar-sign" ></i> 
+				</button>
 				<button class="btn btn-sm btn-danger btn_borrar" type="button" 
 				data-id_registro="<?php echo $fila["id_ventas"]?>"
 				data-tabla="ventas" 
 				data-id_campo="id_ventas" 
 				>
-					<i class="fas fa-trash" ></i> Eliminar
+					<i class="fas fa-trash" ></i> 
 				</button>
 				
 			</td>
@@ -128,9 +150,11 @@
 	<tfoot class="bg-secondary text-white"> 
 		<tr class="text-left">
 			<td colspan="2"><b><?php echo $registros;?> Registro(s)</b></td>
-			<td colspan=""><b>Total:</b></td>
+			<td colspan=""></td>
 			<td class="text-right"><b>$ <?= number_format($total,2);?></b></td>
-			<td colspan="3"></td>
+			<td class="text-right"><b>$ <?= number_format($total_egresos,2);?></b></td>
+			<td class="text-right"><b>$ <?= number_format($total_ganancia,2);?></b></td>
+			<td colspan="2"></td>
 		</tr>
 	</tfoot>
 </table>

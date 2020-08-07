@@ -81,6 +81,8 @@
 		
 		
 		<?php  include('../scripts.php'); ?>
+		<?php  include('../egresos/form_egresos.php'); ?>
 		<script src="index.js?v=<?= date("d-m-Y-H-i-s")?>"></script>
+		<script src="../egresos/egresos.js?v=<?= date("d-m-Y-H-i-s")?>"></script>
 	</body>
 </html>	
