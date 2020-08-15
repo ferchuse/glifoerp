@@ -169,9 +169,8 @@
 						
 						<div class="col-sm-3">
 							<textarea placeholder="Condiciones de Pago" name="condiciones_pago" rows="4" id="condiciones_pago" class="notas form-control mt-2">Se requiere anticipo del 50%.
-							Tiempo de Entrega 4 días habiles a partir del anticipo.							
-							Precio incluye IVA
-							</textarea>
+							Tiempo de Entrega 4 días habiles a partir del anticipo.
+							Precio incluye IVA</textarea>
 						</div>
 						<div class="col-sm-3 col-6 h3 text-right fila_totales">
 							
@@ -187,7 +186,7 @@
 							<input   id="total" type="number" class="form-control input-lg text-right venta" value="0">
 							<input   id="anticipo" type="number" class="form-control input-lg text-right venta" value="0">
 							<input   id="saldo" type="number" class="form-control input-lg text-right venta" value="0" >
-						</div>
+							</div>
 						
 						
 						<div class="col-sm-2 col-12 text-right">
