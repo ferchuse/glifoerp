@@ -63,6 +63,7 @@ function alCargar(respuesta) {
 	$('.sort').click(ordenarTabla);
 	
 	$('.btn_cargos').click( function () {
+		$('#form_cargos')[0].reset();
 		$('#modal_cargos').modal('show');
 		$('#cargos_id_clientes').val($(this).data('id_registro'));
 		$('#saldo_anterior').val($(this).data('saldo'));
@@ -72,6 +73,7 @@ function alCargar(respuesta) {
 	});
 	
 	$('.btn_abonos').click(function () {
+		$('#form_cargos')[0].reset();
 		$('#modal_cargos').modal('show');
 		$('#cargos_id_clientes').val($(this).data('id_registro'));
 		$('#saldo_anterior').val($(this).data('saldo'));

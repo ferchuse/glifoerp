@@ -18,7 +18,7 @@
 							</div>
 							<div class="form-group">
 								<label >Concepto:</label>
-								<input required type="text" class="form-control" name="concepto" placeholder="Abono">
+								<input required type="text" class="form-control" name="concepto" placeholder="">
 							</div>
 							<div class="form-group">
 								<label for="">Importe:</label>
