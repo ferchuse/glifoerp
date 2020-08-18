@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json");
-include ("../conexi.php");
+include ("../../conexi.php");
 $link = Conectarse();
 $respuesta = Array();
 
