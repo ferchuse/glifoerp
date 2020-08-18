@@ -6,7 +6,7 @@
 		
 		if($_SERVER["SERVER_NAME"] == "localhost"){
 			
-			$db="glifoerp";
+			$db="glifo_app";
 			$usuario="sistemas";
 			$pass="Glifom3dia";
 		

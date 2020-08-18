@@ -2,17 +2,38 @@
 	header("Content-Type: application/json");
 	session_start();
 	
-	
 	// Se desactivan los mensajes de debug
 	error_reporting(~(E_WARNING|E_NOTICE));
 	// error_reporting(0);
 	// error_reporting(E_ALL);
 	
-	include_once("../conexi.php");
+	include_once("../../conexi.php");
 	require_once 'sdk2.php';
 	
-	
 	$link = Conectarse();
+	
+	
+	function getEmisor($link,$id_emisores ){
+		$respuesta = "";
+		$query = "SELECT * FROM emisores 
+		WHERE id_emisores = '$id_emisores'
+		";
+		
+		$result = mysqli_query($link,$query) ;
+		
+		if(!$result){
+			return "<option value=''>Ocurrio un error".mysqli_error($link)."</option>"; 
+		}
+		else{
+			while($fila = mysqli_fetch_assoc($result)){
+				$respuesta = $fila;
+			}
+		}
+		return $respuesta; 
+	}
+	
+	$emisor = getEmisor($link, 1);
+	
 	
 	setlocale(LC_ALL,"en_US"); 
 	
@@ -21,13 +42,14 @@
 	$datos = array();
 	
 	// $rfc = $_SESSION["rfc_emisores"];
-	$rfc = "ATO1106301U6";
+	$rfc = $emisor["rfc_emisores"];
 	
+	$respuesta["emisor"] = $emisor;
 	$respuesta["rfc_emisores"] = $rfc;
 	// $pass_timbrado = $_SESSION["password"];
 	// $clave_privada = $_SESSION["password"];
-	$pass_timbrado = "estaGab2";
-	$clave_privada = "estaGab2";
+	$pass_timbrado = $emisor["password"];
+	$clave_privada = $emisor["password"];
 	
 	$serie = $_POST["serie"];
 	$folio = $_POST["folio"];
@@ -41,8 +63,8 @@
 	$id_emisores = 1;
 	// $rfc_emisores = $_SESSION["rfc_emisores"];
 	// $razon_social_emisores=  $_SESSION["razon_social_emisores"];
-	$razon_social_emisores=  "ATOSHKA SA DE CV";
-	$regimen_emisores= "601";
+	$razon_social_emisores=  $emisor["rezon_social_emisores"];
+	$regimen_emisores=  $emisor["regimen_emisores"];
 	// $regimen_emisores= $_POST["regimen_emisores"];
 	// 612 Personas Físicas con Actividades Empresariales y Profesionales ---621 Incorporación Fiscal
 	
@@ -136,7 +158,7 @@
 	$datos['factura']['fecha_expedicion'] = date('Y-m-d\TH:i:s', time() - 120);
 	$datos['factura']['serie'] = $serie;
 	$datos['factura']['folio'] = $folio;
-  
+	
 	$datos['factura']['forma_pago'] = $forma_pago;
 	$datos['factura']['LugarExpedicion'] = $lugar_expedicion; 
 	$datos['factura']['tipocomprobante'] = $tipo_comprobante;
@@ -192,8 +214,8 @@
 					
 				}
 				else{
-				
-				//Retencion
+					
+					//Retencion
 					$datos['conceptos'][$i_concepto]['Impuestos']['Retenciones'][$i_retenciones]['Base'] = $_POST["base"][$i_concepto][$i_impuesto];
 					$datos['conceptos'][$i_concepto]['Impuestos']['Retenciones'][$i_retenciones]['Impuesto'] = $_POST["impuesto"][$i_concepto][$i_impuesto];
 					$datos['conceptos'][$i_concepto]['Impuestos']['Retenciones'][$i_retenciones]['TipoFactor'] = 'Tasa';
@@ -419,20 +441,13 @@
 		
 		
 		//Actualiza Folios
-		if($folio_facturas != ""){
+		if(!isset($_POST["modo_pruebas"])){
 			$folio_facturas++;
 			$update_folios = "UPDATE emisores
-			LEFT JOIN (
-			SELECT
-			id_emisores,
-			folios_restantes_emisores - 1 AS folios_restantes
-			FROM
-			emisores
-			WHERE
-			id_emisores = '$id_emisores'
-			) AS tabla_folios_nuevos USING (id_emisores)
-			SET serie_actual_emisores = '$folio_facturas',
-			folios_restantes_emisores = folios_restantes
+			
+			SET
+			folio_emisores = folio_emisores + 1 ,
+			serie_actual_emisores = serie_actual_emisores + 1 
 			WHERE
 			id_emisores = '$id_emisores'";
 			

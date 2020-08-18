@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	include("../conexi.php");
+	include("../../conexi.php");
 	$link = Conectarse();
 	
 	$id_emisores = 1;
@@ -35,8 +35,10 @@
 		
 	}
 	
-	if(isset($_GET['mostrar_timbrados'])){
-		$query.=" AND  timbrado = '".$_GET['mostrar_timbrados']."' ";
+	if(isset($_GET['mostrar_pruebas'])){
+		$query.=" AND  timbrado = '0' ";
+	}else{
+		$query.=" AND  timbrado = '1' ";
 	}
 	
 	$query.=" AND facturas.id_emisores = '$id_emisores' ";

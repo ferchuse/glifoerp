@@ -1,7 +1,7 @@
 <?php
 	// include("login/login_success.php");
 	include_once("control/is_selected.php");
-	include("conexi.php");
+	include("../conexi.php");
 	$link = Conectarse();
 	$menu_activo = "facturas";
 	$id_emisores = 1;
@@ -143,7 +143,7 @@
 	
 	function getProductos($link,$id_emisores ){
 		$respuesta = "";
-		$query = "SELECT * FROM productos 
+		$query = "SELECT * FROM productos_sat
 		FULL JOIN productos_emisor USING(id_productos) 
 		WHERE id_emisores = '$id_emisores'
 		ORDER BY descripcion_productos
@@ -184,14 +184,20 @@
 		}
 		return $respuesta; 
 	}
+	
+	
+	
+	
+	
+	
 ?>
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Nueva Factura</title>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Nueva Factura</title>
 		<?php include("styles.php");?>
 		<style>
 			#form_conceptos div[class*="col-sm"]{
@@ -204,9 +210,9 @@
 		
 		
 		<?php include("menu.php");?>
-	  <h4 class="text-center">Nueva Factura</h4>
-	<?php
-		// echo var_dump($venta);
+		<h4 class="text-center">Nueva Factura</h4>
+		<?php
+			// echo var_dump($venta);
 		?>
 		<div class="container-fluid">
 			<div class="row">
@@ -253,7 +259,7 @@
 													<input type="text" name="correo_clientes" id="correo_clientes" class="form-control minus" required value="<?= $venta["cliente"]["correo_clientes"]?>">
 												</div>
 												
-												<input disabled type="number" name="id_emisores" id="correo_clientes" class="hidden" value="<?php echo $_SESSION["id_usuarios"]?>">
+												<input disabled type="number" name="id_emisores" id="correo_clientes" class="hidden" value="<?php echo $_COOKIE["id_usuarios"]?>">
 												
 											</div>
 										</div>
@@ -284,11 +290,11 @@
 											<div class="col-sm-10 col-sm-offset-1">
 												<div class="form-group col-sm-6">
 													<label class="control-label" for="forma_pago">Serie:</label>
-													<input type="text" name="serie" id="serie" class="form-control" value="<?php echo $folio["serie"]?>" >
+													<input type="text" name="serie" id="serie" class="form-control" value="<?php echo $emisor["datos"]["serie_emisores"]?>" >
 												</div>
 												<div class="form-group col-sm-6">
 													<label class="control-label" for="forma_pago">Folio:</label>
-													<input type="text" name="folio" id="folio" class="form-control" value="<?php echo $folio["folio"]?>" >
+													<input type="text" name="folio" id="folio" class="form-control" value="<?php echo $emisor["datos"]["folio_emisores"]?>" >
 												</div>
 												<div class="form-group col-sm-6">
 													<label for="">Metodo de pago</label>
@@ -443,19 +449,19 @@
 											<div class="col-sm-1" >
 												<label>CANTIDAD</label>
 											</div>
-											<div class="col-sm-1 hidden" >
+											<div class="col-sm-1 " >
 												<label>UNIDAD</label>
 											</div>
-											<div class="col-sm-2 hidden" >
+											<div class="col-sm-2 " >
 												<label>CLAVE</label>
 											</div>
 											<div class="col-sm-4" >
 												<label>DESCRIPCIÓN</label>
 											</div>
-											<div class="col-sm-1 hidden" >
+											<div class="col-sm-1 " >
 												<label>PRECIO UNITARIO C/IVA</label>
 											</div>
-											<div class="col-sm-1 hidden" >
+											<div class="col-sm-1 " >
 												<label>IVA UNITARIO</label>
 											</div>
 											<div class="col-sm-1" >
@@ -464,21 +470,21 @@
 											<div class="col-sm-1" >
 												<label>IMPORTE</label>
 											</div>
-											<div class="col-sm-1 hidden" >
+											<div class="col-sm-1 " >
 												<label>DESCUENTO</label>
 											</div>
 											
 										</div>
 										<hr>
 										<?php 
-										$traslados = 0;
-										$subtotal = 0;
-										foreach ($venta["productos"] as $i => $producto){
-											
-											$iva = round($producto["precio_menudeo"] * .16, 2); 
-											$importe = $producto["precio_menudeo"] * $producto["cantidad"];
-											$subtotal+= $importe;
-											$traslados+= $iva;
+											$traslados = 0;
+											$subtotal = 0;
+											foreach ($venta["productos"] as $i => $producto){
+												
+												$iva = round($producto["precio"] / 1.16, 2); 
+												$importe = $producto["precio"] * $producto["cantidad"];
+												$subtotal+= $importe;
+												$traslados+= $iva;
 											?>
 											<div id="div_conceptos">
 												<div class="fila_concepto">
@@ -492,24 +498,21 @@
 															<select required  name="clave_unidad[] " class="form-control clave_unidad conceptos">
 																<option value="">Elige...</option>
 																<?php echo  getUnidades($link,$id_emisores );?>
-																</select>
+															</select>
 															
-															<input type="text" class="nombre_unidades " name="nombre_unidades[]" value="Pieza" >
+															<input hidden type="text" class="nombre_unidades " name="nombre_unidades[]" value="Pieza" >
 															
 														</div>	
 														<div class="col-sm-2 ">
-															<input readonly required  name="clave_producto[]" class="form-control  conceptos" value="11151700">
 															
-															<!-- 
-																<select required  name="clave_producto[]" class="form-control  conceptos">
+															<select required  name="clave_producto[]" class="form-control  conceptos">
 																<option value="">Elige...</option>
-																<?php //echo  getProductos($link,$id_emisores );?>
-																</select>
-															-->
+																<?php echo  getProductos($link,$id_emisores );?>
+															</select>
 															
 														</div>
 														<div class="form-group col-sm-4">
-															<textarea required cols="4"  rows="1" value="" placeholder=""  name="descripcion[]" class="form-control conceptos"><?php echo $producto["descripcion_productos"]?></textarea>
+															<textarea required cols="4"  rows="1" value="" placeholder=""  name="descripcion[]" class="form-control conceptos"><?php echo $producto["descripcion"]?></textarea>
 														</div>
 														<div class="col-sm-1 ">
 															<input  type="number" min="0" step=".01"  name="" class="form-control precio_unitario conceptos">
@@ -518,7 +521,7 @@
 															<input   type="number" min="0" step=".01"  class="form-control iva_unitario conceptos">
 														</div>
 														<div class="col-sm-1">
-															<input   type="number" min="0" step=".01" name="precio_unitario[]" class="form-control conceptos precio_sin_iva" value="<?php echo $producto["precio_menudeo"]?>">
+															<input   type="number" min="0" step=".01" name="precio_unitario[]" class="form-control conceptos precio_sin_iva" value="<?php echo $producto["precio"]?>">
 														</div>
 														<div class=" col-sm-1">
 															<input required  type="number" min="0" step=".01"  name="importe[]" class="form-control importe conceptos" value="<?php echo $importe;?>">
@@ -535,7 +538,7 @@
 															</button>
 														</div> 
 													</div>
-													<div class="row hidden">
+													<div class="row ">
 														<div class="col-sm-2 col-sm-offset-2 ">
 															<h3>
 																Impuestos
@@ -622,9 +625,9 @@
 											<div class="col-sm-3">
 												<input  type="number" step=".01" class="form-control" name="descuento_total" id="descuento_total">
 											</div>
-											</div>
-											<div class="row">
-												<div class="col-sm-3 col-sm-offset-6 text-right">
+										</div>
+										<div class="row">
+											<div class="col-sm-3 col-sm-offset-6 text-right">
 												<label>TRASLADADOS:</label> 
 											</div>
 											<div class="col-sm-3">
@@ -651,6 +654,9 @@
 										<label class="pull-right">
 											<input type="checkbox" name="modo_pruebas" value="SI"> MODO PRUEBAS
 										</label>
+										<pre id="debug" class="hidden">
+											<?php print_r($venta)?>
+										</pre>
 										<div id="mensaje_error" class="alert alert-danger hidden">
 											
 										</div>

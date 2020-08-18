@@ -1,7 +1,7 @@
 <?php
 	// include("login/login_success.php");
 	include_once("control/is_selected.php");
-	include_once("conexi.php");
+	include_once("../conexi.php");
 	$link = Conectarse();
 	$menu_activo = "facturas";
 	
@@ -59,7 +59,7 @@
 				</div>
 				
 				<div class="checkbox">
-					<label ><input type="checkbox" checked class="filtro" value="1" name="mostrar_timbrados" id="mostrar_timbrados"> Mostrar Solo Timbrados</label>
+					<label ><input type="checkbox"  class="filtro" value="1" name="mostrar_pruebas" id="mostrar_pruebas"> Mostrar Pruebas</label>
 				</div>
 				
 				<div class="form-group">
