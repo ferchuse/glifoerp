@@ -9,16 +9,22 @@
 	
 	$consulta = "
 	SELECT
-	*,
+	*
+	FROM contratos 
+	LEFT JOIN clientes USING(id_clientes)
 	
 	
 	WHERE 1 
 	";
-	if($_GET["id_vendedores"] != ''){
-		
-		$consulta.="AND id_vendedores = '{$_GET["id_vendedores"]}'
-	";
+	
+	if($_GET["id_documento"] != ""){
+		$consulta.=  " AND id_documento = '{$_GET['id_documento']}' ";
 	}
+	if($_GET["estatus"] != ""){
+		$consulta.=  " AND estatus = '{$_GET['estatus']}' ";
+	}
+	
+	
 	$consulta.="
 	ORDER BY
 	{$_GET["sort"]} {$_GET["order"]}

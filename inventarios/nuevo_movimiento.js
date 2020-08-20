@@ -188,7 +188,7 @@ function renderProductos(respuesta){
 		<input readonly type="number" class='importe form-control text-right' value="${producto.importe}">
 		</td>
 		<td class='w-25'>	
-		<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
+		<input class="existencia_anterior form-control"   value='${producto['existencia_productos']}'> 
 		</td>
 		<td class="text-center">
 		<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">

@@ -68,7 +68,7 @@
 	
 	
 	function get_factura_html($datos_factura){
-		$url = $_SERVER['HTTP_HOST'].'/atoshka/facturacion/facturacion/plantilla_pdf.php';
+		$url = $_SERVER['HTTP_HOST'].'/app/facturacion/facturacion/plantilla_pdf.php';
 		
 		$ch = curl_init(); //ajax
 		curl_setopt($ch, CURLOPT_URL, $url); //url
