@@ -68,7 +68,7 @@
   <head>
     <meta charset="utf-8">
     <title>Factura</title>
-    <link rel="stylesheet" href="http://phptopdf.com/bootstrap.css">
+    <link rel="stylesheet" href="https://phptopdf.com/bootstrap.css">
     <style>
 			body { 
 			font-family: DejaVu Sans, sans-serif; 
