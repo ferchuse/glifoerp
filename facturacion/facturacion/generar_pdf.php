@@ -55,6 +55,7 @@
 	$pdf_file = $dompdf->output();
 	
 	$pdf_path = "timbrados/".$datos_factura["rfc_emisores"]."_".$datos_factura["folio_facturas"].".pdf";
+	$respuesta["html"] = $html ;
 	$respuesta["pdf_path"] = $pdf_path ;
 	$respuesta["url_pdf"] = "timbrados/".$datos_factura["rfc_emisores"]."_".$datos_factura["folio_facturas"].".pdf";
 	$respuesta["url_xml"] = "timbrados/".$datos_factura["rfc_emisores"]."_".$datos_factura["folio_facturas"].".xml";
