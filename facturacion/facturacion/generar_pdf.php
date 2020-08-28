@@ -1,7 +1,7 @@
 <?php
 	header("Content-Type: application/json");
 	require 'vendor/autoload.php';
-	include_once("../conexi.php");
+	include("../../conexi.php");
 	session_start();
 	use Dompdf\Dompdf; 
 	
@@ -37,7 +37,14 @@
 	//generar pdf
 	$dompdf = new Dompdf();
 	$dompdf->set_option('isHtml5ParserEnabled', true);
+	
+	
 	$html = get_factura_html($datos_factura);
+	
+	if(is_array($html)){
+		
+			$respuesta["curl"] = $html;
+	}
 	
 	$dompdf->loadHtml($html);
 	
@@ -80,6 +87,7 @@
 		if($result === FALSE){
 			$respuesta["curl_estatus"] = "error";
 			$respuesta["curl_mensaje"] = 'Curl failed: '. curl_error($ch);
+			$result = curl_error($ch);
 		}
 		curl_close($ch);
 		return $result;
