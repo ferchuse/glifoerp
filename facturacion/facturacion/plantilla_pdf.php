@@ -1,5 +1,5 @@
 <?php
-	include("../conexi.php");
+	include("../../conexi.php");
 	$link = Conectarse();
 	
 	if(isset($_POST["id_facturas"])){
