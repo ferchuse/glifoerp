@@ -1,7 +1,7 @@
 <?php
 	header("Content-Type: application/json");
 	require 'vendor/autoload.php';
-	include_once("../../conexi.php");
+	include_once("../conexi.php");
 	session_start();
 	use Dompdf\Dompdf; 
 	

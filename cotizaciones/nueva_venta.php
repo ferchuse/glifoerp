@@ -186,7 +186,7 @@
 							<input   id="total" type="number" class="form-control input-lg text-right venta" value="0">
 							<input   id="anticipo" type="number" class="form-control input-lg text-right venta" value="0">
 							<input   id="saldo" type="number" class="form-control input-lg text-right venta" value="0" >
-							</div>
+						</div>
 						
 						
 						<div class="col-sm-2 col-12 text-right">
