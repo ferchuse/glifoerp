@@ -88,7 +88,8 @@
 		if($result === FALSE){
 			$respuesta["curl_estatus"] = "error";
 			$respuesta["curl_mensaje"] = 'Curl failed: '. curl_error($ch);
-			$result = curl_error($ch);
+			$result["error"] = curl_error($ch);
+			$result["url"] =$url;
 		}
 		curl_close($ch);
 		return $result;
