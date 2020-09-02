@@ -171,6 +171,7 @@ function confirmarCancelacion() {
 	icono.toggleClass("fa-times fa-spinner fa-spin ");
 	var folio_facturas = boton.data('folio_facturas');
 	var id_facturas = boton.data('id_facturas');
+	var uuid = boton.data('uuid');
 	var fila = boton.closest('tr');
 	function cancelarFactura(evet,value) {
 		$.ajax({
@@ -178,13 +179,23 @@ function confirmarCancelacion() {
 			method: 'POST',
 			data:{
 				
+				"uuid": uuid,
 				motivo_cancelacion: value,
 				folio_facturas: folio_facturas,
 				id_facturas: id_facturas
 			}
 			}).done(function(respuesta){
-			alertify.success("CFDI Cancelado correctamente"); 
+			if(respuesta.respuesta_pac.codigo_mf_numero == 0){
+				
+				alertify.success("CFDI Cancelado correctamente"); 
+				
+			}
+			else{
+				
+				alertify.error(respuesta.respuesta_pac.codigo_mf_texto)
+			}
 			
+			alertify.success("CFDI Cancelado correctamente"); 
 			cargarTabla(filtros);
 			}).fail(function(xhr, error,errnum ){
 			alertify.error("Ocurrio un error" + error);

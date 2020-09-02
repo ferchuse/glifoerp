@@ -65,7 +65,7 @@
 	
 	$datos["uuid"] = $_POST["uuid"];
 	$datos["rfc"] = $rfc;
-	$datos["password"] = "estaGab2";
+	$datos["password"] =  $emisor["password"];
 	$datos["b64Cer"] = "certificados/$rfc.cer";
 	$datos["b64Key"] = "certificados/$rfc.key";
 	
