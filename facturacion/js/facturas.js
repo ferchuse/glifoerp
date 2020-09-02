@@ -1,5 +1,37 @@
+
+function cargarTabla(filtros) {
+	var cargador = "<tr><td class='text-center' colspan='10'><i class='fa fa-spinner fa-spin fa-3x'></i></td></tr>";
+	$('#lista_facturas').html(cargador);
+	$.ajax({
+		url: 'control/lista_facturas.php',
+		method: 'GET',
+		data: filtros
+		}).done(function(respuesta) {
+		$('#lista_facturas').html(respuesta);
+		
+		$('.btn_cancelar').click(confirmarCancelacion);
+		
+		$('.btn_eliminar').click(confirmaEliminar);
+		$('.btn_pago').click(mostrarModalPago);
+		$("#buscar_cliente").keyup(buscarCliente);
+		
+		$('.btn_correo').click(function modal_correo() {
+			console.log("modal_correo()");
+			$("#correo").val($(this).data("correo"));
+			$("#url_xml").val($(this).data("url_xml"));
+			$("#url_pdf").val($(this).data("url_pdf"));
+			
+			$("#modal_correo").modal("show");
+			
+		});
+		
+	});
+}
+
+var filtros = $("#form_filtros").serialize();
+
+
 $(document).ready(function() {
-	var filtros = $("#form_filtros").serialize();
 	
 	cargarTabla(filtros);
 	
@@ -27,45 +59,17 @@ $(document).ready(function() {
 	}
 	
 	//--------FILTRO--------
-	function cargarTabla(filtros) {
-		var cargador = "<tr><td class='text-center' colspan='10'><i class='fa fa-spinner fa-spin fa-3x'></i></td></tr>";
-		$('#lista_facturas').html(cargador);
-		$.ajax({
-			url: 'control/lista_facturas.php',
-			method: 'GET',
-			data: filtros
-			}).done(function(respuesta) {
-			$('#lista_facturas').html(respuesta);
-			
-			$('.btn_cancelar').click(confirmarCancelacion);
-			
-			$('.btn_eliminar').click(confirmaEliminar);
-			$('.btn_pago').click(mostrarModalPago);
-			$("#buscar_cliente").keyup(buscarCliente);
-			
-			$('.btn_correo').click(function modal_correo() {
-				console.log("modal_correo()");
-				$("#correo").val($(this).data("correo"));
-				$("#url_xml").val($(this).data("url_xml"));
-				$("#url_pdf").val($(this).data("url_pdf"));
-				
-				$("#modal_correo").modal("show");
-				
-			});
-			
-		});
-	}
 	
 	
 	$(".exportar").click(function(){
 		
 		$('#tabla_reporte').tableExport(
-		{
-			type:'excel',
-			tableName:'Reporte', 
-			ignoreColumn: [9],
-			escape:'false'
-		});
+			{
+				type:'excel',
+				tableName:'Reporte', 
+				ignoreColumn: [9],
+				escape:'false'
+			});
 	});
 	
 	
@@ -216,7 +220,7 @@ function mostrarModalPago(){
 	var serie_actual = $("#serie_actual").val();
 	var serie = serie_actual[0];
 	var folio = serie_actual.substring(1, serie_actual.length );
-	 
+	
 	
 	$("#modal_pago").modal("show");
 	$("#id_facturas").val($(this).data("id_facturas"));
