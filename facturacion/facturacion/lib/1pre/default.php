@@ -53,6 +53,17 @@ function mf_default(&$datos)
 	{
 		$datos['receptor']['rfc'] = elimina_ampersand($datos['receptor']['rfc']);
 	}
+    
+    if(isset($datos['factura']['descuento']))
+    {
+        if($datos['factura']['descuento']<=0)
+        {
+            unset($datos['factura']['descuento']);
+        }
+        
+    }
+    
+    
 	
 	
 	// Ajuste de nuevo RFC de pruebas

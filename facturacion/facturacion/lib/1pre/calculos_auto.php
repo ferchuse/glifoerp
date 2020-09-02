@@ -90,7 +90,7 @@ function mf_calculos_auto(&$datos)
 
 	//$descuento_global = mf_truncar($descuento);
 	$descuento_global = mf_redondear($descuento);
-	if($descuento_global != 0)
+	if($descuento_global > 0)
 	{
 		$datos['factura']['descuento'] = $descuento_global;
 	}

@@ -20,23 +20,26 @@ function ___cancelacion2018($datos)
     $certificado = base64_encode(file_get_contents($datos["b64Cer"]));
     $key = base64_encode(file_get_contents($datos["b64Key"]));
     
-    if($datos["uuid"] == "")
-    {
-        $RutaXML = $datos["xml"];    
-        $xml = simplexml_load_file($RutaXML); 
-        $ns = $xml->getNamespaces(true);
-        $xml->registerXPathNamespace('c', $ns['cfdi']);
-        $xml->registerXPathNamespace('t', $ns['tfd']);
-        foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd)
-        {  
-        $uuid=(string)$tfd['UUID'];   
-        } 
-    }
-    else
-    {
-        $uuid = $datos["uuid"];
-    }
     
+    if($accion !='CONSULTAR')
+    {
+        if($datos["uuid"] == "")
+        {
+            $RutaXML = $datos["xml"];    
+            $xml = simplexml_load_file($RutaXML); 
+            $ns = $xml->getNamespaces(true);
+            $xml->registerXPathNamespace('c', $ns['cfdi']);
+            $xml->registerXPathNamespace('t', $ns['tfd']);
+            foreach ($xml->xpath('//t:TimbreFiscalDigital') as $tfd)
+            {  
+            $uuid=(string)$tfd['UUID'];   
+            } 
+        }
+        else
+        {
+            $uuid = $datos["uuid"];
+        }
+    }
     
     $url_webservice="http://pac1.multifacturas.com/cancelacion2018/?wsdl";
     $SOAP_CLIENT=$url_webservice;

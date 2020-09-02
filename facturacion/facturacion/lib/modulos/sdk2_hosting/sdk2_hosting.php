@@ -1,7 +1,12 @@
 <?php
+
+___sdk2_hosting($datos=null);
+ 
 function ___sdk2_hosting($datos=null)
 {
 	global $__mf_constantes__;
+    global $__mf_constantes__;
+    print_r($__mf_constantes__);
     $php_minimo=53;
 
     list($uno,$dos,$tres)=explode('.',PHP_VERSION);
@@ -72,6 +77,7 @@ $xsl='';
 /////////////////////////////////////////////////
 ////        PRUEBA XSD 
 /////////////////////////////////////////////////
+echo  $__mf_constantes__['__MF_LIBS_DIR__'];
     if(file_exists($__mf_constantes__['__MF_LIBS_DIR__']."sat/xsd33/cfdv33.xsd")==true)
     {
         $pruebas['validar_xsd'] = $resultado;
@@ -96,7 +102,7 @@ $openssl='';
         }
         else
         {
-            $pruebas['openssl'] = 'ERROR : Requiere ejecutable openssl';
+            $pruebas['openssl'] = 'OPCIONAL : Requiere ejecutable openssl';
         }
         
     }
@@ -183,15 +189,23 @@ else
 		$pruebas['lib_domdocument'] = 'RECOMENDACION : Requiere libreria DOMDocument en PHP para mejorar la velocidad de timbrado';
 }
 
-$res= file_get_contents("http://pac1.multifacturas.com/pac?wsdl");
-if(strlen($res)>5000)
+//$res= file_get_contents("http://pac1.multifacturas.com/pac?wsdl");
+
+for($i=1;$i<=10;$i++)
 {
-		$pruebas['prueba_servidor'] = 'OK';
+    $res= file_get_contents("http://pac$i.multifacturas.com/pac?wsdl");
+    if(strlen($res)>5000)
+    {
+    	$pruebas["prueba_servidor_pac$i"] = 'OK';
+    }
+    else
+    {
+        $pruebas["prueba_servidor_pac$i"] = 'FALLA comunicacion al servidor de timbrado, revise firewall o conexion a internet';
+    }
 }
-else
-{
-		$pruebas['prueba_servidor'] = 'FALLA comunicacion al servidor de timbrado, revise firewall o conexion a internet';
-}
+
+
+
 
 /////////////////////////////////////////////////
 ////        GENERACION PEM 
@@ -241,6 +255,10 @@ else
     {
         $pruebas['c_key_pem'] = 'ERROR GRAVE, NO SE PUEDEN PROCESAR LOS CERTIFICADOS';
     }
+    
+    echo "<pre>";
+    print_r($pruebas);
+    echo "</pre>";
 //return $pruebas;
 return $pruebas;
 }

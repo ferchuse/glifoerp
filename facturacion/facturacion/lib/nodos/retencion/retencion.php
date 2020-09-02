@@ -130,6 +130,22 @@ function mf_nodo_retencion($datos,$produccion='NO')
 
         $complementos = $nodoDividendos;
     }
+    
+    // Intereses
+    if(isset($datos['intereses']))
+    {
+        $ns_intereses = 'xmlns:intereses="http://www.sat.gob.mx/esquemas/retencionpago/1/intereses"';
+        $sl_intereses = "http://www.sat.gob.mx/esquemas/retencionpago/1/intereses http://www.sat.gob.mx/esquemas/retencionpago/1/intereses/intereses.xsd ";
+
+        //$datosIntereses = $datos['intereses'];
+        $atrs = mf_atributos_nodo($datosIntereses = $datos['intereses'], '');
+        $nodoIntereses = "<intereses:Intereses Version=\"1.0\" $atrs />";
+
+
+        $complementos = $nodoIntereses;
+    }
+    
+    
 
     // Nodo Retenciones
     $nodoRetenciones = '';
@@ -215,7 +231,7 @@ function mf_nodo_retencion($datos,$produccion='NO')
     $xml_iso8859 = $nodoRetenciones;
 // MODULO SELLO
 //    $xslt = 'xslt/retenciones.xslt';
-    global $__mf_constantes__;
+    global $__mf_constantes__,$__mf__;
 
     $xslt = $__mf_constantes__['__MF_XSLT_RET_DIR__'] . 'retenciones.xslt';
     $xml_iso8859 = utf8_encode($xml_iso8859);
@@ -223,7 +239,8 @@ function mf_nodo_retencion($datos,$produccion='NO')
 //    file_put_contents("c:\\multifacturas_sdk\\dividendos.xml",utf8_encode($xml_iso8859));
 //$xml_iso8859=utf8_encode($xml_iso8859);
     //file_put_contents('tmp/retenciones.xml',utf8_encode($xml_iso8859));
-    file_put_contents($__mf_constantes__['__MF_SDK_TMP__'] . 'retenciones.xml',utf8_encode($xml_iso8859));
+    $__mf__['xml_cfdi']=utf8_encode($xml_iso8859);
+//    file_put_contents($__mf_constantes__['__MF_SDK_TMP__'] . 'retenciones.xml',utf8_encode($xml_iso8859));
 
 
 
@@ -240,7 +257,12 @@ function mf_nodo_retencion($datos,$produccion='NO')
     {
         $datos['PAC']['pass']='DEMO700101XXX';
     }
-    $res=mf_timbrar_retencion(rand(1, 10), $datos['PAC']['usuario'],$datos['PAC']['pass'], $xml_iso8859);
+    if(!isset($datos['PAC']['produccion']))
+    {
+        $datos['PAC']['produccion']='NO';
+    }   
+    $produccion=$datos['PAC']['produccion'];
+    $res=mf_timbrar_retencion(rand(1, 10), $datos['PAC']['usuario'],$datos['PAC']['pass'], $xml_iso8859,$produccion);
 
     if($res['codigo_mf_numero'] == 0 || $res['codigo_mf_numero'] == '0')
     {

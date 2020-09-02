@@ -48,7 +48,7 @@ function ___consultarestatuscfdi($datos)
     
     if($datos['PAC']['produccion'] == 'NO')
     {
-        echo ff;
+        
         unset($buscar);
         $url = "https://consultaqrfacturaelectronicatest.sw.com.mx/ConsultaCFDIService.svc?singleWsdl";
         $soapclient = new nusoap_client($url,$esWSDL=true);

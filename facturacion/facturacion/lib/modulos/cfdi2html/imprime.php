@@ -1,320 +1,31 @@
 <?php
-// <!-- phpDesigner :: Timestamp [30/11/2016 04:11:55 p. m.] -->
 //error_reporting(E_ALL);
 
-function _inim_imprime()
+function _inim_imprime_factura()
 {
 
-    $js="
-    <script>
-        function dbme_muestra_pdf(id,pdf)
-        {
-            var info = getAcrobatInfo();
-            if(info.acrobat==false)
-            {
-                //alert('no se ve');
-                $('#iddbme_pdf_'+id).html(pdf);
-                
-                $('#iddbme_pdf_'+id).html(\"<iframe width='90%' height='420' src='{URL}/masheditor/libs/pdfjs/web/viewer.html?file=\"+pdf+\"'></iframe>\");
-                
-            }
-            else 
-            {
-                $('#iddbme_pdf_'+id).html(\"<iframe width='90%' height='420' src='\"+pdf+\"'></iframe>\");
-            }
-        }
-    
-    
-        //
-        // http://thecodeabode.blogspot.com
-        // @author: Ben Kitzelman
-        // @license: FreeBSD: (http://opensource.org/licenses/BSD-2-Clause) Do whatever you like with it
-        // @updated: 03-03-2013
-        //
-        var getAcrobatInfo = function() {
-         
-        var getBrowserName = function() {
-        return this.name = this.name || function() {
-        var userAgent = navigator ? navigator.userAgent.toLowerCase() : 'other';
-         
-        if(userAgent.indexOf('chrome') > -1) return 'chrome';
-        else if(userAgent.indexOf('safari') > -1) return 'safari';
-        else if(userAgent.indexOf('msie') > -1) return 'ie';
-        else if(userAgent.indexOf('firefox') > -1) return 'firefox';
-        return userAgent;
-        }();
-        };
-         
-        var getActiveXObject = function(name) {
-        try { return new ActiveXObject(name); } catch(e) {}
-        };
-         
-        var getNavigatorPlugin = function(name) {
-        for(key in navigator.plugins) {
-        var plugin = navigator.plugins[key];
-        if(plugin.name == name) return plugin;
-        }
-        };
-         
-        var getPDFPlugin = function() {
-        return this.plugin = this.plugin || function() {
-        if(getBrowserName() == 'ie') {
-        //
-        // load the activeX control
-        // AcroPDF.PDF is used by version 7 and later
-        // PDF.PdfCtrl is used by version 6 and earlier
-        return getActiveXObject('AcroPDF.PDF') || getActiveXObject('PDF.PdfCtrl');
-        }
-        else {
-        return getNavigatorPlugin('Adobe Acrobat') || getNavigatorPlugin('Chrome PDF Viewer') || getNavigatorPlugin('WebKit built-in PDF');
-        }
-        }();
-        };
-         
-        var isAcrobatInstalled = function() {
-        return !!getPDFPlugin();
-        };
-         
-        var getAcrobatVersion = function() {
-        try {
-        var plugin = getPDFPlugin();
-         
-        if(getBrowserName() == 'ie') {
-        var versions = plugin.GetVersions().split(',');
-        var latest = versions[0].split('=');
-        return parseFloat(latest[1]);
-        }
-         
-        if(plugin.version) return parseInt(plugin.version);
-        return plugin.name
-        }
-        catch(e) {
-        return null;
-        }
-        }
-         
-        //
-        // The returned object
-        //
-        return {
-        browser: getBrowserName(),
-        acrobat: isAcrobatInstalled() ? 'installed' : false,
-        acrobatVersion: getAcrobatVersion()
-        };
-        };    
-        </script>
-    ";
-    AgregarJS_mash($js);    
+  
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////
-function imprime_ticket($idfactura,$nota_impresa)
+function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa,$color_marco,$color_marco_texto,$color_texto,$fuente_texto)
 {
-    $js='<link rel="stylesheet" href="{URL}/factura.css?tmp=213" type="text/css"/> 
-    <style>
-    body{
-        text-transform: uppercase;
-      font-size: 12px !important;
-      margin : 0px !important;
-      padding: 0px !important;
-    }
-    .titulo{
-      font-size: 22px !important;   
-      text-align: center;
-    }
-    .cabecera{
-      font-size: 10px !important;   
-    }
-    .codigo{
-      font-size: 18px !important;   
-      text-align: left;
-    }
     
-    </style>
-    
-    ';
-    if(function_exists('AgregarJS_mash')==true)
-    {
-        AgregarJS_mash($js);
+    //FUNCION QUE REGRESA CSS -> CARLOS
+    if($color_marco==''){
+        $color_marco='black';
     }
-    else
-    {
-        $valor.='<head><link rel="stylesheet" href="factura.css?tmp=213" type="text/css"/> </head>';
+    if($color_texto==''){
+        $color_texto='black';
     }
-
-
-
-    $sql="
-        SELECT 
-          `multi_config`.EMPRESA_NOMBRE,
-          `multi_config`.LOGO,
-          `multi_config`.EMISOR_NOMBRE,
-          `multi_config`.EMISOR_RFC,
-          `multi_config`.EMISOR_EXP_CALLE,
-          `multi_config`.EMISOR_EXP_NUMERO_EXTERIOR,
-          `multi_config`.EMISOR_EXP_COLONIA,
-          `multi_config`.EMISOR_EXP_NUMERO_INTERIOR,
-          `multi_config`.EMISOR_EXP_LOCALIDAD,
-          `multi_config`.EMISOR_EXP_MUNICIPIO,
-          `multi_config`.EMISOR_EXP_ESTADO,
-          `multi_config`.EMISOR_EXP_PAIS,
-          `multi_config`.EMISOR_EXP_CP,
-          `multi_config`.Pagina_WEB,
-          `multi_config`.Telefonos,
-          `multi_config`.Correos,
-          `multi_config`.pagina_tickets,
-          multi_facturas.SERIE,
-          multi_facturas.FOLIO,
-          multi_facturas.FECHA,
-          multi_facturas.TOTAL,
-          multi_facturas.codigo_ticket
-        FROM
-          multi_facturas
-          LEFT OUTER JOIN `multi_config` ON (multi_facturas.idconfig = `multi_config`.idconfig)
-        WHERE
-          (multi_facturas.idfactura = $idfactura)    
-    ";
-
-    $datosticket=lee_sql_mash($sql);
-
-
-    $codigo_ticket=$datosticket['codigo_ticket'];
-    $logo=$datosticket['LOGO'];
-    $EMPRESA_NOMBRE=$datosticket['EMPRESA_NOMBRE'];
-    $EMISOR_NOMBRE=$datosticket['EMISOR_NOMBRE'];
-    $EMISOR_RFC=$datosticket['EMISOR_RFC'];
-    $RFC2=$datosticket['RFC'];
-    $EMISOR_EXP_CALLE=$datosticket['EMISOR_EXP_CALLE'];
-    $EMISOR_EXP_NUMERO_EXTERIOR=$datosticket['EMISOR_EXP_NUMERO_EXTERIOR'];
-    $EMISOR_EXP_COLONIA=$datosticket['EMISOR_EXP_COLONIA'];
-    $EMISOR_EXP_NUMERO_INTERIOR=$datosticket['EMISOR_EXP_NUMERO_INTERIOR'];
-    $EMISOR_EXP_LOCALIDAD=$datosticket['EMISOR_EXP_LOCALIDAD'];
-    $EMISOR_EXP_MUNICIPIO=$datosticket['EMISOR_EXP_MUNICIPIO'];
-    $EMISOR_EXP_ESTADO=$datosticket['EMISOR_EXP_ESTADO'];
-    $EMISOR_EXP_PAIS=$datosticket['EMISOR_EXP_PAIS'];
-    $EMISOR_EXP_CP=$datosticket['EMISOR_EXP_CP'];
-    $Pagina_WEB=$datosticket['Pagina_WEB'];
-    $Telefonos=$datosticket['Telefonos'];
-    $SERIE=$datosticket['SERIE'];
-    $FOLIO=$datosticket['FOLIO'];
-    $FECHA=$datosticket['FECHA'];
-    $TOTAL=$datosticket['TOTAL'];
-    $Correos=$datosticket['Correos'];
-    $pagina_factura=$datosticket['pagina_tickets'];
-
-    $domicilio_fiscal="
-    $EMISOR_NOMBRE <br/>
-    $EMISOR_EXP_CALLE $EMISOR_EXP_NUMERO_EXTERIOR  $EMISOR_EXP_NUMERO_INTERIOR, 
-    $EMISOR_EXP_COLONIA,  
-    $EMISOR_EXP_LOCALIDAD $EMISOR_EXP_MUNICIPIO CP $EMISOR_EXP_CP 
-    $EMISOR_EXP_PAIS 
- <br/>    
-    $Telefonos  $Pagina_WEB $Correos <br/>
-    FECHA : $FECHA<br/>
-    ";
-    $TICKET_RFC=$EMISOR_RFC;
-    if($TICKET_RFC=='')
-    {
-        $TICKET_RFC=$RFC2;
+    if($color_marco_texto==''){
+        $color_marco_texto='white';
     }
 
-$factura="
-    <div class='codigo'>
-    <b>FACTURA EN LINEA</b>
-    <br/> 
-     <b>RFC : $TICKET_RFC<b> <br/> 
-    TICKET : $SERIE$FOLIO <br/> 
-    CODIGO $codigo_ticket <br/> 
-    $pagina_factura
-    </div>
-    <hr/> 
-";
-
-    if(!file_exists($logo))
-    {
-        $logo="c:/cfdipdf/transparente.gif";
-    }
-    else
-    {
-        $conflogo['max']=200;
-        if(function_exists('ver_imagen_mash'))
-        {
-            $logo=ver_imagen_mash($logo,200,0,$conflogo);
-        }
-        else
-        {
-            $logo=$logo;
-        }
-    }
-    $valor="
+    $css=html_css($color_marco,$color_marco_texto,$color_texto,$fuente_texto);
+    $valor.="<head>$css</head>";
     
-    <center><img src='{URL}/$logo'></center>
-    <div class='titulo'>$EMPRESA_NOMBRE</div>
-    <span class='cabecera'>
-    $domicilio_fiscal
-    </span>
-    <hr/>
-    ";
-    
-    $sql="
-    SELECT *
-    FROM
-      `multi_facturas_detalles`
-    WHERE
-      (`multi_facturas_detalles`.idfactura = $idfactura)
-    ";
-    $res=mysql_query($sql);
-    while($datos=mysql_fetch_array($res))
-    {
-        
-        $CODIGO=$datos['CODIGO'];
-        $DESCRIPCION=$datos['DESCRIPCION'];
-        $PRECIO_PUBLICO=$datos['PRECIO_PUBLICO'];
-        $PRECIO_PUBLICO_UNITARIO=$datos['PRECIO_PUBLICO_UNITARIO'];
-        $CANTIDAD=$datos['CANTIDAD'];
-        $IVA_TASA=$datos['IVA_TASA'];
-        $UNIDAD=$datos['UNIDAD'];        
-        $PRECIO_PUBLICO=$PRECIO_PUBLICO+$PRECIO_PUBLICO*$IVA_TASA/100;
-        $PRECIO_PUBLICO=number_format($PRECIO_PUBLICO,2);
-
-          $valor.="<br/>* $DESCRIPCION 
-          <br/> 
-          <div style='text-align: right;'>$CANTIDAD UNIDAD --- $$PRECIO_PUBLICO</div>
-  ";
-
-    }
-
-    
-    $valor.="
-    <hr/>
-    <div class='titulo'>TOTAL $$TOTAL</div>
-    <hr/>
-    $factura
-    ";
-    
-        
-    return $valor;
-}
-///////////////////////////////////////////////////////////////////////////////
-function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa)
-{
-    $version=''; //declarar version xml cfdi
-    
-        $js='<link rel="stylesheet" href="{URL}/factura.css?tmp=213" type="text/css"/> ';
-        if(function_exists('AgregarJS_mash')==true)
-        {
-            AgregarJS_mash($js);
-        }
-        else
-        {
-            $valor.='<head><link rel="stylesheet" href="' . __DIR__ . '/factura.css?tmp=213" type="text/css"/> </head>';
-        }
-//$xml_archivo='ejemplo_nomina.xml';
-//$tipo_factura='NOMINA';
-//echo $xml_archivo;
-//$xml_archivo='ejemplo_honorarios.xml';
-//$tipo_factura='ARRENDAMIENTO';
     if(file_exists($xml_archivo)==false)
     {
         return 'ERROR 1, NO EXISTE XML, MUY  POSIBLEMENTE ES UNA PRUEBA FALLIDA';
@@ -324,20 +35,13 @@ function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa)
         return 'ERROR 2, XML INVALIDO';        
     }
 
-    $xml = simplexml_load_file($xml_archivo);
-    $ns = $xml->getNamespaces(true);
-    foreach($ns as $prefijo => $uri)
-    {
-		$xml->registerXPathNamespace($prefijo, $uri);
-	}
+    //$xml = simplexml_load_file($xml_archivo);
 
-
-    /*$ns = $xml->getNamespaces(true);
-
+    //$ns = $xml->getNamespaces(true);
+/*
     $xml->registerXPathNamespace('c', $ns['cfdi']);
-    $xml->registerXPathNamespace('t', $ns['tfd']);*/
-    
-    
+    $xml->registerXPathNamespace('t', $ns['tfd']);
+   */ 
 //    $xml->registerXPathNamespace('i', $ns['implocal']);
 
 /*
@@ -345,190 +49,227 @@ function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa)
     $xml->registerXPathNamespace('t', $ns['tfd']);
 */
 
+    $xml = simplexml_load_file($xml_archivo);
+    $ns = $xml->getNamespaces(true);
+    foreach($ns as $prefijo => $uri)
+    {
+    $xml->registerXPathNamespace($prefijo, $uri);
+  }
+
 
      
-     
+    $version=''; //declarar version xml cfdi
     //EMPIEZO A LEER LA INFORMACION DEL CFDI E IMPRIMIRLA
     foreach ($xml->xpath('//cfdi:Comprobante') as $cfdiComprobante)
     {
-        $version= $cfdiComprobante['version'];  //3.2
-       
-        if($version =='')
+         $version= $cfdiComprobante['version'];  //3.2
+         if($version =='')
             $version= $cfdiComprobante['Version'];  //3.3
-        
-        if($version =='')    
-                echo "xml no valido";
-                
-        if($version=="3.2")
-        {
-            $fecha_expedicion= $cfdiComprobante['fecha'];
-            //TODO: aki etiketa de cuenta en cheke
-            $metodo_pago= autoformato_impresion($cfdiComprobante['metodoDePago']);
-            $metodo_pago=formato_metodo_pago($metodo_pago);
-            
-            $sello= $cfdiComprobante['sello'];
-            $total=$cfdiComprobante['total'];
-            $total_=number_format((string)$total,2);
-            $Moneda=$cfdiComprobante['Moneda'];
-            
-            $subtotal=$cfdiComprobante['subTotal'];
-            $subtotal_=number_format((string)$subtotal,2);
-            
-            $descuento=$cfdiComprobante['descuento'];
-            $descuento_=number_format((string)$descuento,2);
           
-            $serie=$cfdiComprobante['serie'];
-            $folio=$cfdiComprobante['folio'];
-    
-            $NumCtaPago=$cfdiComprobante['NumCtaPago'];
-            
-            $certificado_key=$cfdiComprobante['certificado'];
-            $forma_pago=autoformato_impresion( $cfdiComprobante['formaDePago']);
-            $certificado_no=$cfdiComprobante['noCertificado'];
-            $cfdiComprobante['tipoDeComprobante'];
-            $LugarExpedicion=autoformato_impresion($cfdiComprobante['LugarExpedicion']);
-          
-            //PARCIALIDADES
-            $FechaFolioFiscalOrig=$cfdiComprobante['FechaFolioFiscalOrig'];
-            $FolioFiscalOrig=$cfdiComprobante['FolioFiscalOrig'];
-            $MontoFolioFiscalOrig=$cfdiComprobante['MontoFolioFiscalOrig'];
-            $SerieFolioFiscalOrig=$cfdiComprobante['SerieFolioFiscalOrig'];
-            if($FolioFiscalOrig !='')
-            {
-            $html_parcialidades="
-              
-                 Folio Fiscal Original: $FolioFiscalOrig | Fecha: $FechaFolioFiscalOrig | Serie Folio: $SerieFolioFiscalOrig | Monto: $MontoFolioFiscalOrig
-              ";  
-            }
-        }
-        if($version=="3.3")
-        {
+          $fecha_expedicion= $cfdiComprobante['fecha'];
+          if($fecha_expedicion == '')
             $fecha_expedicion= $cfdiComprobante['Fecha'];
-            //TODO: aki etiketa de cuenta en cheke
-            $metodo_pago= autoformato_impresion($cfdiComprobante['MetodoPago']);
-            $metodo_pago=formato_metodo_pago33($metodo_pago);
-            
-            $sello= $cfdiComprobante['Sello'];
-            $total=$cfdiComprobante['Total'];
-            $total_=number_format((string)$total,2);
-            $Moneda=$cfdiComprobante['Moneda'];
-            
-            $subtotal=$cfdiComprobante['SubTotal'];
-            $subtotal_=number_format((string)$subtotal,2);
-            $TipoDeComprobante = $cfdiComprobante['TipoDeComprobante'];
-            $descuento=$cfdiComprobante['Descuento'];
-            $descuento_=number_format((string)$descuento,2);
+
+          $metodo_pago=$cfdiComprobante['metodoDePago'];
+          if($metodo_pago == '')
+            $metodo_pago= $cfdiComprobante['MetodoPago'];
           
-            $serie=$cfdiComprobante['Serie'];
-            $folio=$cfdiComprobante['Folio'];
+          $metodo_pago= formato_metodo_pago33_modulo($metodo_pago);
+
+          
+          $sello= $cfdiComprobante['sello'];
+          if($sello == '')
+                $sello= $cfdiComprobante['Sello'];
+          
+          $total=$cfdiComprobante['total'];
+          if($total == '')
+                $total= $cfdiComprobante['Total'];
+          
+          $total_=number_format((string)$total,2);
+
+          $Moneda=$cfdiComprobante['Moneda'];
+          
+          
+          $subtotal=$cfdiComprobante['subTotal'];
+          if($subtotal == '')
+                $subtotal= $cfdiComprobante['SubTotal'];
+          
+          
+          $subtotal_=number_format((string)$subtotal,2);
+          
+          $descuento=$cfdiComprobante['descuento'];
+          if($descuento == '')
+                $descuento= $cfdiComprobante['Descuento'];
+          $descuento_=number_format((string)$descuento,2);
+          
+          $serie=$cfdiComprobante['serie'];
+          if($serie == '')
+                $serie= $cfdiComprobante['Serie'];
+          $folio=$cfdiComprobante['folio'];
+          if($folio == '')
+                $folio= $cfdiComprobante['Folio'];
+
+          $NumCtaPago=$cfdiComprobante['NumCtaPago'];
+          
+          $certificado_key=$cfdiComprobante['certificado'];
+          if($certificado_key == '')
+                $certificado_key= $cfdiComprobante['Certificado'];
+          
+          $forma_pago=autoformato_impresion_modulo( $cfdiComprobante['formaDePago']);
+          if($forma_pago == '')
+                $forma_pago= $cfdiComprobante['FormaPago'];
+          
+          $forma_pago=formato_forma_pago33_modulo($forma_pago);
+          
+          $certificado_no=$cfdiComprobante['noCertificado'];
+          if($certificado_no == '')
+                $certificado_no= $cfdiComprobante['NoCertificado'];
+          
+          $cfdiComprobante['tipoDeComprobante'];
+          $TipoDeComprobante = $cfdiComprobante['TipoDeComprobante'];
+          
+          $LugarExpedicion=autoformato_impresion_modulo($cfdiComprobante['LugarExpedicion']);
+    }
     
-            $NumCtaPago=$cfdiComprobante['NumCtaPago'];
-            
-            $certificado_key=$cfdiComprobante['Certificado'];
-            $forma_pago=autoformato_impresion( $cfdiComprobante['FormaPago']);
-            $forma_pago = formato_forma_pago33($forma_pago);
-            $certificado_no=$cfdiComprobante['NoCertificado'];
-            $cfdiComprobante['TipoDeComprobante'];
-            $LugarExpedicion=autoformato_impresion($cfdiComprobante['LugarExpedicion']);
-          
-            //PARCIALIDADES
-            /*
-            $FechaFolioFiscalOrig=$cfdiComprobante['FechaFolioFiscalOrig'];
-            $FolioFiscalOrig=$cfdiComprobante['FolioFiscalOrig'];
-            $MontoFolioFiscalOrig=$cfdiComprobante['MontoFolioFiscalOrig'];
-            $SerieFolioFiscalOrig=$cfdiComprobante['SerieFolioFiscalOrig'];
-            if($FolioFiscalOrig !='')
-            {
-            $html_parcialidades="
-              
-                 Folio Fiscal Original: $FolioFiscalOrig | Fecha: $FechaFolioFiscalOrig | Serie Folio: $SerieFolioFiscalOrig | Monto: $MontoFolioFiscalOrig
-              ";  
-            }
-            */
-        }
+    
+    //cfdi relacionado
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:CfdiRelacionados') as $CfdiRelacionados)
+    {
+        $TipoRelacion=$CfdiRelacionados['TipoRelacion'];
+        $TipoRelacion_txt = formato_cfdi_relacionados_modulo($TipoRelacion);
+        $html_cfdi_relacionados="<BR/>TIPO RELACION: $TipoRelacion_txt<BR/>";
         
+    }
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:CfdiRelacionados//cfdi:CfdiRelacionado') as $CfdiRelacionado)
+    {
+        $UUID=$CfdiRelacionado['UUID'];
         
-        
+        $html_cfdi_relacionados.="CFDI RELACIONADO: $UUID<BR/>";
     }
 
-    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Emisor') as $Emisor)
-    {
-        if($version=='3.2')
-        {
-            $emisor_rfc=$Emisor['rfc'];
-            $emisor_nombre= autoformato_impresion($Emisor['nombre']);
-        }
-        if($version=='3.3')
-        {
-            $emisor_rfc=$Emisor['Rfc'];
-            $emisor_nombre= autoformato_impresion($Emisor['Nombre']);
-            $regimen_fiscal=$Emisor['RegimenFiscal'];
-        }
-    }
-    //3.2
-    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Emisor//cfdi:DomicilioFiscal') as $DomicilioFiscal)
-    {
-        $emisor_pais= autoformato_impresion($DomicilioFiscal['pais']);
-        $emisor_calle= autoformato_impresion($DomicilioFiscal['calle']);
-        $emisor_estado= autoformato_impresion($DomicilioFiscal['estado']);
-        $emisor_colonia= autoformato_impresion($DomicilioFiscal['colonia']);
-        $emisor_municipio= autoformato_impresion($DomicilioFiscal['municipio']);
-        $emisor_localidad= autoformato_impresion($DomicilioFiscal['localidad']);
-        $emisor_noExterior= autoformato_impresion($DomicilioFiscal['noExterior']);
-        $emisor_noInterior= autoformato_impresion($DomicilioFiscal['noInterior']);
-        $emisor_CP= autoformato_impresion($DomicilioFiscal['codigoPostal']);
-        $emisor_CP=sprintf('%05d',$emisor_CP);
-    }
-    //3.2
-    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Emisor//cfdi:ExpedidoEn') as $ExpedidoEn)
-    {
-        $expedido_pais= autoformato_impresion($ExpedidoEn['pais']);
-        $expedido_calle=autoformato_impresion($ExpedidoEn['calle']);
-        $expedido_estado=autoformato_impresion($ExpedidoEn['estado']);
-        $expedido_colonia=autoformato_impresion($ExpedidoEn['colonia']);
-        $expedido_noExterior=autoformato_impresion($ExpedidoEn['noExterior']);
-        $expedido_noInterior=autoformato_impresion($ExpedidoEn['noInterior']);
-        $expedido_CP=autoformato_impresion($ExpedidoEn['codigoPostal']);
-        $expedido_CP=sprintf('%05d',$expedido_CP);
-        $expedido_municipio=autoformato_impresion($ExpedidoEn['municipio']);
-        $expedido_localidad=autoformato_impresion($ExpedidoEn['localidad']);
-    }
+
     //3.2
     foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Emisor//cfdi:RegimenFiscal') as $RegimenFiscal)
     {
-        if($version=='3.2')
-            $regimen_fiscal=autoformato_impresion($RegimenFiscal['Regimen']);
+       $regimen_fiscal=autoformato_impresion_modulo($RegimenFiscal['Regimen']);
     }
+    
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Emisor') as $Emisor)
+    {
+       $emisor_rfc=$Emisor['rfc'];
+       if($emisor_rfc == '')
+                $emisor_rfc= $Emisor['Rfc'];
+       
+       $emisor_nombre= $Emisor['nombre'];
+       if($emisor_nombre == '')
+                $emisor_nombre= $Emisor['Nombre'];
+       $emisor_nombre= autoformato_impresion_modulo($emisor_nombre);
+       
+       $regimen_fiscal=$Emisor['RegimenFiscal'];
+       
+    }
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Emisor//cfdi:DomicilioFiscal') as $DomicilioFiscal)
+    {
+       $emisor_pais= autoformato_impresion_modulo($DomicilioFiscal['pais']);
+       
+       $emisor_calle= autoformato_impresion_modulo($DomicilioFiscal['calle']);
+       
+       $emisor_estado= autoformato_impresion_modulo($DomicilioFiscal['estado']);
+       
+       $emisor_colonia= autoformato_impresion_modulo($DomicilioFiscal['colonia']);
+       
+       $emisor_municipio= autoformato_impresion_modulo($DomicilioFiscal['municipio']);
+       
+$emisor_localidad= autoformato_impresion_modulo($DomicilioFiscal['localidad']);
+       
+       
+       
+       $emisor_noExterior= autoformato_impresion_modulo($DomicilioFiscal['noExterior']);
+
+       $emisor_noInterior= autoformato_impresion_modulo($DomicilioFiscal['noInterior']);
+       
+       
+       $emisor_CP= autoformato_impresion_modulo($DomicilioFiscal['codigoPostal']);
+       $emisor_CP=sprintf('%05d',$emisor_CP);
+       
+    }
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Emisor//cfdi:ExpedidoEn') as $ExpedidoEn)
+    {
+       $expedido_pais= autoformato_impresion_modulo($ExpedidoEn['pais']);
+       
+       $expedido_calle=autoformato_impresion_modulo($ExpedidoEn['calle']);
+       
+       $expedido_estado=autoformato_impresion_modulo($ExpedidoEn['estado']);
+       
+       $expedido_colonia=autoformato_impresion_modulo($ExpedidoEn['colonia']);
+       
+       $expedido_noExterior=autoformato_impresion_modulo($ExpedidoEn['noExterior']);
+
+       $expedido_noInterior=autoformato_impresion_modulo($ExpedidoEn['noInterior']);
+
+
+       
+       $expedido_CP=autoformato_impresion_modulo($ExpedidoEn['codigoPostal']);
+       $expedido_CP=sprintf('%05d',$expedido_CP);
+       
+       $expedido_municipio=autoformato_impresion_modulo($ExpedidoEn['municipio']);
+$expedido_localidad=autoformato_impresion_modulo($ExpedidoEn['localidad']);
+       
+    }
+
     foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Receptor') as $Receptor)
     {
         if($version=='3.2'){   
             $receptor_rfc=$Receptor['rfc'];
-            $receptor_nombre=autoformato_impresion($Receptor['nombre']);
+            $receptor_nombre=autoformato_impresion_modulo($Receptor['nombre']);
         }
         if($version=='3.3'){   
             $receptor_rfc=$Receptor['Rfc'];
-            $receptor_nombre=autoformato_impresion($Receptor['Nombre']);
+            $receptor_nombre=autoformato_impresion_modulo($Receptor['Nombre']);
             $uso_CFDi=$Receptor['UsoCFDI'];
-        }
+
+      $ResidenciaFiscal=$Receptor['ResidenciaFiscal'];
+            $NumRegIdTrib=$Receptor['NumRegIdTrib'];
+
+    $NumRegIdTrib=$Receptor['NumRegIdTrib'];
+            if($NumRegIdTrib != "")
+            {
+                $rfc_extranjero="<br/>Residencia Fiscal: $ResidenciaFiscal <br/>
+                NumRegIdTrib: $NumRegIdTrib<br/>";
+            }else{
+                $rfc_extranjero="";
+            }
+
+  }
+       
     }
-    //3.2
     foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Receptor//cfdi:Domicilio') as $ReceptorDomicilio)
     {
-        $receptor_pais=autoformato_impresion($ReceptorDomicilio['pais']);
-        $receptor_calle=autoformato_impresion($ReceptorDomicilio['calle']);
-        $receptor_estado=autoformato_impresion($ReceptorDomicilio['estado']);
-        $receptor_colonia=autoformato_impresion($ReceptorDomicilio['colonia']);
-        $receptor_municipio=autoformato_impresion($ReceptorDomicilio['municipio']);
-        $receptor_localidad=autoformato_impresion($ReceptorDomicilio['localidad']);
-        $receptor_noExterior=autoformato_impresion($ReceptorDomicilio['noExterior']);
-        $receptor_noInterior=autoformato_impresion($ReceptorDomicilio['noInterior']);
-        $receptor_CP=autoformato_impresion($ReceptorDomicilio['codigoPostal']);
-        $receptor_CP=sprintf('%05d',$receptor_CP);
+        
+       $receptor_pais=autoformato_impresion_modulo($ReceptorDomicilio['pais']);
+       
+       $receptor_calle=autoformato_impresion_modulo($ReceptorDomicilio['calle']);
+       
+       $receptor_estado=autoformato_impresion_modulo($ReceptorDomicilio['estado']);
+       
+       $receptor_colonia=autoformato_impresion_modulo($ReceptorDomicilio['colonia']);
+       
+       $receptor_municipio=autoformato_impresion_modulo($ReceptorDomicilio['municipio']);
+$receptor_localidad=autoformato_impresion_modulo($ReceptorDomicilio['localidad']);
+       
+       $receptor_noExterior=autoformato_impresion_modulo($ReceptorDomicilio['noExterior']);
+
+       $receptor_noInterior=autoformato_impresion_modulo($ReceptorDomicilio['noInterior']);
+       
+       $receptor_CP=autoformato_impresion_modulo($ReceptorDomicilio['codigoPostal']);
+       $receptor_CP=sprintf('%05d',$receptor_CP);
+       
     }
     
     /***************************** PRODUCTOS **************************/
     if($version=='3.2'){
-        $desgloce='<table width="100%">
+        $desgloce='
+        <table width="100%">
            <tr class="factura_detalles_cabecera">
             <td width="44px">CNT</td>
             <td  width="75px">UNIDAD</td>
@@ -555,7 +296,6 @@ function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa)
         
         ';
     }
-    
     if($TipoDeComprobante=='P'){
         $desgloce='<table width="100%">
            <tr class="factura_detalles_cabecera">
@@ -570,17 +310,41 @@ function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa)
         
         ';
     }
+
+
+//productos
+/*
+    $desgloce='<table width="100%">
+       <tr class="factura_detalles_cabecera">
+        <td width="44px">CNT</td>
+        <td  width="75px">UNIDAD</td>
+        <td width="75px">CODIGO</td>
+        <td>DESCRIPCION</td>
+        <td   width="100px" align="right">PRECIO UNITARIO</td>
+        <td   width="100px"  align="right">IMPORTE</td>
+       </tr>
+    
+    ';
+    */
     $tmp=1;
     
+    
+    
+
     foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Conceptos//cfdi:CuentaPredial') as $PredialData)
     {
         $predial=(string) $PredialData['numero'];
+        if($predial == '')
+            $predial=(string) $PredialData['Numero'];
+            
         if($predial!='')
         {
             $predial="<br/>PREDIAL : $predial";
         }
     }
 
+    $subtotal_productos=0.00;
+    
     $subtotal_productos=0.00;
     foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Conceptos//cfdi:Concepto') as $Concepto)
     {
@@ -604,7 +368,7 @@ function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa)
                 $class='factura_detalles_renglon2';
                 $tmp=0;
             }
-            $descripcion=autoformato_impresion($descripcion);
+            $descripcion=autoformato_impresion_modulo($descripcion);
             $precio_unitario_=number_format((string)$precio_unitario,2);     
             $importe_=number_format((string)$importe,2);  
             $subtotal_productos+=(float)$importe;
@@ -643,7 +407,7 @@ function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa)
                 $class='factura_detalles_renglon2';
                 $tmp=0;
             }
-            $descripcion=autoformato_impresion($descripcion);
+            $descripcion=autoformato_impresion_modulo($descripcion);
             $precio_unitario_=number_format((string)$precio_unitario,2);     
             $importe_=number_format((string)$importe,2);  
             $subtotal_productos+=(float)$importe;
@@ -692,9 +456,8 @@ function imprime_factura($xml_archivo,$titulo,$tipo_factura,$logo,$nota_impresa)
     }
     $desgloce.='</table>';
     
-$isr_retenido=0.00;
-$iva_retenido=0.00;
-
+    $isr_retenido=0.00;
+    $iva_retenido=0.00;
     foreach ($xml->xpath('//tfd:TimbreFiscalDigital') as $tfd)
     {
         if($version=='3.2')
@@ -715,6 +478,7 @@ $iva_retenido=0.00;
             $timbre_version= $tfd['Version'];
             $timbre_selloSAT = $sellosat=$tfd['SelloSAT'];
         }   
+
     }
     
     //TRANSLADOS (impuestos comprobante)
@@ -728,10 +492,11 @@ $iva_retenido=0.00;
             $importe_=number_format((string)$importe,2);
             $impuesto= $Traslado['impuesto'];
             $total_translados=$total_translados+(float)$importe;
+            $tasa_txt=number_format((string)$tasa,2);
             $iva_txt.="
                     <tr>
                         <td class='factura_totales'>
-                        $impuesto ($tasa%)
+                        $impuesto ($tasa_txt%)
                         </td>
                         <td class='factura_totales'>
                          $importe_ 
@@ -746,18 +511,21 @@ $iva_retenido=0.00;
             $importe=$Traslado['Importe'];
             $importe_=number_format((string)$importe,2);
             $impuesto= $Traslado['Impuesto'];
-            $impuesto_txt=formato_impuestos($impuesto);
+            $impuesto_txt=formato_impuestos_modulo($impuesto);
             $TipoFactor= $Traslado['TipoFactor'];
             if($Base =='')
             {
                 $total_translados=$total_translados+(float)$importe;
+                $tasa_txt=doubleval($tasa)*100;
+                //$tasa_txt=number_format((string)$tasa,2);
+                //$tasa_txt=number_format((string)$tasa_txt,2);
                 $iva_txt.="
                         <tr>
                             <td class='factura_totales'>
-                            $impuesto_txt ($tasa%)  $Base
+                            $impuesto_txt ($tasa_txt%)  $Base
                             </td>
                             <td class='factura_totales'>
-                             $importe_ 
+                             $$importe_ 
                             </td>
                         </tr>
                 ";
@@ -765,85 +533,147 @@ $iva_retenido=0.00;
         }
     }
 
-    //LOCALES 
+
+    //LOCALES
+    //CFDI 3.2  
     $cadena=file_get_contents($xml_archivo);
     if(strpos($cadena,'ImpuestosLocales')>0)
     {
-        list($tmp,$cadena,$tmp)=explode('ImpuestosLocales',$cadena);
-        list($tmp,$cadena2)=explode('>',(string)$cadena,2);//
-        $cadena="<implocal:ImpuestosLocales  >
-            $cadena2"."ImpuestosLocales>
-            ";
-        $xml2 = simplexml_load_string($cadena);
-        $arr = object2array($xml2);
-        $TrasladosLocales=$arr['TrasladosLocales'];
-        
-        //TRANSLADO LOCAL
-        foreach($TrasladosLocales AS $llave_=>$TrasladosLocal)
-        {
-            $ImpLocTrasladado=$TrasladosLocal['@attributes']['ImpLocTrasladado'];
-            if($ImpLocTrasladado=='')
-                $ImpLocTrasladado=$TrasladosLocal['ImpLocTrasladado'];
-    
-            $Importe=$TrasladosLocal['@attributes']['Importe'];
-            if($Importe=='')
-                $Importe=$TrasladosLocal['Importe']; 
-    
-            $TasadeTraslado=$TrasladosLocal['@attributes']['TasadeTraslado'];
-            if($TasadeTraslado=='')
-                $TasadeTraslado=$TrasladosLocal['TasadeTraslado'];
+
+                    list($tmp,$cadena,$tmp)=explode('ImpuestosLocales',$cadena);
+                
+                    list($tmp,$cadena2)=explode('>',(string)$cadena,2);//
+                    $cadena="<implocal:ImpuestosLocales  >
+                    $cadena2"."ImpuestosLocales>
+                    ";
+                    $xml2 = simplexml_load_string($cadena);
+                    $arr = object2array($xml2);
+                    $TrasladosLocales=$arr['TrasladosLocales'];
+                
+                //TRANSLADO LOCAL
+                
+                    foreach($TrasladosLocales AS $llave_=>$TrasladosLocal)
+                    {
+                        $ImpLocTrasladado=$TrasladosLocal['@attributes']['ImpLocTrasladado'];
+                    if($ImpLocTrasladado=='')
+                        $ImpLocTrasladado=$TrasladosLocal['ImpLocTrasladado'];
             
-            $total_translados=$total_translados+(float)$Importe;
-    
+            
+                    $Importe=$TrasladosLocal['@attributes']['Importe'];
+                    if($Importe=='')
+                        $Importe=$TrasladosLocal['Importe']; 
+            
+            
+                    $TasadeTraslado=$TrasladosLocal['@attributes']['TasadeTraslado'];
+                    if($TasadeTraslado=='')
+                        $TasadeTraslado=$TrasladosLocal['TasadeTraslado'];
+            
+                   $total_translados=$total_translados+(float)$Importe;
+            
             //echo "TL $ImpLocTrasladado $TasadeTraslado% $Importe<br>";
-            $importe_=number_format((string)$Importe,2);
-            $iva_txt.="
+                    $importe_=number_format((string)$Importe,2);
+                    $iva_txt.="
+                            <tr>
+            
+                                <td class='factura_totales'>
+                                (LOCAL) $ImpLocTrasladado ($TasadeTraslado%) 
+                                </td>
+                                <td class='factura_totales'>
+                                 $importe_
+                                </td>
+                            </tr>
+                    ";        
+                }
+            
+            
+            //RETENCIONES LOCAL
+              $RetencionesLocales=$arr['RetencionesLocales'];
+                foreach($RetencionesLocales AS $llave_=>$RetencionesLocal)
+                {
+                    $ImpLocRetenido=$RetencionesLocal['@attributes']['ImpLocRetenido'];
+                    if($ImpLocRetenido=='')
+                        $ImpLocRetenido=$RetencionesLocal['ImpLocRetenido'];
+            
+            
+                    $Importe=$RetencionesLocal['@attributes']['Importe'];
+                    if($Importe=='')
+                        $Importe=$RetencionesLocal['Importe']; 
+            
+            
+                    $TasadeRetencion=$RetencionesLocal['@attributes']['TasadeRetencion'];
+                    if($TasadeRetencion=='')
+                        $TasadeRetencion=$RetencionesLocal['TasadeRetencion'];
+            
+                    $importe_=number_format((string)$Importe,2);
+                   $importe_retenciones=$importe_retenciones+$Importe;
+
+                   $retenciones_txt.="
+                                   <tr>
+                                        <td class='factura_totales'>
+                                        RET LOCAL $ImpLocRetenido ($TasadeRetencion%) $
+                                        </td>
+                                        <td class='factura_totales'>
+                                         $importe_
+                                        </td>
+                                    </tr>
+            
+                   ";                    
+                }
+            
+
+
+        
+    }
+       
+
+    //CFDI 3.3
+    //LOCALES 2
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//implocal:ImpuestosLocales') as $ImpuestosLocales)
+    {
+        $TotaldeTraslados=$ImpuestosLocales['TotaldeTraslados'];
+        $TotaldeRetenciones=$ImpuestosLocales['TotaldeRetenciones'];
+    }
+    //LOCALES 2 RETENCIONES
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//implocal:ImpuestosLocales//implocal:RetencionesLocales') as $RetencionesLocales)
+    {
+        $ImpLocRetenido=$RetencionesLocales['ImpLocRetenido'];
+        $TasadeRetencion=$RetencionesLocales['TasadeRetencion'];
+        $TasadeRetencion_txt=number_format((string)$TasadeRetencion,2);
+        $Importe=$RetencionesLocales['Importe'];
+        
+        $retenciones_txt.="
+                           <tr>
+                                <td class='factura_totales'>
+                                RET LOCAL $ImpLocRetenido ($TasadeRetencion_txt%) $
+                                </td>
+                                <td class='factura_totales'>
+                                 $Importe
+                                </td>
+                            </tr>
+    
+           ";       
+    }
+    
+    //LOCALES 2 TRASLADOS
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//implocal:ImpuestosLocales//implocal:TrasladosLocales') as $TrasladosLocales)
+    {
+        $ImpLocTrasladado=$TrasladosLocales['ImpLocTrasladado'];
+        $TasadeTraslado=$TrasladosLocales['TasadeTraslado'];
+        $TasadeTraslado_txt=number_format((string)$TasadeTraslado,2);
+        $importe_=$TrasladosLocales['Importe'];
+        
+        $iva_txt.="
                     <tr>
     
                         <td class='factura_totales'>
-                        (LOCAL) $ImpLocTrasladado ($TasadeTraslado%) 
+                        (LOCAL) $ImpLocTrasladado ($TasadeTraslado_txt%) 
                         </td>
                         <td class='factura_totales'>
                          $importe_
                         </td>
                     </tr>
             ";        
-        }
-    
-        //RETENCIONES LOCAL
-        $RetencionesLocales=$arr['RetencionesLocales'];
-        foreach($RetencionesLocales AS $llave_=>$RetencionesLocal)
-        {
-            $ImpLocRetenido=$RetencionesLocal['@attributes']['ImpLocRetenido'];
-            if($ImpLocRetenido=='')
-                $ImpLocRetenido=$RetencionesLocal['ImpLocRetenido'];
-    
-            $Importe=$RetencionesLocal['@attributes']['Importe'];
-            if($Importe=='')
-                $Importe=$RetencionesLocal['Importe']; 
-    
-            $TasadeRetencion=$RetencionesLocal['@attributes']['TasadeRetencion'];
-            if($TasadeRetencion=='')
-                $TasadeRetencion=$RetencionesLocal['TasadeRetencion'];
-    
-            $importe_=number_format((string)$Importe,2);
-            $importe_retenciones=$importe_retenciones+$Importe;
-            
-            $retenciones_txt.="
-                           <tr>
-                                <td class='factura_totales'>
-                                RET LOCAL $ImpLocRetenido ($TasadeRetencion%) $
-                                </td>
-                                <td class='factura_totales'>
-                                 $importe_
-                                </td>
-                            </tr>
-    
-           ";                    
-        }
     }
-        
-
 
 //RETENCIONES
 //    $retenciones_txt='';
@@ -874,7 +704,7 @@ $iva_retenido=0.00;
             $impuesto=$Retencion['Impuesto'];
             $importe_retenciones=$importe_retenciones+(float)$importe;
             $importe_=number_format((string)$importe,2);
-            $impuesto_txt_ret=formato_impuestos($impuesto);
+            $impuesto_txt_ret=formato_impuestos_modulo($impuesto);
             if($Base =='')
             {
                 $retenciones_txt.="
@@ -890,20 +720,20 @@ $iva_retenido=0.00;
             }
         }
     }
-    
     if($importe_retenciones==0)
     {
        $retenciones_txt=''; 
     }
 
 
-    // SI HAY RETENCIONES MUESTA EL SUBTOTAL ANTES DE RETENCIONES CON IMPUESTOS AGREGADOS
+// SI HAY RETENCIONES MUESTA EL SUBTOTAL ANTES DE RETENCIONES CON IMPUESTOS AGREGADOS
     if($retenciones_txt!='')
     {
         $subtotal_con_retenciones=(float)$subtotal+(float)$total_translados+(float)$total_translados_locales;
+
         $subtotal_con_retenciones=number_format($subtotal_con_retenciones-$descuento_,2);
         //$subtotal_ //aki
-        $retenciones_txt="
+       $retenciones_txt="
                        <tr>
                             <td class='factura_totales'>
                             SUB TOTAL $
@@ -914,16 +744,17 @@ $iva_retenido=0.00;
                             </td>
                         </tr>
                         $retenciones_txt
-        ";
+       ";
+        
     }
-
+    
     //INE
     foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//ine:INE') as $INE)
     {
         $TipoProceso=$INE['TipoProceso'];
         $TipoComite=$INE['TipoComite'];
         $IdContabilidad=$DescInmueble['IdContabilidad'];
-        
+        /*
         $html_Ine.= "<hr/><div>
                                 INE:<br/><br/>
                                 Tipo de Proceso: $TipoProceso Comite: $TipoComite Contabilidad $IdContabilidad<br/>
@@ -931,6 +762,12 @@ $iva_retenido=0.00;
                                 Estado: $Estado Pais: $Pais<br/>
                                 C.P.: $CodigoPostal
                                 </div>
+                                ";
+                                */
+         $html_Ine.= "<hr/><div>
+                                INE:<br/><br/>
+                                Tipo de Proceso: $TipoProceso Comite: $TipoComite Contabilidad $IdContabilidad<br/>
+                            </div>
                                 ";
     }
     //
@@ -973,160 +810,152 @@ $iva_retenido=0.00;
 
 ////////
 //PAGOS
+    //CANTIDAD DE NODOS PAGO
+    
+    $np = count($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//pago10:Pagos//pago10:Pago'));
     foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//pago10:Pagos') as $Pagos)
     {
     
     }
-    //$HTML_PAGO="<table width='100%'>
-    //<tr class='factura_detalles_cabecera'><td width='33%'>Fecha de pago</td><td width='33%'>Forma de Pago</td><td width='33%'>Total</td></tr>";
-    $P=0;
-    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//pago10:Pagos//pago10:Pago') as $Pago)
-    {
-       $P++;
-       $HTML_PAGO="<table width='100%'>
-                            <tr class='factura_detalles_cabecera'><td colspan='3'>PAGO</td></tr>"; 
-        
-        $FechaPago=$Pago['FechaPago'];
-        $FormaDePagoP=$Pago['FormaDePagoP'];
-        $MonedaP=$Pago['MonedaP'];
-        $TipoCambioP=$Pago['TipoCambioP'];
-        $Monto_Pago=$Pago['Monto'];
-        $NumOperacion=$Pago['NumOperacion'];
-        if($NumOperacion !='')
-            $NumOperacion_txt="Num. operacion: $NumOperacion <br/>";
-            
-        $RfcEmisorCtaOrd=$Pago['RfcEmisorCtaOrd'];
-        if($RfcEmisorCtaOrd !='')
-            $RfcEmisorCtaOrd_txt="RFC Emisor cuenta: $RfcEmisorCtaOrd <br/>";
-            
-        $NomBancoOrdExt=$Pago['NomBancoOrdExt'];
-        if($NomBancoOrdExt !='')
-            $NomBancoOrdExt_txt="Banco: $NomBancoOrdExt ";  
-        
-        $CtaOrdenante=$Pago['CtaOrdenante'];
-        if($CtaOrdenante !='')
-            $CtaOrdenante_txt="Num. Cuenta Ordenante: $CtaOrdenante <br/>";  
-            
-        $RfcEmisorCtaBen=$Pago['RfcEmisorCtaBen'];
-        if($RfcEmisorCtaBen !='')
-            $RfcEmisorCtaBen_txt="RFC Cuenta Beneficiario: $RfcEmisorCtaBen <br/>";
-            
-        $CtaBeneficiario=$Pago['CtaBeneficiario'];
-        if($CtaBeneficiario !='')
-            $CtaBeneficiario_txt="Num Cuenta Beneficiario: $CtaBeneficiario";
-        
-        $FormaDePagoP_txt=formato_forma_pago33($FormaDePagoP);
-        $Monto_Pago_txt=number_format((string)$Monto_Pago,2);
-        
-        $TipoCadPago=$Pago['TipoCadPago'];
-        $CertPago=$Pago['CertPago'];
-        $CadPago=$Pago['CadPago'];
-        $SelloPago=$Pago['SelloPago'];
-        if($TipoCadPago !='')
-        {
-            $tr_="<tr><td colspan='3'>
-                    Cadena pago $TipoCadPago <br/>
-                    Certificado pago $CertPago <br/>
-                    Cadena origianal pago $CertPago <br/>
-                    Sello pago $SelloPago <br/>
-                    </td></tr>";
-        }
-        
-        $HTML_PAGO.="<tr>
-                        <td width='33%'>Monto: $Monto_Pago_txt <br/> $NumOperacion_txt Fecha de pago: $FechaPago <br/> Forma de pago: $FormaDePagoP_txt</td>
-                        <td width='33%'>$RfcEmisorCtaOrd_txt $NomBancoOrdExt_txt </td></tr>
-                        <td width='33%'>$CtaOrdenante_txt $RfcEmisorCtaBen_txt  $CtaBeneficiario_txt</td>
-                        $tr_
-                    </tr>
-                    ";
-        $HTML_PAGO.="</table>";
-        
-        
-        $PAGOS__[$P]=$HTML_PAGO;
-    }
-    //$HTML_."PAGO_".$P.="</table>";
-    
-    
-    $D=0;
-    //$HTML_DOCUMENTOS_PAGOS="<table width='100%'>
-    //<tr class='factura_detalles_cabecera'><td>UUID</td><td>Metodo de pago</td><td>Saldo anterior</td><td>Monto Pagado</td><td>Saldo Pendiente</td></tr>";
-    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//pago10:Pagos//pago10:Pago//pago10:DoctoRelacionado') as $DoctoRelacionado)
-    {
-        $D++;
-        $HTML_DOCUMENTOS_PAGOS="<table width='100%'>
-    <tr class='factura_detalles_cabecera'><td>UUID</td><td>Metodo de pago</td><td>Saldo anterior</td><td>Monto Pagado</td><td>Saldo Pendiente</td></tr>";
-        
-        $IdDocumento=$DoctoRelacionado['IdDocumento'];
-        $MonedaDR=$DoctoRelacionado['MonedaDR'];
-        $TipoCambioDR=$DoctoRelacionado['TipoCambioDR'];
-        $MetodoDePagoDR=$DoctoRelacionado['MetodoDePagoDR'];
-        $NumParcialidad=$DoctoRelacionado['NumParcialidad'];
-        $ImpSaldoAnt=$DoctoRelacionado['ImpSaldoAnt'];
-        $ImpPagado=$DoctoRelacionado['ImpPagado'];
-        $ImpSaldoInsoluto=$DoctoRelacionado['ImpSaldoInsoluto'];
-        $MetodoDePagoDR_txt=formato_metodo_pago33($MetodoDePagoDR);
-        
-        $ImpSaldoAnt_txt=number_format((string)$ImpSaldoAnt,2);
-        $ImpPagado_txt=number_format((string)$ImpPagado,2);
-        $ImpSaldoInsoluto_txt=number_format((string)$ImpSaldoInsoluto,2);
-        
-        $HTML_DOCUMENTOS_PAGOS.="
-        <tr><td>$IdDocumento</td><td>$MetodoDePagoDR_txt</td><td>$ImpSaldoAnt_txt</td><td>$ImpPagado_txt</td><td>$ImpSaldoInsoluto_txt</td></tr>";
-        
-        $HTML_DOCUMENTOS_PAGOS.="</table>";
-        
-        
-        $DOC__[$D]=$HTML_DOCUMENTOS_PAGOS;
-       
-    }
 
-    $CANT_PAGOS=count($PAGOS__);
-    for($b=0;$b<=$CANT_PAGOS;$b++)
+    for($_P=1;$_P<=$np;$_P++ )
     {
-       $pago_html= $PAGOS__[$b];
-       $doc_html = $DOC__[$b];
-        $HTML_PAGOS.="
-       $pago_html
-       $doc_html
-       <hr/>
-       ";
+        foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//pago10:Pagos//pago10:Pago['.$_P.']') as $Pago)
+        {
+            $HTML_PAGO.="<table width='100%'>
+                          <tr class='factura_detalles_cabecera'><td colspan='3'>PAGO</td></tr>"; 
+            
+            $FechaPago=$Pago['FechaPago'];
+            $FormaDePagoP=$Pago['FormaDePagoP'];
+            $MonedaP=$Pago['MonedaP'];
+            $TipoCambioP=$Pago['TipoCambioP'];
+            if($MonedaP == 'USD'){
+                $td_tipoCambioP="Tipo de Cambio $TipoCambioP";
+            }
+            $tr_moneda="<tr><td width='33%'colspan='3'>Moneda Pago: $MonedaP $td_tipoCambioP</td></tr>";
+                         
+            $Monto_Pago=$Pago['Monto'];
+            $NumOperacion=$Pago['NumOperacion'];
+            if($NumOperacion !='')
+                $NumOperacion_txt="Num. operacion: $NumOperacion <br/>";
+                
+            $RfcEmisorCtaOrd=$Pago['RfcEmisorCtaOrd'];
+            if($RfcEmisorCtaOrd !='')
+                $RfcEmisorCtaOrd_txt="RFC Emisor cuenta: $RfcEmisorCtaOrd <br/>";
+                
+            $NomBancoOrdExt=$Pago['NomBancoOrdExt'];
+            if($NomBancoOrdExt !='')
+                $NomBancoOrdExt_txt="Banco: $NomBancoOrdExt ";  
+            
+            $CtaOrdenante=$Pago['CtaOrdenante'];
+            if($CtaOrdenante !='')
+                $CtaOrdenante_txt="Num. Cuenta Ordenante: $CtaOrdenante <br/>";  
+                
+            $RfcEmisorCtaBen=$Pago['RfcEmisorCtaBen'];
+            if($RfcEmisorCtaBen !='')
+                $RfcEmisorCtaBen_txt="RFC Cuenta Beneficiario: $RfcEmisorCtaBen <br/>";
+                
+            $CtaBeneficiario=$Pago['CtaBeneficiario'];
+            if($CtaBeneficiario !='')
+                $CtaBeneficiario_txt="Num Cuenta Beneficiario: $CtaBeneficiario";
+            
+            $FormaDePagoP_txt=formato_forma_pago33_modulo($FormaDePagoP);
+            $Monto_Pago_txt=number_format((string)$Monto_Pago,2);
+            
+            $TipoCadPago=$Pago['TipoCadPago'];
+            $CertPago=$Pago['CertPago'];
+            $CadPago=$Pago['CadPago'];
+            $SelloPago=$Pago['SelloPago'];
+            if($TipoCadPago !='')
+            {
+                $tr_="<tr><td colspan='3'>
+                        Cadena pago $TipoCadPago <br/>
+                        Certificado pago $CertPago <br/>
+                        Cadena origianal pago $CertPago <br/>
+                        Sello pago $SelloPago <br/>
+                        </td></tr>";
+            }
+           $HTML_PAGO.="<tr>
+                            <td width='30%'>Monto: $Monto_Pago_txt <br/> $NumOperacion_txt Fecha de pago: $FechaPago <br/> Forma de pago: $FormaDePagoP_txt</td>
+                            <td width='30%'>$RfcEmisorCtaOrd_txt $NomBancoOrdExt_txt </td>
+                            <td width='30%'>$CtaOrdenante_txt $RfcEmisorCtaBen_txt  $CtaBeneficiario_txt</td>
+                        </tr>
+                        $tr_moneda
+                        $tr_
+                        ";
+            $HTML_PAGO.="</table>";
+            
+            
+            foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//pago10:Pagos//pago10:Pago['.$_P.']//pago10:DoctoRelacionado') as $DoctoRelacionado)
+            {
+                $HTML_PAGO.="<table width='100%'>
+                <tr class='factura_detalles_cabecera'><td>FACT</td><td>UUID</td><td>Metodo de pago</td><td>Saldo anterior</td><td>Monto Pagado</td><td>Saldo Pendiente</td></tr>";
+                
+                $SerieDocumento=$DoctoRelacionado['Serie'];
+                $FolioDocumento=$DoctoRelacionado['Folio'];
+                $IdDocumento=$DoctoRelacionado['IdDocumento'];
+                $MonedaDR=$DoctoRelacionado['MonedaDR'];
+                $TipoCambioDR=$DoctoRelacionado['TipoCambioDR'];
+                $MetodoDePagoDR=$DoctoRelacionado['MetodoDePagoDR'];
+                $NumParcialidad=$DoctoRelacionado['NumParcialidad'];
+                $ImpSaldoAnt=$DoctoRelacionado['ImpSaldoAnt'];
+                $ImpPagado=$DoctoRelacionado['ImpPagado'];
+                $ImpSaldoInsoluto=$DoctoRelacionado['ImpSaldoInsoluto'];
+                $MetodoDePagoDR_txt=formato_metodo_pago33_modulo($MetodoDePagoDR);
+                
+                $ImpSaldoAnt_txt=number_format((string)$ImpSaldoAnt,2);
+                $ImpPagado_txt=number_format((string)$ImpPagado,2);
+                $ImpSaldoInsoluto_txt=number_format((string)$ImpSaldoInsoluto,2);
+                
+                if($MonedaDR == 'USD')
+                {
+                    $td_MonedaDR="<BR>Moneda: $MonedaDR <br/>Tipo de Cambio: $$TipoCambioDR";
+                }                                
+                
+                $HTML_PAGO.="
+                <tr><td>$SerieDocumento$FolioDocumento </td><td>$IdDocumento</td><td>$MetodoDePagoDR_txt $td_MonedaDR</td><td>$$ImpSaldoAnt_txt</td><td>$$ImpPagado_txt</td><td>$$ImpSaldoInsoluto_txt</td></tr>";
+                
+                $HTML_PAGO.="</table>";
+            }
+            
+            $HTML_PAGO.="<hr/>";
+        }
     }
     if($TipoDeComprobante !='P')
     {
         $HTML_PAGOS="";   
+    }else{
+        $HTML_PAGOS=$HTML_PAGO;
     }
-    
-    
-//////////////
-//NOMINA 1.1
-if(array_key_exists('nomina', $ns))
-{
-    foreach ($xml->xpath('//nomina:Nomina') as $Nomina)
+        
+//////////
+//NOMINAS
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//nomina:Nomina') as $Nomina)
     {
-        $RegistroPatronal= autoformato_impresion($Nomina['RegistroPatronal']);
-        $NumEmpleado= autoformato_impresion($Nomina['NumEmpleado']);
-        $CURP= autoformato_impresion($Nomina['CURP']);
+        $RegistroPatronal= autoformato_impresion_modulo($Nomina['RegistroPatronal']);
+        $NumEmpleado= autoformato_impresion_modulo($Nomina['NumEmpleado']);
+        $CURP= autoformato_impresion_modulo($Nomina['CURP']);
         
-        $TipoRegimen= autoformato_impresion($Nomina['TipoRegimen']);
+        $TipoRegimen= autoformato_impresion_modulo($Nomina['TipoRegimen']);
         
-        $NumSeguridadSocial= autoformato_impresion($Nomina['NumSeguridadSocial']);
-        $FechaPago= autoformato_impresion($Nomina['FechaPago']);
-        $FechaInicialPago= autoformato_impresion($Nomina['FechaInicialPago']);
-        $FechaFinalPago= autoformato_impresion($Nomina['FechaFinalPago']);
-        $NumDiasPagados= autoformato_impresion($Nomina['NumDiasPagados']);
-        $Departamento= autoformato_impresion($Nomina['Departamento']);
-        $Banco= autoformato_impresion($Nomina['Banco']);
-        $CLABE= autoformato_impresion($Nomina['CLABE']);
-        $FechaInicioRelLaboral= autoformato_impresion($Nomina['FechaInicioRelLaboral']);
-        $Antiguedad= autoformato_impresion($Nomina['Antiguedad']);
-        $Puesto= autoformato_impresion($Nomina['Puesto']);
-        $TipoContrato= autoformato_impresion($Nomina['TipoContrato']);
-        $TipoJornada= autoformato_impresion($Nomina['TipoJornada']);
-        $PeriodicidadPago= autoformato_impresion($Nomina['PeriodicidadPago']);
-        $SalarioBaseCotApor= autoformato_impresion($Nomina['SalarioBaseCotApor']);
-        $RiesgoPuesto= autoformato_impresion($Nomina['RiesgoPuesto']);
-        $SalarioDiarioIntegrado= autoformato_impresion($Nomina['SalarioDiarioIntegrado']);
-        $RegistroPatronal= autoformato_impresion($Nomina['RegistroPatronal']);
+        $NumSeguridadSocial= autoformato_impresion_modulo($Nomina['NumSeguridadSocial']);
+        $FechaPago= autoformato_impresion_modulo($Nomina['FechaPago']);
+        $FechaInicialPago= autoformato_impresion_modulo($Nomina['FechaInicialPago']);
+        $FechaFinalPago= autoformato_impresion_modulo($Nomina['FechaFinalPago']);
+        $NumDiasPagados= autoformato_impresion_modulo($Nomina['NumDiasPagados']);
+        $Departamento= autoformato_impresion_modulo($Nomina['Departamento']);
+        $Banco= autoformato_impresion_modulo($Nomina['Banco']);
+        $CLABE= autoformato_impresion_modulo($Nomina['CLABE']);
+        $FechaInicioRelLaboral= autoformato_impresion_modulo($Nomina['FechaInicioRelLaboral']);
+        $Antiguedad= autoformato_impresion_modulo($Nomina['Antiguedad']);
+        $Puesto= autoformato_impresion_modulo($Nomina['Puesto']);
+        $TipoContrato= autoformato_impresion_modulo($Nomina['TipoContrato']);
+        $TipoJornada= autoformato_impresion_modulo($Nomina['TipoJornada']);
+        $PeriodicidadPago= autoformato_impresion_modulo($Nomina['PeriodicidadPago']);
+        $SalarioBaseCotApor= autoformato_impresion_modulo($Nomina['SalarioBaseCotApor']);
+        $RiesgoPuesto= autoformato_impresion_modulo($Nomina['RiesgoPuesto']);
+        $SalarioDiarioIntegrado= autoformato_impresion_modulo($Nomina['SalarioDiarioIntegrado']);
+        $RegistroPatronal= autoformato_impresion_modulo($Nomina['RegistroPatronal']);
        
     }
     if($CURP!='')
@@ -1157,14 +986,14 @@ if(array_key_exists('nomina', $ns))
 
 //NOMINAS PERCEPCIONES
     $NominaPercepciones='';
-    foreach ($xml->xpath('//nomina:Percepcion') as $Percepciones)
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//nomina:Percepciones//nomina:Percepcion') as $Percepciones)
     {
         
-        $TipoPercepcion= autoformato_impresion($Percepciones['TipoPercepcion']);
-        $Clave= autoformato_impresion($Percepciones['Clave']);
-        $Concepto= autoformato_impresion($Percepciones['Concepto']);
-        $ImporteGravado= autoformato_impresion($Percepciones['ImporteGravado']);
-        $ImporteExento= autoformato_impresion($Percepciones['ImporteExento']);
+        $TipoPercepcion= autoformato_impresion_modulo($Percepciones['TipoPercepcion']);
+        $Clave= autoformato_impresion_modulo($Percepciones['Clave']);
+        $Concepto= autoformato_impresion_modulo($Percepciones['Concepto']);
+        $ImporteGravado= autoformato_impresion_modulo($Percepciones['ImporteGravado']);
+        $ImporteExento= autoformato_impresion_modulo($Percepciones['ImporteExento']);
         
         
         $NominaPercepciones.="<tr><td style='font-size:$letra px !important'>$TipoPercepcion</td><td style='font-size:$letra px !important'>$Clave</td><td style='font-size:$letra px !important'>$Concepto</td><td style='font-size:$letra px !important'>$ImporteGravado</td><td style='font-size:$letra px !important'>$ImporteExento</td></tr>";
@@ -1181,7 +1010,7 @@ if(array_key_exists('nomina', $ns))
         <td style='font-size:$letra px !important'>CLAVE</td>
         <td style='font-size:$letra px !important' >CONCEPTO</td>
         <td style='font-size:$letra px !important'>IMP GRAVADO</td>
-        <td style='font-size:$letra px !important'>IMP EXCENTO</td>
+        <td style='font-size:$letra px !important'>IMP EXENTO</td>
        </tr>
 
             $NominaPercepciones
@@ -1192,14 +1021,14 @@ if(array_key_exists('nomina', $ns))
 
 //NOMINAS DEDUCCIONES
     $NominaDeducciones='';
-    foreach ($xml->xpath('//nomina:Deduccion') AS $Deducciones)
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//nomina:Deducciones//nomina:Deduccion') AS $Deducciones)
     {
         
-        $TipoDeduccion= autoformato_impresion($Deducciones['TipoDeduccion']);
-        $Clave= autoformato_impresion($Deducciones['Clave']);
-        $Concepto= autoformato_impresion($Deducciones['Concepto']);
-        $ImporteGravado= autoformato_impresion($Deducciones['ImporteGravado']);
-        $ImporteExento= autoformato_impresion($Deducciones['ImporteExento']);
+        $TipoDeduccion= autoformato_impresion_modulo($Deducciones['TipoDeduccion']);
+        $Clave= autoformato_impresion_modulo($Deducciones['Clave']);
+        $Concepto= autoformato_impresion_modulo($Deducciones['Concepto']);
+        $ImporteGravado= autoformato_impresion_modulo($Deducciones['ImporteGravado']);
+        $ImporteExento= autoformato_impresion_modulo($Deducciones['ImporteExento']);
         
         $NominaDeducciones.="<tr><td style='font-size:$letra px !important'>$TipoDeduccion</td><td style='font-size:$letra px !important'>$Clave</td><td style='font-size:$letra px !important'>$Concepto</td><td style='font-size:$letra px !important'>$ImporteGravado</td><td style='font-size:$letra px !important'>$ImporteExento</td></tr>";
         
@@ -1215,7 +1044,7 @@ if(array_key_exists('nomina', $ns))
         <td style='font-size:$letra px !important'>CLAVE</td>
         <td style='font-size:$letra px !important'>CONCEPTO</td>
         <td style='font-size:$letra px !important'>IMP GRAVADO</td>
-        <td style='font-size:$letra px !important'>IMP EXCENTO</td>
+        <td style='font-size:$letra px !important'>IMP EXENTO</td>
        </tr>
 
             $NominaDeducciones
@@ -1227,12 +1056,12 @@ if(array_key_exists('nomina', $ns))
 
 //NOMINAS HORAS EXTRA
     $NominaHorasExtras='';
-    foreach ($xml->xpath('//nomina:HorasExtra') AS $HoraExtra)
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//nomina:HorasExtras//nomina:HorasExtra') AS $HoraExtra)
     {
         
-        $Dias= autoformato_impresion($HoraExtra['Dias']);
-        $TipoHoras= autoformato_impresion($HoraExtra['TipoHoras']);
-        $HorasExtra= autoformato_impresion($HoraExtra['HorasExtra']);
+        $Dias= autoformato_impresion_modulo($HoraExtra['Dias']);
+        $TipoHoras= autoformato_impresion_modulo($HoraExtra['TipoHoras']);
+        $HorasExtra= autoformato_impresion_modulo($HoraExtra['HorasExtra']);
         
         $NominaHorasExtras.="<tr><td style='font-size:$letra px !important'>$Dias</td><td style='font-size:$letra px !important'>$TipoHoras</td><td style='font-size:$letra px !important'>$HorasExtra</td></tr>";
 
@@ -1259,12 +1088,12 @@ if(array_key_exists('nomina', $ns))
 
 //NOMINAS INCAPACIDADES
     $NominaIncapacidades='';
-    foreach ($xml->xpath('//nomina:Incapacidad') AS $Incapacidad)
+    foreach ($xml->xpath('//cfdi:Comprobante//cfdi:Complemento//nomina:Incapacidades//nomina:Incapacidad') AS $Incapacidad)
     {
         
-        $DiasIncapacidad= autoformato_impresion($Incapacidad['DiasIncapacidad']);
-        $TipoIncapacidad= autoformato_impresion($Incapacidad['TipoIncapacidad']);
-        $Descuento= autoformato_impresion($Incapacidad['Descuento']);
+        $DiasIncapacidad= autoformato_impresion_modulo($Incapacidad['DiasIncapacidad']);
+        $TipoIncapacidad= autoformato_impresion_modulo($Incapacidad['TipoIncapacidad']);
+        $Descuento= autoformato_impresion_modulo($Incapacidad['Descuento']);
         
         $NominaIncapacidades.="<tr><td style='font-size:$letra px !important'>$DiasIncapacidad</td><td style='font-size:$letra px !important'>$TipoIncapacidad</td><td style='font-size:$letra px !important'>$Descuento</td></tr>";
 
@@ -1287,651 +1116,23 @@ if(array_key_exists('nomina', $ns))
         ";
     }
 
-}
 
-// NOMINA 1.2
-if(array_key_exists('nomina12', $ns))
-{
-	// Catalagos
-	$catEntidad = array('AGU' => 'Aguascalientes', 'BCN' => 'Baja California', 'BCS' => 'Baja California Sur', 'CAM' => 'Campeche', 'CHP' => 'Chiapas', 'CHH' => 'Chihuahua', 'COA' => 'Coahuila', 'COL' => 'Colima', 'DIF' => 'Ciudad de México', 'DUR' => 'Durango', 'GUA' => 'Guanajuato', 'GRO' => 'Guerrero', 'HID' => 'Hidalgo', 'JAL' => 'Jalisco', 'MEX' => 'Estado de México', 'MIC' => 'Michoacán', 'MOR' => 'Morelos', 'NAY' => 'Nayarit', 'NLE' => 'Nuevo León', 'OAX' => 'Oaxaca', 'PUE' => 'Puebla', 'QUE' => 'Querétaro', 'ROO' => 'Quintana Roo', 'SLP' => 'San Luis Potosí', 'SIN' => 'Sinaloa', 'SON' => 'Sonora', 'TAB' => 'Tabasco', 'TAM' => 'Tamaulipas', 'TLA' => 'Tlaxcala', 'VER' => 'Veracruz', 'YUC' => 'Yucatán', 'ZAC' => 'Zacatecas', 'AL' => 'Alabama', 'AK' => 'Alaska', 'AZ' => 'Arizona', 'AR' => 'Arkansas', 'CA' => 'California', 'NC' => 'Carolina del Norte', 'SC' => 'Carolina del Sur', 'CO' => 'Colorado', 'CT' => 'Connecticut', 'ND' => 'Dakota del Norte', 'SD' => 'Dakota del Sur', 'DE' => 'Delaware', 'FL' => 'Florida', 'GA' => 'Georgia', 'HI' => 'Hawái', 'ID' => 'Idaho', 'IL' => 'Illinois', 'IN' => 'Indiana', 'IA' => 'Iowa', 'KS' => 'Kansas', 'KY' => 'Kentucky', 'LA' => 'Luisiana', 'ME' => 'Maine', 'MD' => 'Maryland', 'MA' => 'Massachusetts', 'MI' => 'Míchigan', 'MN' => 'Minnesota', 'MS' => 'Misisipi', 'MO' => 'Misuri', 'MT' => 'Montana', 'NE' => 'Nebraska', 'NV' => 'Nevada', 'NJ' => 'Nueva Jersey', 'NY' => 'Nueva York', 'NH' => 'Nuevo Hampshire', 'NM' => 'Nuevo México', 'OH' => 'Ohio', 'OK' => 'Oklahoma', 'OR' => 'Oregón', 'PA' => 'Pensilvania', 'RI' => 'Rhode Island', 'TN' => 'Tennessee', 'TX' => 'Texas', 'UT' => 'Utah', 'VT' => 'Vermont', 'VA' => 'Virginia', 'WV' => 'Virginia Occidental', 'WA' => 'Washington', 'WI' => 'Wisconsin', 'WY' => 'Wyoming', 'ON' => 'Ontario ', 'QC' => ' Quebec ', 'NS' => ' Nueva Escocia', 'NB' => 'Nuevo Brunswick ', 'MB' => ' Manitoba', 'BC' => ' Columbia Británica', 'PE' => ' Isla del Príncipe Eduardo', 'SK' => ' Saskatchewan', 'AB' => ' Alberta', 'NL' => ' Terranova y Labrador', 'NT' => ' Territorios del Noroeste', 'YT' => ' Yukón', 'UN' => ' Nunavut');
-	$catOrigenRegusro = array('IP' => 'Ingresos Personales', 'IF' => 'Ingresos Federales', 'IM' => 'Ingresos Mixtos');
-	$catTipoHoras = array('01' => 'Dobles', '02' => 'Triples', '03' => 'Simples');
-	$catTipoIncapacidad = array('01' => 'Riesgo de trabajo', '02' => 'Enfermedad en general', '03' => 'Maternidad');
-	$catTipoOtroPago = array('001' => 'Reintegro de ISR pagado en exceso', '002' => 'Subsidio para el empleo', '003' => 'Viáticos', '004' => 'Aplicación de saldo a favor por compensación anual', '999' => 'Pagos distintos a los listados y que no deben considerarse como ingreso por sueldos, salarios o ingresos asimilados');
-	$catTipoContrato = array('01' => 'Contrato de trabajo por tiempo indeterminado', '02' => 'Contrato de trabajo para obra determinada', '03' => 'Contrato de trabajo por tiempo determinado', '04' => 'Contrato de trabajo por temporada', '05' => 'Contrato de trabajo sujeto a prueba', '06' => 'Contrato de trabajo con capacitación inicial', '07' => 'Modalidad de contratación por pago de hora laborada', '08' => 'Modalidad de trabajo por comisión laboral', '09' => 'Modalidades de contratación donde no existe relación de trabajo', '10' => 'Jubilación, pensión, retiro.', '99' => 'Otro contrato');
-	$catTipoJornada = array('01' => 'Diurna', '02' => 'Nocturna', '03' => 'Mixta', '04' => 'Por hora', '05' => 'Reducida', '06' => 'Continuada', '07' => 'Partida', '08' => 'Por turnos', '99' => 'Otra Jornada');
-	$catTipoRegimen = array ('02' => 'Sueldos', '03' => 'Jubilados', '04' => 'Pensionados', '05' => 'Asimilados Miembros Sociedades Cooperativas Produccion', '06' => 'Asimilados Integrantes Sociedades Asociaciones Civiles', '07' => 'Asimilados Miembros consejos', '08' => 'Asimilados comisionistas', '09' => 'Asimilados Honorarios', '10' => 'Asimilados acciones', '11' => 'Asimilados otros', '99' => 'Otro Regimen');
-	$catRiesgoPuesto = array('1' => 'Clase I' , '2' => 'Clase II' , '3' => 'Clase III' , '4' => 'Clase IV' , '5' => 'Clase V');
-	$catTipoRegimen = array('02' => 'Sueldos' , '03' => 'Jubilados' , '04' => 'Pensionados' , '05' => 'Asimilados Miembros Sociedades Cooperativas Produccion' , '06' => 'Asimilados Integrantes Sociedades Asociaciones Civiles' , '07' => 'Asimilados Miembros consejos' , '08' => 'Asimilados comisionistas' , '09' => 'Asimilados Honorarios' , '10' => 'Asimilados acciones' , '11' => 'Asimilados otros' , '99' => 'Otro Regimen');
-	$catPeriodicidadPago = array('01' => 'Diario' , '02' => 'Semanal' , '03' => 'Catorcenal' , '04' => 'Quincenal' , '05' => 'Mensual' , '06' => 'Bimestral' , '07' => 'Unidad obra' , '08' => 'Comisión' , '09' => 'Precio alzado' , '99' => 'Otra Periodicidad');
-	$catBanco = array('002' => 'BANAMEX' , '006' => 'BANCOMEXT' , '009' => 'BANOBRAS' , '012' => 'BBVA BANCOMER' , '014' => 'SANTANDER' , '019' => 'BANJERCITO' , '021' => 'HSBC' , '030' => 'BAJIO' , '032' => 'IXE' , '036' => 'INBURSA' , '037' => 'INTERACCIONES' , '042' => 'MIFEL' , '044' => 'SCOTIABANK' , '058' => 'BANREGIO' , '059' => 'INVEX' , '060' => 'BANSI' , '062' => 'AFIRME' , '072' => 'BANORTE' , '102' => 'THE ROYAL BANK' , '103' => 'AMERICAN EXPRESS' , '106' => 'BAMSA' , '108' => 'TOKYO' , '110' => 'JP MORGAN' , '112' => 'BMONEX' , '113' => 'VE POR MAS' , '116' => 'ING' , '124' => 'DEUTSCHE' , '126' => 'CREDIT SUISSE' , '127' => 'AZTECA' , '128' => 'AUTOFIN' , '129' => 'BARCLAYS' , '130' => 'COMPARTAMOS' , '131' => 'BANCO FAMSA' , '132' => 'BMULTIVA' , '133' => 'ACTINVER' , '134' => 'WAL-MART' , '135' => 'NAFIN' , '136' => 'INTERBANCO' , '137' => 'BANCOPPEL' , '138' => 'ABC CAPITAL' , '139' => 'UBS BANK' , '140' => 'CONSUBANCO' , '141' => 'VOLKSWAGEN' , '143' => 'CIBANCO' , '145' => 'BBASE' , '166' => 'BANSEFI' , '168' => 'HIPOTECARIA FEDERAL' , '600' => 'MONEXCB' , '601' => 'GBM' , '602' => 'MASARI' , '605' => 'VALUE' , '606' => 'ESTRUCTURADORES' , '607' => 'TIBER' , '608' => 'VECTOR' , '610' => 'B&B' , '614' => 'ACCIVAL' , '615' => 'MERRILL LYNCH' , '616' => 'FINAMEX' , '617' => 'VALMEX' , '618' => 'UNICA' , '619' => 'MAPFRE' , '620' => 'PROFUTURO' , '621' => 'CB ACTINVER' , '622' => 'OACTIN' , '623' => 'SKANDIA' , '626' => 'CBDEUTSCHE' , '627' => 'ZURICH' , '628' => 'ZURICHVI' , '629' => 'SU CASITA' , '630' => 'CB INTERCAM' , '631' => 'CI BOLSA' , '632' => 'BULLTICK CB' , '633' => 'STERLING' , '634' => 'FINCOMUN' , '636' => 'HDI SEGUROS' , '637' => 'ORDER' , '638' => 'AKALA' , '640' => 'CB JPMORGAN' , '642' => 'REFORMA' , '646' => 'STP' , '647' => 'TELECOMM' , '648' => 'EVERCORE' , '649' => 'SKANDIA' , '651' => 'SEGMTY' , '652' => 'ASEA' , '653' => 'KUSPIT' , '655' => 'SOFIEXPRESS' , '656' => 'UNAGRA' , '659' => 'OPCIONES EMPRESARIALES DEL NOROESTE' , '901' => 'CLS' , '902' => 'INDEVAL' , '670' => 'LIBERTAD');
-	
-	// NOMINA
-	foreach ($xml->xpath('//nomina12:Nomina') as $Nomina)
-    {
-		$TipoNomina = autoformato_impresion($Nomina['TipoNomina']);
-		$FechaPago= autoformato_impresion($Nomina['FechaPago']);
-		$FechaInicialPago= autoformato_impresion($Nomina['FechaInicialPago']);
-        $FechaFinalPago= autoformato_impresion($Nomina['FechaFinalPago']);
-        $NumDiasPagados= autoformato_impresion($Nomina['NumDiasPagados']);
-        $TotalPercepciones = autoformato_impresion($Nomina['TotalPercepciones']);
-        $TotalDeducciones = autoformato_impresion($Nomina['TotalDeducciones']);
-        $TotalOtrosPagos = autoformato_impresion($Nomina['TotalOtrosPagos']);
-		
-		//========================
-       
-    }
-        $letra=10;
-        $nomina_general="
-        <div>
-	<table width='100%' border=0 class='factura_titulo_ch' >
-		<tr>
-			<td width='50%' style='font-size:$letra px !important'> Tipo de Nomina : $TipoNomina</td>
-			<td style='font-size:$letra px !important'> Fecha de Pago : $FechaPago</td>
-		</tr>
-		<tr>
-			<td style='font-size:$letra px !important'> Fecha Inicial Pago : $FechaInicialPago</td>
-			<td style='font-size:$letra px !important'> Fecha Final Pago : $FechaFinalPago
-			</td>
-		</tr>
-		<tr>
-			<td style='font-size:$letra px !important'> Dias Pagados : $NumDiasPagados</td>
-			<td style='font-size:$letra px !important'> Total Percepciones : $TotalPercepciones
-			</td>
-		</tr>
-		<tr>
-			<td style='font-size:$letra px !important'> Total Deducciones : $TotalDeducciones</td>
-			<td style='font-size:$letra px !important'> Total Otros Pagos : $TotalOtrosPagos
-			</td>
-		</tr>
-	</table>
-</div>    
-        ";
-	
-	// EMISOR
-	$NominaEmisor='';
-	foreach ($xml->xpath('//nomina12:Emisor') as $Emisor)
-    {
-		$Curp = autoformato_impresion($Emisor['Curp']);
-		$RegistroPatronal= autoformato_impresion($Emisor['RegistroPatronal']);
-		$RfcPatronOrigen= autoformato_impresion($Emisor['RfcPatronOrigen']);
-		$OrigenRecurso = '';
-		$MontoRecurso = '';
-		
-		$entidad = $xml->xpath('//nomina12:EntidadSNCF');
-		if(!empty($entidad))
-		{
-			$entidad = $entidad[0];
-			$OrigenRecurso = autoformato_impresion($entidad['OrigenRecurso']);
-			$OrigenRecurso = $catOrigenRegusro[$OrigenRecurso];
-			$MontoRecurso = autoformato_impresion($entidad['MontoRecursoPropio']);
-		}
-		
-		$NominaEmisor.="<tr>
-	<td style='font-size:$letra px !important'>$Curp</td>
-	<td style='font-size:$letra px !important'>$RegistroPatronal</td>
-	<td style='font-size:$letra px !important'>$RfcPatronOrigen</td>
-	<td style='font-size:$letra px !important'>$OrigenRecurso</td>
-	<td style='font-size:$letra px !important'>$MontoRecurso</td>
-</tr>";
-       
-    }
-    
-    if(strlen($NominaEmisor)>10)
-    {
-        $NominaEmisor="
-        <b>EMISOR:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>CURP</td>
-		<td style='font-size:$letra px !important'>REGISTRO PATRONAL</td>
-		<td style='font-size:$letra px !important'>RFC PATRON ORIGEN</td>
-		<td style='font-size:$letra px !important'>ORIGEN RECURSO</td>
-		<td style='font-size:$letra px !important'>MONTO</td>
-	</tr>
-            $NominaEmisor
-</table>
-        ";
-    }
-    
-    // RECEPTOR
-	$NominaReceptor='';
-	foreach ($xml->xpath('//nomina12:Receptor') as $Receptor)
-    {
-		$Curp = autoformato_impresion($Receptor['Curp']);
-		//$NumeroSeguridadSocial= autoformato_impresion($Receptor['NumeroSeguridadSocial']);
-        $NumeroSeguridadSocial= $Receptor['NumSeguridadSocial'];
-        $FechaInicioRelLaboral= autoformato_impresion($Receptor['FechaInicioRelLaboral']);
-		$Antiguedad= autoformato_impresion($Receptor[utf8_encode('Antigüedad')]);
-		$TipoContrato= autoformato_impresion($Receptor['TipoContrato']);
-		$TipoContrato = $catTipoContrato[$TipoContrato];
-		$Sindicalizado= autoformato_impresion($Receptor['Sindicalizado']);
-		$TipoJornada= autoformato_impresion($Receptor['TipoJornada']);
-		$TipoJornada = $catTipoJornada[$TipoJornada];
-		$TipoRegimen= autoformato_impresion($Receptor['TipoRegimen']);
-		$TipoRegimen = $catTipoRegimen[$TipoRegimen];
-		$NumEmpleado= autoformato_impresion($Receptor['NumEmpleado']);
-		$Departamento= autoformato_impresion($Receptor['Departamento']);
-		$Puesto= autoformato_impresion($Receptor['Puesto']);
-		$RiesgoPuesto= autoformato_impresion($Receptor['RiesgoPuesto']);
-		$RiesgoPuesto = $catRiesgoPuesto[$RiesgoPuesto];
-		$PeriodicidadPago= autoformato_impresion($Receptor['PeriodicidadPago']);
-		$PeriodicidadPago = $catPeriodicidadPago[$PeriodicidadPago];
-		$Banco= autoformato_impresion($Receptor['Banco']);
-		$Banco = $catBanco[$Banco];
-		$CuentaBancaria= autoformato_impresion($Receptor['CuentaBancaria']);
-		$SalarioBaseCotApor= autoformato_impresion($Receptor['SalarioBaseCotApor']);
-		$SalarioDiarioIntegrado= autoformato_impresion($Receptor['SalarioDiarioIntegrado']);
-		$ClaveEntFed= autoformato_impresion($Receptor['ClaveEntFed']);
-		$ClaveEntFed = $catEntidad[$ClaveEntFed];
-		
-		$NominaReceptor="<table width='100%'>
-  <tr>
-    <th colspan='4' style='background-color: black; color:white;'>RECEPTOR</th>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>CURP</td>
-    <td style='font-size:$letra px !important'>$Curp</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>NUM SEGURO SOCIAL</td>
-    <td style='font-size:$letra px !important'>$NumeroSeguridadSocial</td>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>FECHA INICIO REL LABORAL</td>
-    <td style='font-size:$letra px !important'>$FechaInicioRelLaboral</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>ANTIGUEDAD</td>
-    <td style='font-size:$letra px !important'>$Antiguedad</td>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>TIPO CONTRATO</td>
-    <td style='font-size:$letra px !important'>$TipoContrato</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>SINDICALIZADO</td>
-    <td style='font-size:$letra px !important'>$Sindicalizado</td>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>TIPO JORNADA</td>
-    <td style='font-size:$letra px !important'>$TipoJornada</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>TIPO REGIMEN</td>
-    <td style='font-size:$letra px !important'>$TipoRegimen</td>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>NUM EMPLEADO</td>
-    <td style='font-size:$letra px !important'>$NumEmpleado</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>DEPARTAMENTO</td>
-    <td style='font-size:$letra px !important'>$Departamento</td>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>PUESTO</td>
-    <td style='font-size:$letra px !important'>$Puesto</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>RIESGO PUESTO</td>
-    <td style='font-size:$letra px !important'>$RiesgoPuesto</td>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>PERIODICIDAD PAGO</td>
-    <td style='font-size:$letra px !important'>$PeriodicidadPago</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>BANCO</td>
-    <td style='font-size:$letra px !important'>$Banco</td>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>CUENTA BANCARIA</td>
-    <td style='font-size:$letra px !important'>$CuentaBancaria</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>SALARIO BASE COT APOR</td>
-    <td style='font-size:$letra px !important'>$SalarioBaseCotApor</td>
-  </tr>
-  <tr>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>SALARIO DIARIO INTEGRADO</td>
-    <td style='font-size:$letra px !important'>$SalarioDiarioIntegrado</td>
-    <td class='factura_detalles_cabecera' style='font-size:$letra px !important'>ENTIDAD FEDERATIVA</td>
-    <td style='font-size:$letra px !important'>$ClaveEntFed</td>
-  </tr>
-</table>";
-		
-		/*$NominaReceptor.="<tr>
-	<td style='font-size:$letra px !important'>$Curp</td>
-	<td style='font-size:$letra px !important'>$NumeroSeguridadSocial</td>
-	<td style='font-size:$letra px !important'>$FechaInicioRelLaboral</td>
-	<td style='font-size:$letra px !important'>$Antiguedad</td>
-	<td style='font-size:$letra px !important'>$TipoContrato</td>
-	<td style='font-size:$letra px !important'>$Sindicalizado</td>
-	<td style='font-size:$letra px !important'>$TipoJornada</td>
-	<td style='font-size:$letra px !important'>$TipoRegimen</td>
-	<td style='font-size:$letra px !important'>$NumEmpleado</td>
-	<td style='font-size:$letra px !important'>$Departamento</td>
-	<td style='font-size:$letra px !important'>$Puesto</td>
-	<td style='font-size:$letra px !important'>$RiesgoPuesto</td>
-	<td style='font-size:$letra px !important'>$PeriodicidadPago</td>
-	<td style='font-size:$letra px !important'>$Banco</td>
-	<td style='font-size:$letra px !important'>$CuentaBancaria</td>
-	<td style='font-size:$letra px !important'>$SalarioBaseCotApor</td>
-	<td style='font-size:$letra px !important'>$SalarioDiarioIntegrado</td>
-	<td style='font-size:$letra px !important'>$ClaveEntFed</td>
-</tr>";*/
-       
-    }
-    
-    if(strlen($NominaReceptor)>10)
-    {
-        /*$NominaReceptor="
-        <b>RECEPTOR:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>CURP</td>
-		<td style='font-size:$letra px !important'>NUM SEG SOCIAL</td>
-		<td style='font-size:$letra px !important'>FECHA INICIO REL LABORAL</td>
-		<td style='font-size:$letra px !important'>ANTIGUEDAD</td>
-		<td style='font-size:$letra px !important'>TIPO CONTRATO</td>
-		<td style='font-size:$letra px !important'>SINDICALIZADO</td>
-		<td style='font-size:$letra px !important'>TIPO JORNADA</td>
-		<td style='font-size:$letra px !important'>TIPO REGIMEN</td>
-		<td style='font-size:$letra px !important'>NUM EMPLEADO</td>
-		<td style='font-size:$letra px !important'>DEPARTAMENTO</td>
-		<td style='font-size:$letra px !important'>PUESTO</td>
-		<td style='font-size:$letra px !important'>RIESGO PUESTO</td>
-		<td style='font-size:$letra px !important'>PERIODICIDAD PAGO</td>
-		<td style='font-size:$letra px !important'>BANCO</td>
-		<td style='font-size:$letra px !important'>CUENTA BANCARIA</td>
-		<td style='font-size:$letra px !important'>SALARIO BASE COT APOR</td>
-		<td style='font-size:$letra px !important'>SALARIO DIARIO INTEGRADO</td>
-		<td style='font-size:$letra px !important'>ENTIDAD FED</td>
-	</tr>
-            $NominaReceptor
-</table>
-        ";*/
-    }
-    
-    //NOMINAS SUBCONTRATACION
-    $NominaSubcontratacion='';
-    foreach ($xml->xpath('//nomina12:SubContratacion') as $Subcontratacion)
-    {
-        $RfcLabora= autoformato_impresion($Subcontratacion['RfcLabora']);
-        $PorcentajeTiempo= autoformato_impresion($Subcontratacion['PorcentajeTiempo']);
-        
-        
-        $NominaSubcontratacion.="<tr>
-	<td style='font-size:$letra px !important'>$RfcLabora</td>
-	<td style='font-size:$letra px !important'>$PorcentajeTiempo</td>
-</tr>";
-        
-
-    }
-    if(strlen($NominaSubcontratacion)>10)
-    {
-        $NominaSubcontratacion="
-        <b>SUBCONTRATACION:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>RFC LABORA</td>
-		<td style='font-size:$letra px !important'>PORCENTAJE TIEMPO</td>
-	</tr>
-            $NominaSubcontratacion
-</table>
-        ";
-    }
-    
-    //NOMINAS PERCEPCIONES
-    $NominaPercepciones='';
-    foreach ($xml->xpath('//nomina12:Percepcion') as $Percepciones)
-    {
-        $TipoPercepcion= autoformato_impresion($Percepciones['TipoPercepcion']);
-        $Clave= autoformato_impresion($Percepciones['Clave']);
-        $Concepto= autoformato_impresion($Percepciones['Concepto']);
-        $ImporteGravado= autoformato_impresion($Percepciones['ImporteGravado']);
-        $ImporteExento= autoformato_impresion($Percepciones['ImporteExento']);
-        
-        
-        $NominaPercepciones.="<tr>
-	<td style='font-size:$letra px !important'>$TipoPercepcion</td>
-	<td style='font-size:$letra px !important'>$Clave</td>
-	<td style='font-size:$letra px !important'>$Concepto</td>
-	<td style='font-size:$letra px !important'>$ImporteGravado</td>
-	<td style='font-size:$letra px !important'>$ImporteExento</td>
-</tr>";
-        
-
-    }
-    if(strlen($NominaPercepciones)>10)
-    {
-        $NominaPercepciones="
-        <b>PERCEPCIONES:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>TP</td>
-		<td style='font-size:$letra px !important'>CLAVE</td>
-		<td style='font-size:$letra px !important' >CONCEPTO</td>
-		<td style='font-size:$letra px !important'>IMP GRAVADO</td>
-		<td style='font-size:$letra px !important'>IMP EXCENTO</td>
-	</tr>
-            $NominaPercepciones
-</table>
-        ";
-    }
-
-
-//NOMINAS DEDUCCIONES
-    $NominaDeducciones='';
-    foreach ($xml->xpath('//nomina12:Deduccion') AS $Deducciones)
-    {
-        $TipoDeduccion= autoformato_impresion($Deducciones['TipoDeduccion']);
-        $Clave= autoformato_impresion($Deducciones['Clave']);
-        $Concepto= autoformato_impresion($Deducciones['Concepto']);
-        $Importe= autoformato_impresion($Deducciones['Importe']);
-        
-        $NominaDeducciones.="<tr>
-	<td style='font-size:$letra px !important'>$TipoDeduccion</td>
-	<td style='font-size:$letra px !important'>$Clave</td>
-	<td style='font-size:$letra px !important'>$Concepto</td>
-	<td style='font-size:$letra px !important'>$Importe</td>
-</tr>";
-        
-
-    }
-    if(strlen($NominaDeducciones)>10)
-    {
-        $NominaDeducciones="
-        <b>DEDUCCIONES:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>TP</td>
-		<td style='font-size:$letra px !important'>CLAVE</td>
-		<td style='font-size:$letra px !important'>CONCEPTO</td>
-		<td style='font-size:$letra px !important'>IMPORTE</td>
-	</tr>
-            $NominaDeducciones
-</table>
-        ";
-    }
-
-
-
-//NOMINAS HORAS EXTRA
-    $NominaHorasExtras='';
-    foreach ($xml->xpath('//nomina12:HorasExtra') AS $HoraExtra)
-    {
-        
-        $Dias= autoformato_impresion($HoraExtra['Dias']);
-        $TipoHoras= autoformato_impresion($HoraExtra['TipoHoras']);
-        $HorasExtra= autoformato_impresion($HoraExtra['HorasExtra']);
-        $TipoHoras = $catTipoHoras[$TipoHoras];
-        
-        $NominaHorasExtras.="<tr>
-	<td style='font-size:$letra px !important'>$Dias</td>
-	<td style='font-size:$letra px !important'>$TipoHoras</td>
-	<td style='font-size:$letra px !important'>$HorasExtra</td>
-</tr>";
-
-        
-
-    }
-    if(strlen($NominaHorasExtras)>10)
-    {
-        $NominaHorasExtras="
-        <b>HORAS EXTRA:</b>
-            <table width='100%'>
-       <tr class='factura_detalles_cabecera'  >
-        <td style='font-size:$letra px !important'>DIAS</td>
-        <td style='font-size:$letra px !important'>TIPO</td>
-        <td style='font-size:$letra px !important'>HORAS EXTRA</td>
-       </tr>
-
-            $NominaHorasExtras
-            </table>
-        ";
-    }
-
-
-
-//NOMINAS INCAPACIDADES
-    $NominaIncapacidades='';
-    foreach ($xml->xpath('//nomina12:Incapacidad') AS $Incapacidad)
-    {
-        $DiasIncapacidad= autoformato_impresion($Incapacidad['DiasIncapacidad']);
-        $TipoIncapacidad= autoformato_impresion($Incapacidad['TipoIncapacidad']);
-        $TipoIncapacidad = $catTipoIncapacidad[$TipoIncapacidad];
-        $Descuento= autoformato_impresion($Incapacidad['ImporteMonetario']);        
-        
-        $NominaIncapacidades.="<tr>
-	<td style='font-size:$letra px !important'>$DiasIncapacidad</td>
-	<td style='font-size:$letra px !important'>$TipoIncapacidad</td>
-	<td style='font-size:$letra px !important'>$Descuento</td>
-</tr>";
-
-        
-
-    }
-    if(strlen($NominaIncapacidades)>10)
-    {
-        $NominaIncapacidades="
-        <b>INCAPACIDADES:</b>
-            <table width='100%'>
-       <tr class='factura_detalles_cabecera'  >
-        <td style='font-size:$letra px !important'>DIAS</td>
-        <td style='font-size:$letra px !important'>TIPO</td>
-        <td style='font-size:$letra px !important'>IMPORTE</td>
-       </tr>
-
-            $NominaIncapacidades
-            </table>
-        ";
-    }
-    
-    //NOMINAS OTROS PAGOS
-    $NominaOtrosPagos='';
-    foreach ($xml->xpath('//nomina12:OtroPago') AS $OtroPago)
-    {
-		$TipoOtroPago= autoformato_impresion($OtroPago['TipoOtroPago']);
-		$TipoOtroPago = $catTipoOtroPago[$TipoOtroPago];
-        $Clave= autoformato_impresion($OtroPago['Clave']);
-        $Concepto= autoformato_impresion($OtroPago['Concepto']);
-        $Importe= autoformato_impresion($OtroPago['Importe']);
-        
-        $NominaOtrosPagos.="<tr>
-	<td style='font-size:$letra px !important'>$Clave</td>
-	<td style='font-size:$letra px !important'>$TipoOtroPago</td>
-	<td style='font-size:$letra px !important'>$Concepto</td>
-	<td style='font-size:$letra px !important'>$Importe</td>
-</tr>";
-    }
-    if(strlen($NominaOtrosPagos)>10)
-    {
-        $NominaOtrosPagos="
-        <b>OTROS PAGOS:</b>
-            <table width='100%'>
-       <tr class='factura_detalles_cabecera'  >
-        <td style='font-size:$letra px !important'>CLAVE</td>
-        <td style='font-size:$letra px !important'>TIPO OTRO PAGO</td>
-        <td style='font-size:$letra px !important'>CONCEPTO</td>
-        <td style='font-size:$letra px !important'>IMPORTE</td>
-       </tr>
-
-            $NominaOtrosPagos
-            </table>
-        ";
-    }
-    //NOMINAS JUBILACION
-    $NominaJubilacion='';
-    foreach ($xml->xpath('//nomina12:JubilacionPensionRetiro') as $Jubilacion)
-    {
-        $TotalUnaExhibicion= autoformato_impresion($Jubilacion['TotalUnaExhibicion']);
-        $TotalParcialidad= autoformato_impresion($Jubilacion['TotalParcialidad']);
-        $MontoDiario= autoformato_impresion($Jubilacion['MontoDiario']);
-        $IngresoAcumulable= autoformato_impresion($Jubilacion['IngresoAcumulable']);
-        $IngresoNoAcumulable= autoformato_impresion($Jubilacion['IngresoNoAcumulable']);
-        
-        
-        $NominaJubilacion.="<tr>
-	<td style='font-size:$letra px !important'>$TotalUnaExhibicion</td>
-	<td style='font-size:$letra px !important'>$TotalParcialidad</td>
-	<td style='font-size:$letra px !important'>$MontoDiario</td>
-	<td style='font-size:$letra px !important'>$IngresoAcumulable</td>
-	<td style='font-size:$letra px !important'>$IngresoNoAcumulable</td>
-</tr>";
-        
-
-    }
-    if(strlen($NominaJubilacion)>10)
-    {
-        $NominaJubilacion="
-        <b>JUBILACION/PENCION/RETIRO:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>TOTAL UNA EXHIBICION</td>
-		<td style='font-size:$letra px !important'>TOTAL PARCIALIDAD</td>
-		<td style='font-size:$letra px !important' >MONTO DIARIO</td>
-		<td style='font-size:$letra px !important'>INGRESO ACUMULABLE</td>
-		<td style='font-size:$letra px !important'>INGRESO NO ACUMULABLE</td>
-	</tr>
-            $NominaJubilacion
-</table>
-        ";
-    }
-    
-    //NOMINAS SEPARACION INDEMNIZACION
-    $NominaSeparacion='';
-    foreach ($xml->xpath('//nomina12:SeparacionIndemnizacion') as $Separacion)
-    {
-        $TotalPagado= autoformato_impresion($Separacion['TotalPagado']);
-        $NumAñosServicio= autoformato_impresion($Separacion['NumAñosServicio']);
-        $UltimoSueldoMensOrd= autoformato_impresion($Separacion['UltimoSueldoMensOrd']);
-        $IngresoAcumulable= autoformato_impresion($Separacion['IngresoAcumulable']);
-        $IngresoNoAcumulable= autoformato_impresion($Separacion['IngresoNoAcumulable']);
-        
-        
-        $NominaSeparacion.="<tr>
-	<td style='font-size:$letra px !important'>$TotalPagado</td>
-	<td style='font-size:$letra px !important'>$NumAñosServicio</td>
-	<td style='font-size:$letra px !important'>$UltimoSueldoMensOrd</td>
-	<td style='font-size:$letra px !important'>$IngresoAcumulable</td>
-	<td style='font-size:$letra px !important'>$IngresoNoAcumulable</td>
-</tr>";
-        
-
-    }
-    if(strlen($NominaSeparacion)>10)
-    {
-        $NominaSeparacion="
-        <b>SEPARACION/INDEMNIZACION:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>TOTAL PAGADO</td>
-		<td style='font-size:$letra px !important'>AÑOS SERVICIO</td>
-		<td style='font-size:$letra px !important' >ULTIMO SUELDO MENS ORD</td>
-		<td style='font-size:$letra px !important'>INGRESO ACUMULABLE</td>
-		<td style='font-size:$letra px !important'>INGRESO NO ACUMULABLE</td>
-	</tr>
-            $NominaSeparacion
-</table>
-        ";
-    }
-    
-    // NOMINA ACCIONES O TITULOS
-    $NominaAcciones='';
-    foreach ($xml->xpath('//nomina12:AccionesOTitulos') as $Accion)
-    {
-        $ValorMercado= autoformato_impresion($Accion['ValorMercado']);
-        $PrecioAlOtorgarse= autoformato_impresion($Accion['PrecioAlOtorgarse']);
-        
-        
-        $NominaAcciones.="<tr>
-	<td style='font-size:$letra px !important'>$ValorMercado</td>
-	<td style='font-size:$letra px !important'>$PrecioAlOtorgarse</td>
-</tr>";
-        
-
-    }
-    if(strlen($NominaAcciones)>10)
-    {
-        $NominaAcciones="
-        <b>ACCIONES O TITULOS:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>VALOR DE MERCADO</td>
-		<td style='font-size:$letra px !important'>PRECIO AL OTORGARSE</td>
-	</tr>
-            $NominaAcciones
-</table>
-        ";
-    }
-    
-    // NOMINA SUBSIDIO AL EMPLEO
-    $NominaSubsidio='';
-    foreach ($xml->xpath('//nomina12:SubsidioAlEmpleo') as $Subsidio)
-    {
-        $SubsidioCausado= autoformato_impresion($Subsidio['SubsidioCausado']);        
-        
-        $NominaSubsidio.="<tr>
-	<td style='font-size:$letra px !important'>$SubsidioCausado</td>
-</tr>";
-        
-
-    }
-    if(strlen($NominaSubsidio)>10)
-    {
-        $NominaSubsidio="
-        <b>SUBSIDIO:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>SUBSIDIO CAUSADO</td>
-	</tr>
-            $NominaSubsidio
-</table>
-        ";
-    }
-    
-    // NOMINA COMPENSACION
-    $NominaCompensacion='';
-    foreach ($xml->xpath('//nomina12:CompensacionSaldosAFavor') as $Compensacion)
-    {
-        $SaldoAFavor= autoformato_impresion($Compensacion['SaldoAFavor']);
-        $Ano= autoformato_impresion($Compensacion[utf8_encode('Año')]);
-        $RemanenteSalFav= autoformato_impresion($Compensacion['RemanenteSalFav']);
-        
-        $NominaCompensacion.="<tr>
-	<td style='font-size:$letra px !important'>$SaldoAFavor</td>
-	<td style='font-size:$letra px !important'>$Ano</td>
-	<td style='font-size:$letra px !important'>$RemanenteSalFav</td>
-</tr>";
-        
-
-    }
-    if(strlen($NominaCompensacion)>10)
-    {
-        $NominaCompensacion="
-        <b>COMPENSACION:</b>
-<table width='100%'>
-	<tr class='factura_detalles_cabecera'  >
-		<td style='font-size:$letra px !important'>SALDO A FAVOR</td>
-		<td style='font-size:$letra px !important'>AÑO</td>
-		<td style='font-size:$letra px !important'>REMANENTE</td>
-	</tr>
-            $NominaCompensacion
-</table>
-        ";
-    }
-}
 
 
 $nominas_txt="
 <table>
 <tr valign='top'>
     <td width='50%' valign='top'>
-		$NominaEmisor
         $NominaPercepciones
         $NominaHorasExtras
-        $NominaOtrosPagos
-        $NominaAcciones
-        $NominaSubsidio
     </td>
     <td width='50%'>
-		$NominaJubilacion
         $NominaDeducciones
         $NominaIncapacidades
-        $NominaSeparacion
-        $NominaSubcontratacion
-        $NominaCompensacion
     </td>
 
 </tr>
 </table>
-$NominaReceptor
 ";
 $emisor_municipio2=trim(strtolower($emisor_municipio2));
 $emisor_municipio2=str_replace(' ','',$emisor_municipio2);
@@ -1949,7 +1150,7 @@ if($emisor_municipio2==$emisor_localidad2)
     $emisor_localidad='';
 }
 
-//////////  DISEÑO ////////////
+//////////  DISEÃ‘O ////////////
 
 if($version=='3.2')
 {
@@ -1980,14 +1181,14 @@ if($version=='3.3')
      </div>
     ";
 }
-    
+
 $ciudad_estado="$emisor_municipio $emisor_localidad $emisor_estado,";
 if($expedido_municipio==$expedido_localidad)
 {
     $expedido_localidad='';
 }
-
 $ExpedidoEn='';
+
 
 $ExpedidoEn="
 <div class='factura_expedidoen factura_cuadro_linea'>
@@ -2003,8 +1204,10 @@ if($version=='3.3')
     $ExpedidoEn='<hr/>';
 }
 
-$idreceptor=$datosfacturas['idreceptor'];
-$Fiscal_Orientacion=$datosreceptor['Fiscal_Orientacion'];
+
+        $idreceptor=$datosfacturas['idreceptor'];
+//        $datosreceptor=lee_sql_mash(sql_agenda($idreceptor));
+        $Fiscal_Orientacion=$datosreceptor['Fiscal_Orientacion'];
 
 if($receptor_municipio==$receptor_localidad)
 {
@@ -2036,10 +1239,12 @@ if($version=='3.3')
         <div class='factura_titulo_empresa'>$receptor_nombre  </div>
         RFC: <b> $receptor_rfc </b><br/>
         Uso CFDI: $uso_CFDi
+  $rfc_extranjero
         
     </div>
     ";
 }
+
 $DatosGenerales="
 <div class='factura_titulo_serie_folio'>$titulo</div>
 <div class='factura_datosgenerales'>
@@ -2052,34 +1257,39 @@ $DatosGenerales="
 
 </div>
 ";
-//$logo="<div class='logo'><img src='{URL}/$logo'></div>";
-if(!file_exists($logo))
+//$logo="<div class='logo'><img src='http://192.168.1.111/multifacturas_docs/multifacturas_sdk_desarrollo/$logo'></div>";
+
+global $masheditor;
+$ruta_logo=$masheditor['carpeta_instalacion']."$logo";
+
+/*
+if(!file_exists($ruta_logo))
 {
-    $logo="c:/cfdipdf/transparente.gif";
+    $ruta_logo="c:/cfdipdf/transparente.gif";
 }
 else
 {
     $conflogo['max']=220;
     if(function_exists('ver_imagen_mash'))
     {
-        $logo=ver_imagen_mash($logo,250,0,$conflogo);
+        $ruta_logo=ver_imagen_mash($ruta_logo,250,0,$conflogo);
     }
     else
     {
-        $logo=$logo;
+        $ruta_logo=$ruta_logo;
     }    
 }
+*/
 
-
-$cabecera="
-    <table width='100%'>
+$cabecera="<table width='100%'>
         <tr valign='top'>
-            <td width='260'><img src='{URL}/$logo'></td>
+            <td width='260'><img  width='250px' src='$ruta_logo'></td>
 
             <td >$DatosGenerales</td>
         </tr>
     </table>
     $ExpedidoEn
+    $html_cfdi_relacionados
     <table width='100%'>
         <tr valign='top'>
             <td width='50%'>$Emisor</td>
@@ -2110,11 +1320,6 @@ $idempresa=$datosfacturas['idempresa'];
 
 //        $timbre_selloSAT = $sellosat=$tfd['selloSAT'];
 
-global $masheditor;
-//print_r($masheditor);
-list($ano,$mes,$dia)=explode("-",date('Y-m-d'));
-$ruta_instalacion=$masheditor['carpeta_instalacion']."/$EMISOR_NOMBRE/";
-
 $archivo_png=str_replace('.xml','.png',$xml_archivo);
 $archivo_png=str_replace('.XML','.PNG',$archivo_png);
 
@@ -2138,44 +1343,28 @@ else
         default :  $moneda_txt='PESOS'; break;
     }
     
-    $numeroletras=num2letras($total,'  '); 
-    
-    //ES PAGO
-    if($TipoDeComprobante =='P'){
-        $numeroletras=num2letras($Monto_Pago,'  ');
-    }   
+    $numeroletras=num2letras($total,'  ');    
 
 
 if(intval($NumCtaPago)>0)
     $NumCtaPago_txt="CUENTA : $NumCtaPago";
 
-//echo    "$ruta_instalacion/$archivo_png";
-$ruta_instalacion=str_replace('//','/',$ruta_instalacion);
-$ruta_instalacion=str_replace('//','/',$ruta_instalacion);
-$ruta_instalacion=str_replace('//','/',$ruta_instalacion);
 
-//echo    "$ruta_instalacion/$archivo_png";
-$ruta_instalacion='{URL}';
-
+$ruta_qr=$masheditor['carpeta_instalacion']."/$archivo_png";
+/*
 $sellos_pie="
-
 <div class='factura_sellos factura_cuadro '>
 <table width='100%' border=0>
     <tr valign='top'>
-        <td width=200px;>
-            <img src='$ruta_instalacion/$archivo_png'><br/>
+        <td width=198px;>
+            <img src='$ruta_qr'><br/>
             
         </td>
         <td>
             <div class='factura_sellos_txt'>
             CANTIDAD CON LETRA: $numeroletras $moneda_txt ($Moneda)<br>
-            "; 
-            
-            if($TipoDeComprobante !='P')
-                  $sellos_pie.="<b>METODO PAGO: $metodo_pago | FORMA PAGO: $forma_pago | $NumCtaPago_txt  </b><br/>";
-                    
-            $sellos_pie.="<b>$html_parcialidades</b>
-                <b>REGIMEN FISCAL : </b>$regimen_fiscal  <b>Fecha Timbrado : </b>$timbre_fecha <br/> 
+            <b>METODO PAGO: $metodo_pago | FORMA PAGO: $forma_pago | $NumCtaPago_txt  </b><br/>
+                <b>REGIMEN FISCAL : </b>$regimen_fiscal<b>Fecha Timbrado : </b>$timbre_fecha <br/> 
                 <b>SELLO : </b><br/>$sello <br/>
                 <b>SELLO SAT : </b><br/>$timbre_selloSAT <br/>
 
@@ -2184,7 +1373,7 @@ $sellos_pie="
                 $cadena_sat 
                 <br/>
 
-<b>Este documento es una representación impresa de un CFDI</b> EFECTOS FISCALES AL PAGO 
+<b>Este documento es una representaciÃ³n impresa de un CFDI</b> EFECTOS FISCALES AL PAGO 
             </div>
             <br/>
 $referencia $barcode_factura 
@@ -2195,7 +1384,50 @@ $referencia $barcode_factura
 
 </div>
 ";
+ */
  
+$sellos_pie="
+
+<div class='factura_sellos factura_cuadro '>
+<table width='100%' border=0>
+    <tr valign='top'>
+        <td width=200px;>
+            <img src='$ruta_qr'><br/>
+            
+        </td>
+        <td>
+            <!-- CANTIDAD CON LETRA: $numeroletras $moneda_txt ($Moneda)<br> -->
+            <div class='factura_sellos_txt'>
+            CANTIDAD CON LETRA: $numeroletras ($Moneda)<br>
+            "; 
+            
+            if($TipoDeComprobante !='P')
+                  $sellos_pie.="<b>METODO PAGO: $metodo_pago | FORMA PAGO: $forma_pago | $NumCtaPago_txt  </b><br/>";
+            
+            if($html_parcialidades !='')
+                $html_parcialidades="<b>$html_parcialidades</b>";
+                                                    
+            $sellos_pie.="$html_parcialidades
+                <b>REGIMEN FISCAL : $regimen_fiscal Fecha Timbrado : $timbre_fecha </b><br/> 
+                <b>SELLO : </b><br/>$sello <br/>
+                <b>SELLO SAT : </b>$timbre_selloSAT <br/>
+
+                <b>Numero Certificado SAT : </b> $timbre_noCertificadoSAT <br/>
+                <b>Cadena Original</b><br/><br/>
+                $cadena_sat 
+                <br/>
+
+<b>Este documento es una representaciÃ³n impresa de un CFDI</b> EFECTOS FISCALES AL PAGO 
+            </div>
+            <br/>
+$referencia $barcode_factura 
+        </td>
+    
+    </tr>
+</table>
+
+</div>
+";
 $importeneto=(float)$subtotal;
 //echo "$importeneto=$subtotal-$descuento";
 //mash $importeneto=sprintf('%1.2f',$importeneto);
@@ -2204,8 +1436,7 @@ $importeneto=(float)$subtotal;
 if(strlen($nota_impresa)>5)
 {
     $notas_impresas="
-        <div class='factura_sellos factura_cuadro nota'>
-        NOTA: <br/>
+        <div class='factura_sellos factura_cuadro'>
         $nota_impresa
         </div>
     ";    
@@ -2260,6 +1491,7 @@ if($CURP!='')
 
 
 $pie="
+
 <table width='100%'>
     <tr>
         <td valign='top' >
@@ -2298,6 +1530,7 @@ $iva_txt
 </table>
 
 ";
+
 
 //ES UN PAGO
 if($TipoDeComprobante =='P')
@@ -2341,23 +1574,9 @@ if($TipoDeComprobante =='P')
 
 }
 
+
 $idfactura2=sprintf('%06d',$idfactura);
-$cancelado='';
 
-
-/*
-    $sql="
-    SELECT *
-    FROM
-      `multi_facturas`
-    WHERE
-      `multi_facturas`.`SERIE` = $serie AND 
-      `multi_facturas`.`FOLIO` = $folio    
-    ";
-*/
-          
-          
-          
 if($datosfacturas['factura_cancelada']==1)
 {
     $cancelado_fecha=$datosfacturas['factura_cancelada_fecha'];
@@ -2394,8 +1613,7 @@ if($datosfacturas['factura_cancelada']==2)
 }
 
 
-//if($certificado_no==20001000000100005867)
-if($certificado_no==20001000000300022815)
+if($certificado_no==20001000000100005867)
 {
     $cancelado="
     <div class='factura_cancelada'>
@@ -2407,7 +1625,7 @@ FACTURA NO VALIDA ANTE EL SAT
     </div>
     ";
 }
-/*
+
 $leyenda="
 <div class='factura_leyenda' style='font-size:10px !important;'>
 Por este pagare me(nos) obligo(amos) a pagar incondicionalmente el dia ___________________ en esta ciudad de $ciudad_estado.
@@ -2419,15 +1637,26 @@ FIRMA CLIENTE : _____________________________ <br/>
 
 </div>
 ";
-*/
 if($CURP!='')
 {
     $leyenda='';
 }
-
-
+/*
 $valor.="
 $cabecera
+<div class=factura_detalles>
+$desgloce
+$nominas_txt
+$nomina_general
+$cancelado
+</div>
+$pie
+$sellos_pie
+$barcode_factura
+$leyenda 
+";
+*/
+$valor.="$cabecera
 <div class=factura_detalles>
 $desgloce
 $nominas_txt
@@ -2442,6 +1671,7 @@ $barcode_factura
 $leyenda 
 ";
 
+
 global $masheditor;
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' OR count($masheditor)==0) 
     {
@@ -2451,7 +1681,7 @@ global $masheditor;
     return $valor;
 }
 ///////////////////////////////////////////////////////////////////////////////
-function autoformato_impresion($txt)
+function autoformato_impresion_modulo($txt)
 {
     //$txt=utf8_decode(utf8_decode($txt));
     $txt=utf8_decode($txt);
@@ -2459,7 +1689,7 @@ function autoformato_impresion($txt)
 }
 ///////////////////////////////////////////////////////////////////////////////
 
-function object2array($object)
+function object2array_modulo($object)
 {
     $return = NULL;
       
@@ -2484,7 +1714,7 @@ function object2array($object)
 } 
 
 
-function XML2Array ( $xml )
+function XML2Array_modulo( $xml )
 {
     $array = simplexml_load_string ( $xml );
     $newArray = array ( ) ;
@@ -2498,7 +1728,7 @@ function XML2Array ( $xml )
   return $newArray ;
 } 
 
-class simple_xml_extended extends SimpleXMLElement
+class simple_xml_extended_modulo extends SimpleXMLElement
 {
     public    function    Attribute($name)
     {
@@ -2512,7 +1742,7 @@ class simple_xml_extended extends SimpleXMLElement
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-function genera_pdf($idfactura,$ruta_pdf=NULL,$ruta_url=NULL)
+function genera_pdf_modulo($idfactura,$ruta_pdf=NULL,$ruta_url=NULL)
 {
 
     $idfactura=intval($idfactura);
@@ -2526,17 +1756,14 @@ function genera_pdf($idfactura,$ruta_pdf=NULL,$ruta_url=NULL)
         {
             $sql="
             SELECT 
-              multi_facturas.XML,
-              `multi_facturas`.idfacturatipo
+              multi_facturas.XML
             FROM
               multi_facturas
             WHERE
               (multi_facturas.idfactura = $idfactura)    
             ";
             if(function_exists('lee_sql_mash'))
-            {
-                list($xml,$idfacturatipo)=mysql_fetch_row(mysql_query($sql));
-            }
+                list($xml)=lee_sql_mash($sql);
         }
         
     }
@@ -2549,9 +1776,6 @@ function genera_pdf($idfactura,$ruta_pdf=NULL,$ruta_url=NULL)
 
 //echo debug_mash($masheditor);
     $rfc=$_COOKIE["RFC"];
-//    $rfc=str_replace('&','',$rfc);
-    $rfc=str_replace('&','---',$rfc);
-
     $hora=time();
     $md5=md5("mash,$rfc,$hora,");
     $authpdf="$rfc,$hora,$md5";
@@ -2572,10 +1796,8 @@ function genera_pdf($idfactura,$ruta_pdf=NULL,$ruta_url=NULL)
         {
             $url=$ruta_url;
             if(function_exists('formato_url_mash'))
-            {
                 $url=formato_url_mash($url);
-            }
-            $url="$url/?authpdf=$authpdf";        
+            #$url="$url/?authpdf=$authpdf";        
         } 
 
     }
@@ -2588,38 +1810,26 @@ unlink("$carpeta_instalacion$pdf");
         if(strpos("  $SO",'x86')>0)
         {
             //32bits
-            $ruta='c:\\cfdipdf\\32\\';
+            //$ruta='c:\\cfdipdf\\32\\';
+            $ruta='c:\\cfdipdf\\htdocs\\32\\';
         }
         else
         {
             //64 bits
-            $ruta='c:\\cfdipdf\\64\\';
+            //$ruta='c:\\cfdipdf\\64\\';
+            $ruta='c:\\cfdipdf\\htdocs\\32\\';
         }
     }
-
-// = tiket
-if($idfacturatipo==7)
-{
-    //ticket
-    $tipo_hoja='A8';
-    
-}
-else
-{
-    //factura
-    $tipo_hoja='A4';
-}
-
     if(file_exists("$carpeta_instalacion$pdf")==false)
     {
-       $comando=$ruta."wkhtmltopdf  -s $tipo_hoja -B 1 -T 1 -L 1 -R 1  \"$url\"  \"$carpeta_instalacion$pdf\"    "; //   -B 1 -T 1 -L 1 -R 1 -s A4 &
+        $comando=$ruta."wkhtmltopdf  -s A4 -B 1 -T 1 -L 1 -R 1  \"$url\"  \"$carpeta_instalacion$pdf\"    "; //   -B 1 -T 1 -L 1 -R 1 -s A4 &        
     }
 
 //echo $comando;
 
     $resultado=shell_exec($comando);
     $url=$masheditor['url'];
-    $valor= ver_pdf("$url/$pdf");
+    $valor= ver_pdf_modulo("$url/$pdf");
 
 
     return $valor;
@@ -2627,7 +1837,7 @@ else
 }
 ///////////////////////////////////////////////////////////////////////////////
 
-function ver_pdf($pdf)
+function ver_pdf_modulo_modulo($pdf)
 {   
 
     $hora=time();
@@ -2646,61 +1856,153 @@ function ver_pdf($pdf)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-function formato_metodo_pago($metodo_pago)
+function html_css($color_marco,$color_marco_texto,$color_texto,$fuente_texto)
 {
-    $metodo_pago=str_replace('01','Efectivo (01)',$metodo_pago);
-    $metodo_pago=str_replace('02','Cheque Nominativo (02)',$metodo_pago);
-    $metodo_pago=str_replace('03','Transferencia electrónica de fondos (03)',$metodo_pago);
-    $metodo_pago=str_replace('04','Tarjetas de crédito (04)',$metodo_pago);
-    $metodo_pago=str_replace('05','Monederos electrónicos (05)',$metodo_pago);
-    $metodo_pago=str_replace('06','Dinero electrónico (06)',$metodo_pago);
-    $metodo_pago=str_replace('07','Tarjetas digitales (07)',$metodo_pago);
-    $metodo_pago=str_replace('08','Vales de despensa (08)',$metodo_pago);
-    $metodo_pago=str_replace('09','Bienes (09)',$metodo_pago);
-    $metodo_pago=str_replace('10','Servicio (10)',$metodo_pago);
-    $metodo_pago=str_replace('11','Por cuenta de tercero (11)',$metodo_pago);
-    $metodo_pago=str_replace('12','Dación en pago (12)',$metodo_pago);
-    $metodo_pago=str_replace('13','Pago por subrogación (13)',$metodo_pago);
-    $metodo_pago=str_replace('14','Pago por consignación (14)',$metodo_pago);
-    $metodo_pago=str_replace('15','Condonación (15)',$metodo_pago);
-    $metodo_pago=str_replace('16','Cancelación (16)',$metodo_pago);
-    $metodo_pago=str_replace('17','Compensación (17)',$metodo_pago);
-    $metodo_pago=str_replace('98','NA (98)',$metodo_pago);
-    $metodo_pago=str_replace('99','Otros (99)',$metodo_pago);
-    $metodo_pago=str_replace('28','Tarjeta de Débito (28)',$metodo_pago);
-    $metodo_pago=str_replace('29','Tarjeta de Servicio (29)',$metodo_pago);
-
-/*
-
-01 – Efectivo
-02 – Cheque
-03 – Transferencia
-04 – Tarjetas de crédito
-05 – Monederos electrónicos
-06 – Dinero electrónico
-07 – Tarjetas digitales
-08 – Vales de despensa
-09 – Bienes
-10 – Servicio
-11 – Por cuenta de tercero
-12 – Dación en pago
-13 – Pago por subrogación
-14 – Pago por consignación
-15 – Condonación
-16 – Cancelación
-17 – Compensación
-98 – NA
-99 – Otros
-
-
-
-preuba
+$css="
+<style type='text/css'> 
+*{
+/*    
+    font-family: monospace !important; 
+fantasy sans-serif
 */
-    $metodo_pago=strtoupper($metodo_pago);
-    return $metodo_pago;
+    font-family: $fuente_texto;
+
+    font-size: 12px !important;
+    font-weight: bold !important;
+    color: $color_texto;
+}
+
+.factura_cuadro{
+    margin: 3px !important;
+    padding: 3px !important;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.factura_cuadro_linea{
+    margin: 3px !important;
+    padding: 3px !important;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    
+    
+}
+
+.factura_emisor{
+    text-transform: uppercase !important;
+    min-height: 80px;
+}
+
+.factura_expedidoen{
+    text-transform: uppercase !important;
+}
+.factura_receptor{
+    text-transform: uppercase !important;
+    min-height: 80px;
+}
+.factura_datosgenerales{
+    text-transform: uppercase !important;
+    font-weight: bold;
+    font-size: 14px;
+    text-align: right;
+}
+.factura_sellos{
+    word-wrap:break-word;
+     
+}
+.factura_titulo_empresa{
+    text-transform: uppercase !important;
+    font-weight: bold;
+    font-size: 14px !important;
+}
+
+.factura_titulo_ch{
+    text-transform: uppercase !important;
+    font-weight: bold;
+    font-size: 13px !important;    
+    
+}
+
+.factura_cbb{
+    display: inline-block;
+    width: auto;
+    display: inline-block;
+    background-color: red;
+    
+}
+.factura_sellos_txt{
+    display: inline-block;    
+   word-wrap:break-word;
+   font-size: 8px !important;
+}
+
+.factura_sellos_txt b{
+    display: inline-block;    
+   word-wrap:break-word;
+   font-size: 9px !important;
+   text-transform: uppercase;
+}
+
+
+.factura_totales{
+    text-align: right !important;
+    font-size: 12px !important;
+    font-weight: bold !important;
+}
+
+.factura_detalles{
+    min-height: 100px;
+}
+
+.factura_detalles_renglon1{
+    font-weight: bold;
+    font-style: normal;
+}
+.factura_detalles_renglon2{
+    font-weight: bold;
+    font-style: italic;
+}
+.factura_detalles_cabecera{
+    background-color: $color_marco;
+    color: $color_marco_texto;
+    font-weight: bolder;
+}
+.factura_detalles_cabecera td{
+    background-color: $color_marco;
+    color: $color_marco_texto;
+}
+
+.factura_titulo_serie_folio{
+    font-weight: bold !important;
+    font-size: 24px !important;
+}
+
+.factura_cancelada{
+    position: relative;
+    top : -30px;
+    margin: 10px;
+    margin-left: 100px;
+    padding: 5px;
+    text-align: center;
+    width: 350px;
+    font-size: 18px;
+    border-style: double;
+    border-width: 3px;
+
+    -moz-transform:rotate(-3deg);
+    -webkit-transform:rotate(-3deg); 
+    -ms-transform:rotate(-3deg);
+}
+</style> 
+";
+    
+    return $css;
 }
 ///////////////////////////////////////////////////////////////////////////////
-function formato_impuestos($impuesto)
+
+///////////////////////////////////////////////////////////////////////////////
+function formato_impuestos_modulo($impuesto)
 {
     $impuesto=str_replace('001','ISR',$impuesto);
     $impuesto=str_replace('002','IVA',$impuesto);
@@ -2710,7 +2012,7 @@ function formato_impuestos($impuesto)
     return $impuesto;
 }
 ////////////////////////////////////////////////////////////////////////////////
-function formato_metodo_pago33($metodo_pago)
+function formato_metodo_pago33_modulo($metodo_pago)
 {
     $metodo_pago=str_replace('PUE','Pago en una sola exhibiciOn (PUE)',$metodo_pago);
     $metodo_pago=str_replace('PIP','Pago inicial y parcialidades (PIP)',$metodo_pago);
@@ -2720,58 +2022,71 @@ function formato_metodo_pago33($metodo_pago)
     return $metodo_pago;
 }
 ///////////////////////////////////////////////////////////////////////////////
-function formato_forma_pago33($forma_pago)
+function formato_forma_pago33_modulo($forma_pago)
 {
     $forma_pago=str_replace('01','Efectivo (01)',$forma_pago);
     $forma_pago=str_replace('02','Cheque Nominativo (02)',$forma_pago);
-    $forma_pago=str_replace('03','Transferencia electrónica de fondos (03)',$forma_pago);
-    $forma_pago=str_replace('04','Tarjetas de crédito (04)',$forma_pago);
-    $forma_pago=str_replace('05','Monederos electrónicos (05)',$forma_pago);
-    $forma_pago=str_replace('06','Dinero electrónico (06)',$forma_pago);
+    $forma_pago=str_replace('03','Transferencia electrÃ³nica de fondos (03)',$forma_pago);
+    $forma_pago=str_replace('04','Tarjetas de crÃ©dito (04)',$forma_pago);
+    $forma_pago=str_replace('05','Monederos electrÃ³nicos (05)',$forma_pago);
+    $forma_pago=str_replace('06','Dinero electrÃ³nico (06)',$forma_pago);
     //$forma_pago=str_replace('07','Tarjetas digitales (07)',$forma_pago);
     $forma_pago=str_replace('08','Vales de despensa (08)',$forma_pago);
     //$forma_pago=str_replace('09','Bienes (09)',$forma_pago);
     //$forma_pago=str_replace('10','Servicio (10)',$forma_pago);
     //$forma_pago=str_replace('11','Por cuenta de tercero (11)',$forma_pago);
-    $forma_pago=str_replace('12','Dación en pago (12)',$forma_pago);
-    $forma_pago=str_replace('13','Pago por subrogación (13)',$forma_pago);
-    $forma_pago=str_replace('14','Pago por consignación (14)',$forma_pago);
-    $forma_pago=str_replace('15','Condonación (15)',$forma_pago);
-    //$forma_pago=str_replace('16','Cancelación (16)',$forma_pago);
-    $forma_pago=str_replace('17','Compensación (17)',$forma_pago);
-    $forma_pago=str_replace('23','Novación (23)',$forma_pago);
-    $forma_pago=str_replace('24','Confusión (24)',$forma_pago);
-    $forma_pago=str_replace('25','Remisión de deuda (25)',$forma_pago);
-    $forma_pago=str_replace('26','Prescripción o caducidad (26)',$forma_pago);
-    $forma_pago=str_replace('27','A satisfacción del acreedor (27)',$forma_pago);
-    $forma_pago=str_replace('28','Tarjeta de Débito (28)',$forma_pago);
+    $forma_pago=str_replace('12','DaciÃ³n en pago (12)',$forma_pago);
+    $forma_pago=str_replace('13','Pago por subrogaciÃ³n (13)',$forma_pago);
+    $forma_pago=str_replace('14','Pago por consignaciÃ³n (14)',$forma_pago);
+    $forma_pago=str_replace('15','CondonaciÃ³n (15)',$forma_pago);
+    //$forma_pago=str_replace('16','CancelaciÃ³n (16)',$forma_pago);
+    $forma_pago=str_replace('17','CompensaciÃ³n (17)',$forma_pago);
+    $forma_pago=str_replace('23','NovaciÃ³n (23)',$forma_pago);
+    $forma_pago=str_replace('24','ConfusiÃ³n (24)',$forma_pago);
+    $forma_pago=str_replace('25','RemisiÃ³n de deuda (25)',$forma_pago);
+    $forma_pago=str_replace('26','PrescripciÃ³n o caducidad (26)',$forma_pago);
+    $forma_pago=str_replace('27','A satisfacciÃ³n del acreedor (27)',$forma_pago);
+    $forma_pago=str_replace('28','Tarjeta de DÃ©bito (28)',$forma_pago);
     $forma_pago=str_replace('29','Tarjeta de Servicio (29)',$forma_pago);
     $forma_pago=str_replace('99','Por definir (99)',$forma_pago);
 /*
-01 – Efectivo
-02 – Cheque
-03 – Transferencia
-04 – Tarjetas de crédito
-05 – Monederos electrónicos
-06 – Dinero electrónico
-07 – Tarjetas digitales
-08 – Vales de despensa
-09 – Bienes
-10 – Servicio
-11 – Por cuenta de tercero
-12 – Dación en pago
-13 – Pago por subrogación
-14 – Pago por consignación
-15 – Condonación
-16 – Cancelación
-17 – Compensación
-98 – NA
-99 – Otros
+01 â€“ Efectivo
+02 â€“ Cheque
+03 â€“ Transferencia
+04 â€“ Tarjetas de crÃ©dito
+05 â€“ Monederos electrÃ³nicos
+06 â€“ Dinero electrÃ³nico
+07 â€“ Tarjetas digitales
+08 â€“ Vales de despensa
+09 â€“ Bienes
+10 â€“ Servicio
+11 â€“ Por cuenta de tercero
+12 â€“ DaciÃ³n en pago
+13 â€“ Pago por subrogaciÃ³n
+14 â€“ Pago por consignaciÃ³n
+15 â€“ CondonaciÃ³n
+16 â€“ CancelaciÃ³n
+17 â€“ CompensaciÃ³n
+98 â€“ NA
+99 â€“ Otros
 */
     $forma_pago=strtoupper($forma_pago);
     return $forma_pago;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+function formato_cfdi_relacionados_modulo($tipo_relacion)
+{
+    $tipo_relacion=str_replace('01','Nota de crÃ©dito de los documentos relacionados (01)',$tipo_relacion);
+    $tipo_relacion=str_replace('02','Nota de dÃ©bito de los documentos relacionados (02)',$tipo_relacion);
+    $tipo_relacion=str_replace('03','DevoluciÃ³n de mercancÃ­a sobre facturas o traslados previos (03)',$tipo_relacion);
+    $tipo_relacion=str_replace('04','SustituciÃ³n de los CFDI previos (04)',$tipo_relacion);
+    $tipo_relacion=str_replace('05','Traslados de mercancias facturados previamente (05)',$tipo_relacion);
+    $tipo_relacion=str_replace('06','Factura generada por los traslados previos (06)',$tipo_relacion);
+    
+    return $tipo_relacion;
+}
 
 
 ?>

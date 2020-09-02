@@ -153,56 +153,7 @@ function mf_nodo_cfdi(array &$datos)
 		// Se verifica la version
 		switch ($__mf_constantes__['__MF_VERSION_CFDI__'])
 		{
-			case '3.2':
-			{
-				// Emisor
-				$emisor = '';
-				if(isset($datos['emisor']))
-				{
-					$emisor .= mf_carga_nodo('emisor', $datos['emisor']);
-				}
 
-				// Receptor
-				$receptor = '';
-				if(isset($datos['receptor']))
-				{
-					$receptor .= mf_carga_nodo('receptor', $datos['receptor']);
-				}
-
-				// Conceptos
-				$conceptos = '';
-				if(isset($datos['conceptos']))
-				{
-					$conceptos .= mf_carga_nodo('conceptos', $datos);
-				}
-
-				// Impuestos
-				$impuestos = '';
-				if(isset($datos['impuestos']))
-				{
-					$impuestos .= mf_carga_nodo('impuestos', $datos['impuestos']);
-				}
-
-				// Se agrega el complemento
-				$complemento = '<cfdi:Complemento>';
-				
-				if(isset($datos['complemento']))
-				{
-					if(isset($datos[$datos['complemento']]))
-					{
-						$complemento .= mf_carga_complemento($datos['complemento'], $datos[$datos['complemento']]);
-					}
-				}
-				$complemento .= '</cfdi:Complemento>';
-
-				// Se sella el XML
-				$sello = mf_busca_alias('factura.sello');
-				$atr = mf_agrega_namespaces() . mf_atributos_nodo($datos['factura'], 'factura') . "$sello='{SELLO}'";
-
-				$comprobante = "<cfdi:Comprobante $atr>$emisor$receptor$conceptos$impuestos$complemento</cfdi:Comprobante>";
-				$xml_a_timbrar = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n$comprobante";
-				break;
-			}
 			case '3.3':
 			{
 				// CfdisRelacionados
@@ -460,7 +411,7 @@ function mf_nodo_cfdi(array &$datos)
                 }
 
                 // Se timbra el XML
-                $res = mf_timbrar_cfdi(rand(1, 10), $datos['PAC']['usuario'], $datos['PAC']['pass'], mf_recupera_global('ruta_tmp'), $datos['retencion']);
+                $res = mf_timbrar_cfdi(rand(1, 10), $datos['PAC']['usuario'], $datos['PAC']['pass'], mf_recupera_global('ruta_tmp'), $datos['url']);
                 $respuesta_sdk = array_merge($respuesta_sdk, $res);
 
                 /*if (isset($res['abortar']) && $res['abortar'] == true)
@@ -498,20 +449,22 @@ function mf_nodo_cfdi(array &$datos)
                     unset($res['abortar']);
 
                     // Se valida si se timbro la factura
-                    if ($res['codigo_mf_numero'] != 0)
+                    if (intval($res['codigo_mf_numero']) != 0)
                     {
                         // Se borra el temporal
                         unlink($xmltmp);
-
+                        
+/*
+//MASH movi a sdk2XX.php funcion mf_genera_cfdi
                         $ultimo_xml_error = file_get_contents(mf_recupera_global('ruta_tmp'));
                         if (preg_match('!\S!u', $ultimo_xml_error)) {
 
                         } else {
                             $ultimo_xml_error = utf8_encode($ultimo_xml_error);
                         }
-
-                        file_put_contents($__mf_constantes__['__MF_SDK_TMP__'] . 'ultimo_error.xml', $ultimo_error);
                         
+                        file_put_contents($__mf_constantes__['__MF_SDK_TMP__'] . 'ultimo_error.xml', $ultimo_error);
+  */                      
                         return $respuesta_sdk;
                     } else {
                         // Se lee el timbre
