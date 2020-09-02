@@ -22,13 +22,13 @@
 	session_start();
 	date_default_timezone_set('America/Mexico_City');
 	
-	include_once("../conexi.php");
+	include_once("../../conexi.php");
 	include_once "sdk2.php";
 	
 	$link = Conectarse();
 	$respuesta = array();
 	
-		function getEmisor($link,$id_emisores ){
+	function getEmisor($link,$id_emisores ){
 		$respuesta = "";
 		$query = "SELECT * FROM emisores 
 		WHERE id_emisores = '$id_emisores'
