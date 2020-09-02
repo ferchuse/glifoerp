@@ -199,7 +199,7 @@ function confirmarCancelacion() {
 				alertify.error(respuesta.respuesta_pac.codigo_mf_texto)
 			}
 			
-			alertify.success("CFDI Cancelado correctamente"); 
+			
 			cargarTabla(filtros);
 			}).fail(function(xhr, error,errnum ){
 			alertify.error("Ocurrio un error" + error);
