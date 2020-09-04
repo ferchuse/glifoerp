@@ -22,6 +22,7 @@ function cambiarMetodoPago(evt) {
 
 $(document).ready(function(){
 	
+	
 	$( ".precio_sin_iva" ).each(function(){
 		console.log("calcula precio unitario");
 		$(this).focus().next().focus();
@@ -410,6 +411,11 @@ $(document).ready(function(){
 		$(this).closest(".row").find(".nombre_unidades").val($nombre_unidad);
 		console.log("$nombre_unidad" + $nombre_unidad);
 	});
+	
+	
+	
+	
+	sumarImportes();
 	
 });
 

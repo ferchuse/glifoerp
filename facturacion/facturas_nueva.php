@@ -615,7 +615,7 @@
 												<label>SUBTOTAL:</label>
 											</div>
 											<div class="col-sm-3">
-												<input required  type="number" step="any" class="form-control" name="subtotal" id="subtotal" value="<?php echo $subtotal;?>">
+												<input required  type="number" step="any" class="form-control" name="subtotal" id="subtotal" >
 											</div>
 										</div>
 										<div class="row">
@@ -631,7 +631,7 @@
 												<label>TRASLADADOS:</label> 
 											</div>
 											<div class="col-sm-3">
-												<input  type="number" step="any" class="form-control" name="total_traslados" id="total_traslados" value="<?php echo $traslados?>">
+												<input  type="number" step="any" class="form-control" name="total_traslados" id="total_traslados" >
 											</div>
 										</div>
 										<div class="row">
@@ -647,7 +647,7 @@
 												<label>TOTAL:</label>
 											</div>
 											<div class="col-sm-3">
-												<input required  type="number"  step="any" class="form-control" name="total_pagos" id="total" value="<?php echo $subtotal + $traslados;?>">
+												<input required  type="number"  step="any" class="form-control" name="total_pagos" id="total" >
 											</div>
 										</div>
 										<hr> 
