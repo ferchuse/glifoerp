@@ -97,7 +97,7 @@
 				</div>
 				
 				<div class="mt-3 row">
-					<table id="tabla_venta" class="col-12 table table-hover table-bordered table-condensed">
+					<table  class="col-12 table table-hover table-bordered table-condensed">
 						
 						<thead class="bg-info">
 							

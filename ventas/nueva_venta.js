@@ -702,7 +702,7 @@ function imprimirTicket(id_registro){
 	});
 }
 function imprimirCotizacion(id_registro){
-	console.log("imprimirTicket()");
+	console.log("imprimirCotizacion()");
 	
 	document.title = "Venta " + id_registro;
 	$.ajax({
