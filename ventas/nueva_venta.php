@@ -179,11 +179,11 @@
 							<label class="venta" for="">Saldo:</label> 
 						</div>
 						<div class="col-sm-2 col-6 h3 venta">
-							<input   id="subtotal" type="number" class="form-control input-lg text-right venta" value="0" >
-							<input   id="descuento" type="number" class="form-control input-lg text-right venta" value="0">
-							<input   id="total" type="number" class="form-control input-lg text-right venta" value="0">
-							<input   id="anticipo" type="number" class="form-control input-lg text-right venta" value="0">
-							<input   id="saldo" type="number" class="form-control input-lg text-right venta" value="0" >
+							<input   id="subtotal" type="number" class="form-control input-lg text-right venta" value="0" step="any" >
+							<input   id="descuento" type="number" class="form-control input-lg text-right venta" value="0" step="any">
+							<input   id="total" type="number" class="form-control input-lg text-right venta" value="0" step="any">
+							<input   id="anticipo" type="number" class="form-control input-lg text-right venta" value="0" step="any">
+							<input   id="saldo" type="number" class="form-control input-lg text-right venta" value="0" step="any">
 						</div>
 						
 						
