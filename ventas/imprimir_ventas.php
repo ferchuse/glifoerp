@@ -21,6 +21,7 @@
 	$consulta_detalle = "SELECT
 	cantidad,
 	descripcion,
+	notas,
 	precio,
 	importe
 	FROM
@@ -119,12 +120,10 @@
 									<th class="text-center">
 										<?php echo number_format($producto["cantidad"]) ?>
 									</th>
-									<th class="text-center">
-										<?php echo $producto["descripcion"] ?>
-										<br> 
-										<?php echo $producto["codigo_productos"] ?>
-										
-									</th>
+									<td class="dsad">
+										<b><?php echo $producto["descripcion"] ?></b> <br>
+										<?php echo nl2br($producto["notas"]) ?>
+									</td>
 									<th class="text-center"><?php echo $producto["precio"] ?></th>
 									<th class="text-center"><?php echo $producto["importe"] ?></th>
 								</tr>
@@ -173,7 +172,7 @@
 				<?php print_r($filas)?>
 			</pre>
 			
-			</div>
-		</body>
-		
-	</html>							
+		</div>
+	</body>
+	
+</html>							

@@ -118,9 +118,6 @@
 									<td class="">
 										<b><?php echo $producto["descripcion"] ?></b> <br>
 										<?php echo nl2br($producto["notas"]) ?>
-										
-										
-										
 									</td>
 									<td class="text-center"><?php echo number_format($producto["precio"]) ?></td>
 									<td class="text-center"><?php echo number_format($producto["importe"]) ?></td>

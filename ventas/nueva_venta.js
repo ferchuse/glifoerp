@@ -235,9 +235,10 @@ function renderProductos(respuesta){
 		</td>
 		
 		<td class="w-25">
-		
 		<input  class="descripcion form-control"  value='${producto['descripcion']}'>
+		<textarea placeholder="Descripción detallada" name="notas" class="notas form-control mt-2">${producto['notas']}</textarea>
 		</td>
+		
 		<td class="text-center venta">
 		<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio']}'>
 		</td>	
@@ -266,45 +267,6 @@ function renderProductos(respuesta){
 		
 		
 		
-		/*
-			
-			<tr class="">
-			<td >
-			<input hidden class="id_productos"  value="${producto['id_productos']}">
-			
-			<input hidden class="precio_mayoreo" value='${producto['precio_mayoreo']}'>
-			<input hidden class="ganancia_porc" value='${producto['ganancia_menudeo_porc']}'>
-			<input hidden class="costo_proveedor" value='${producto['costo_proveedor']}'>
-			<input type="number"  step="any" class="cantidad form-control text-right"  value='${producto['cantidad']}'>
-			</td>
-			
-			<td class="w-25">
-			
-			<input  class="descripcion form-control"  value='${producto['descripcion_productos']}'>
-			</td>
-			<td class="text-center venta">
-			<input type="number"  step="any" class="precio form-control text-right"  value='${producto['precio_menudeo']}'>
-			</td>	
-			<td class="text-center venta">
-			<input type="number" readonly step="any" class="importe form-control text-right">
-			</td>
-			
-			<td class="w-25">	
-			<input class="existencia_anterior form-control" readonly  value='${producto['saldo']}'> 
-			</td>
-			<td class="text-center">
-			<button title="Eliminar Producto" class="btn btn-danger btn_eliminar">
-			<i class="fa fa-trash"></i>
-			</button> 
-			</td>
-			</tr>
-			
-			
-		*/
-		
-		
-		
-		
 	});
 	
 	
@@ -315,7 +277,7 @@ function renderProductos(respuesta){
 	console.log("datos Venta:",  respuesta.ventas)
 	//Imprime datos de la Venta
 	$("#id_vendedores").val(respuesta.ventas[0].ventas_id_vendedores);
-	$("#fecha_movimiento").val(respuesta.ventas[0].fecha_ventas);
+	// $("#fecha_movimiento").val(respuesta.ventas[0].fecha_ventas);
 	$("#span_id_clientes").text(respuesta.ventas[0].id_clientes);
 	$("#id_clientes").val(respuesta.ventas[0].id_clientes);
 	$("#buscar_clientes").val(respuesta.ventas[0].razon_social_clientes);
@@ -589,6 +551,7 @@ function guardarVenta(event){
 				"cantidad": $(item).find(".cantidad").val(),
 				"precio": $(item).find(".precio").val(),
 				"descripcion": $(item).find(".descripcion").val(),
+				"notas": $(item).find(".notas").val(),
 				"importe": $(item).find(".importe").val(),
 				"existencia_anterior": $(item).find(".existencia_anterior").val(),
 				"costo_proveedor": $(item).find(".costo_proveedor").val()
@@ -683,7 +646,7 @@ function sumarImportes(event){
 			articulos+= Math.round(cantidad);
 		}
 		
-		console.log("importe", importe)
+		console.log("importe", importe, indice)
 		fila.find(".importe").val(importe.toFixed(2))
 		
 	});
@@ -715,7 +678,7 @@ function sumarImportes(event){
 function imprimirTicket(id_registro){
 	console.log("imprimirTicket()");
 	
-	document.title = "Venta " + id_registro;
+	document.title = "Venta " + id_registro + $("#id_clientes option:selected").text();
 	$.ajax({
 		url: "imprimir_ventas.php",
 		data:{
