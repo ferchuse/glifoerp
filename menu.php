@@ -82,11 +82,6 @@
 						
 					</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="../clientes">
-						<i class="fas fa-users"></i> Clientes
-					</a>
-				</li>
 				<li class="nav-item ">
 					<a class="nav-link" href="../usuarios/usuarios.php">
 						<i class="fas fa-user"></i> Usuarios
