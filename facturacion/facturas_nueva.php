@@ -515,13 +515,13 @@
 															<textarea required cols="4"  rows="1" value="" placeholder=""  name="descripcion[]" class="form-control conceptos"><?php echo $producto["descripcion"]?></textarea>
 														</div>
 														<div class="col-sm-1 ">
-															<input  type="number" min="0" step=".01"  name="" class="form-control precio_unitario conceptos">
+															<input  type="number" min="0" step=".01"  name="" class="form-control precio_unitario conceptos" value="<?php echo $producto["precio"]?>">
 														</div>
 														<div class="col-sm-1 ">
 															<input   type="number" min="0" step=".01"  class="form-control iva_unitario conceptos">
 														</div>
 														<div class="col-sm-1">
-															<input   type="number" min="0" step=".01" name="precio_unitario[]" class="form-control conceptos precio_sin_iva" value="<?php echo $producto["precio"]?>">
+															<input   type="number" min="0" step=".01" name="precio_unitario[]" class="form-control conceptos precio_sin_iva" >
 														</div>
 														<div class=" col-sm-1">
 															<input required  type="number" min="0" step=".01"  name="importe[]" class="form-control importe conceptos" value="<?php echo $importe;?>">
