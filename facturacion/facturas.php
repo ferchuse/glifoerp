@@ -67,7 +67,7 @@
 				</div>
 			</form>
 			<div class="pull-right">
-				<a class="btn btn-success hidden" href="facturas_nueva.php" hidden>
+				<a class="btn btn-success " href="facturas_nueva.php" >
 					<i class="fa fa-plus" ></i> Nueva Factura
 				</a>	
 				<button class="btn btn-primary exportar">
