@@ -13,7 +13,9 @@
 	fecha_ventas AS fecha,
 	CONCAT('VENTA #', id_ventas, '<br>', lista_conceptos) as concepto,
 	total AS importe,
-	razon_social_clientes
+	razon_social_clientes,
+	estatus_ventas as estatus,
+	1 as orden
 	FROM
 	ventas
 	LEFT JOIN clientes USING(id_clientes)
@@ -32,35 +34,43 @@
 	UNION
 	
 	SELECT
-	id_abonos AS id_transaccion,
-	'ABONO' as tipo,
-	'abonos' as tabla,
-	fecha,
-	concepto,
-	importe,
-	razon_social_clientes
-	FROM
-	abonos
-	LEFT JOIN clientes USING(id_clientes)
-	WHERE id_clientes = '{$_GET["id_clientes"]}'
-	
-	UNION
-	
-	SELECT
 	id_cargos AS id_transaccion,
 	'CARGO' as tipo,
 	'cargos' as tabla,
 	fecha,
 	concepto,
 	importe,
-	razon_social_clientes
+	razon_social_clientes,
+	estatus,
+	1 as orden
 	FROM
 	cargos
 	LEFT JOIN clientes USING(id_clientes)
 	WHERE id_clientes = '{$_GET["id_clientes"]}'
 	
+	
+	UNION
+	
+	SELECT
+	id_abonos AS id_transaccion,
+	'ABONO' as tipo,
+	'abonos' as tabla,
+	fecha,
+	concepto,
+	importe,
+	razon_social_clientes,
+	estatus,
+	3 as orden
+	FROM
+	abonos
+	LEFT JOIN clientes USING(id_clientes)
+	WHERE id_clientes = '{$_GET["id_clientes"]}'
+	
+	
+	
+	
 	ORDER BY
-	fecha 
+	fecha, orden
 	";
 	
 	
@@ -106,7 +116,7 @@
 					<td>
 						<?php
 							switch($transaccion["tabla"]){
-							case "ventas":
+								case "ventas":
 							?>
 							<a target="_blank" href="../ventas/imprimir_ventas.php?id_registro=<?= $transaccion["id_transaccion"] ?>">
 								<?php echo $transaccion["concepto"];?>
@@ -132,19 +142,38 @@
 						
 					</td>
 					
-					<?php if($transaccion["tipo"] == "CARGO"){
-						$cargos+=$transaccion["importe"];
-						$saldo+=$transaccion["importe"];
+					<?php if($transaccion["tipo"] == "CARGO" ){
+						
+						IF($transaccion["estatus"] != "CANCELADA"){
+							$cargos+=$transaccion["importe"];
+							$saldo+=$transaccion["importe"];
+						}
 					?>
-					<td>$<?php echo number_format($transaccion["importe"]);?></td>
+					<td>
+						$<?php echo number_format($transaccion["importe"]);
+							
+							// echo $transaccion["estatus"];
+							
+						?>
+						<?php if($transaccion["estatus"] == 'CANCELADA' ){
+							
+							
+							"<span class='badge badge-danger'>CANCELADA</span>";
+							echo "<span class='badge badge-danger'>CANCELADA</span>";
+						}
+						?>
+						
+					</td>
 					<td>-</td>
 					
 					<?php
 					}
 					else{
-						$abonos+=$transaccion["importe"]; 
-						$saldo-=$transaccion["importe"]; 
 						
+						// Es abono 
+						$abonos+=$transaccion["importe"]; 
+					$saldo-=$transaccion["importe"]; 
+					
 					?>
 					
 					<td>-</td>
@@ -169,13 +198,21 @@
 				<?php
 				}
 			?>
-			<tfoot class="h5 text-white bg-secondary text-right">
-				<tr>
+			<tfoot >
+				<tr class="h5 text-white bg-secondary text-right">
 					<td>TOTALES:</td>
 					<td></td>
 					<td>$<?php echo number_format($cargos);?></td>
 					<td>$<?php echo number_format($abonos);?></td>
 					<td>$<?php echo number_format($saldo);?></td>
+					
+				</tr>
+				<tr class="text-right">
+					<td></td>
+					<td></td>
+					<td>CARGOS</td>
+					<td>ABONOS</td>
+					<td>SALDO</td>
 					
 				</tr>
 			</tfoot>
