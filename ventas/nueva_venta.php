@@ -207,7 +207,12 @@
 		<?php include('../productos/form_productos.php'); ?>
 		<?php include('../clientes/form_clientes.php'); ?>
 		
-		
+		<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<script >
+	$('#id_clientes').select2();
+	
+</script>
 		<script src="../productos/editar_producto.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
 		<script src="../clientes/clientes.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
 		<script src="nueva_venta.js?v=<?= date("d-m-Y-h-i-s")?>"></script>
