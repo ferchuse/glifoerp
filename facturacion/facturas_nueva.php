@@ -480,9 +480,10 @@
 											$traslados = 0;
 											$subtotal = 0;
 											foreach ($venta["productos"] as $i => $producto){
-												
-												$iva = round($producto["precio"] / 1.16, 2); 
-												$importe = $producto["precio"] * $producto["cantidad"];
+												// $precio_unitario
+												$precio_unitario = round($producto["precio"] / 1.16, 2); 
+												$iva = round($precio_unitario * 1.16, 2); 
+												$importe = $precio_unitario * $producto["cantidad"];
 												$subtotal+= $importe;
 												$traslados+= $iva;
 											?>
@@ -521,7 +522,7 @@
 															<input   type="number" min="0" step=".01"  class="form-control iva_unitario conceptos">
 														</div>
 														<div class="col-sm-1">
-															<input   type="number" min="0" step=".01" name="precio_unitario[]" class="form-control conceptos precio_sin_iva" >
+															<input   type="number" min="0" step=".01" name="precio_unitario[]" class="form-control conceptos precio_sin_iva" value="<?php echo $precio_unitario;?>">
 														</div>
 														<div class=" col-sm-1">
 															<input required  type="number" min="0" step=".01"  name="importe[]" class="form-control importe conceptos" value="<?php echo $importe;?>">
