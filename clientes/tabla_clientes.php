@@ -16,7 +16,9 @@
 	FROM
 	clientes
 	LEFT JOIN ( 
-	SELECT id_clientes, SUM( total ) AS suma_ventas FROM ventas GROUP BY id_clientes 
+	SELECT id_clientes, SUM( total ) AS suma_ventas FROM ventas
+	WHERE estatus_ventas <> 'CANCELADA'
+	GROUP BY id_clientes 
 	) AS t_ventas USING ( id_clientes )
 	
 	LEFT JOIN ( 
