@@ -402,40 +402,34 @@
 	
 	
 	//Actualiza Folios
-	if($folio_facturas != ""){
-		$folio_facturas++;
-		$update_folios = "UPDATE emisores
-		LEFT JOIN (
-		SELECT
-		id_emisores,
-		folios_restantes_emisores - 1 AS folios_restantes
-		FROM
-		emisores
-		WHERE
-		id_emisores = '1'
-		) AS tabla_folios_nuevos USING (id_emisores)
-		SET serie_actual_emisores = '$folio_facturas',
-		folios_restantes_emisores = folios_restantes
-		WHERE
-		id_emisores = '$id_emisores'";
-		
-		
-		$result = mysqli_query($link, $update_folios); 
-		
-		if($result){
-			$respuesta["update_folios_estatus"]  = "success";
-			$respuesta["update_folios_mensaje"]  = "Folios Actualizados";
+		//Actualiza Folios
+		if(!isset($_POST["modo_pruebas"])){
+			$folio_facturas++;
+			$update_folios = "UPDATE emisores
+			
+			SET
+			folio_emisores = folio_emisores + 1 ,
+			serie_actual_emisores = serie_actual_emisores + 1 
+			WHERE
+			id_emisores = '$id_emisores'";
+			
+			
+			$result = mysqli_query($link, $update_folios); 
+			
+			if($result){
+				$respuesta["update_folios_estatus"]  = "success";
+				$respuesta["update_folios_mensaje"]  = "Folios Actualizados";
+				
+			}
+			else{
+				$respuesta["update_folios_estatus"]  = "error";
+				$respuesta["update_folios_mensaje"]  = mysqli_error($link);
+				
+			}
+			$respuesta["update_folios"]  = $update_folios;
+			$respuesta["folio_facturas"]  = $folio_facturas;
 			
 		}
-		else{
-			$respuesta["update_folios_estatus"]  = "error";
-			$respuesta["update_folios_mensaje"]  = mysqli_error($link);
-			
-		}
-		$respuesta["update_folios"]  = $update_folios;
-		$respuesta["folio_facturas"]  = $folio_facturas;
-		
-	}
 	
 	
 	
