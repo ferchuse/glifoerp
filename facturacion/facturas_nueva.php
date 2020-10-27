@@ -479,6 +479,21 @@
 										<?php 
 											$traslados = 0;
 											$subtotal = 0;
+											//Si no hay productos crear uno vacio
+											if(empty($venta["productos"] )){
+												
+												$venta["productos"] = 
+												[
+													[
+													"cantidad" => 1, 
+													"descripcion" => "", 
+													"precio" => 0
+													
+													]
+												
+												];
+											}
+											
 											foreach ($venta["productos"] as $i => $producto){
 												// $precio_unitario
 												$precio_unitario = round($producto["precio"] / 1.16, 2); 
