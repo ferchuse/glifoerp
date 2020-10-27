@@ -1,7 +1,7 @@
 <?php
 	//busca un termino en la base de datos Version: 7-dic-2017
 	header('Content-Type: application/json');
-	include("../conexi.php");
+	include("../../conexi.php");
 	$link=Conectarse();
 	
 	$respuesta = array();

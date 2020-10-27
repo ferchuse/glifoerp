@@ -11,8 +11,8 @@
 		<ul class="nav navbar-nav mr-auto">
 			<?php if($_COOKIE["permiso_usuarios"] == "administrador" ){?>
 				<li class="nav-item">
-					<a class="nav-link" href="../inventarios/movimientos.php?tipo_movimiento=ENTRADA">
-						<i class="fas fa-arrow-left"></i> Entradas
+					<a class="nav-link" href="../clientes">
+						<i class="fas fa-users"></i> Clientes
 					</a>
 				</li>
 				<li class="nav-item">
