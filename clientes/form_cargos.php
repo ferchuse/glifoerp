@@ -21,6 +21,15 @@
 								<input required type="text" class="form-control" name="concepto" placeholder="">
 							</div>
 							<div class="form-group">
+								<label >Forma de Pago:</label>
+								<select id="forma_pago" name="forma_pago">
+									<option>Efectivo<option>
+									<option>Transferencia<option>
+									<option>Depósito<option>
+									
+								</select >
+							</div>
+							<div class="form-group">
 								<label for="">Importe:</label>
 								<input required class="form-control" type="number" name="importe" id="importe">
 							</div>

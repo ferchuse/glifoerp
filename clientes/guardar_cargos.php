@@ -13,6 +13,11 @@
 	saldo_restante = '{$_POST["saldo_restante"]}'
 	
 	";
+	
+	if($_POST["tipo"] == "abonos"){
+		$consulta .= ", forma_pago = '{$_POST["forma_pago"]}'"
+	}
+	
 	$result = mysqli_query($link, $consulta);
 	
 	$respuesta["consulta"] = $consulta;
