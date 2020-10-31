@@ -22,10 +22,10 @@
 							</div>
 							<div class="form-group">
 								<label >Forma de Pago:</label>
-								<select id="forma_pago" name="forma_pago">
-									<option>Efectivo<option>
-									<option>Transferencia<option>
-									<option>Depósito<option>
+								<select id="forma_pago" name="forma_pago" class="form-control">
+									<option>Efectivo</option>
+									<option>Transferencia</option>
+									<option>Depósito</option>
 									
 								</select >
 							</div>
