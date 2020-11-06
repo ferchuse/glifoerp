@@ -15,7 +15,7 @@
 	";
 	
 	if($_POST["tipo"] == "abonos"){
-		$consulta .= ", forma_pago = '{$_POST["forma_pago"]}'"
+		$consulta .= ", forma_pago = '{$_POST["forma_pago"]}'" ;
 	}
 	
 	$result = mysqli_query($link, $consulta);
