@@ -93,7 +93,7 @@
 		
 		
 		$consulta = "UPDATE cargos SET 
-		estatus = 'Pendiente'
+		estatus = 'Pendiente',
 		link_pago = '$link_pago'
 		
 		WHERE id_cargos = {$cargo["id_cargos"]}
@@ -108,7 +108,7 @@
 			$respuesta["status"] = "success";
 			$respuesta["mensaje"] = "Guardado";
 			
-			$folio = mysqli_insert_id($link);
+			// $folio = mysqli_insert_id($link);
 			
 		}	
 		else{
