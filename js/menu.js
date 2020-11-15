@@ -1,17 +1,12 @@
 $(document).ready(function(){
+	
+	
+	console.log("ACtivar turnos")
 	$.ajax({
-		"url": "login/get_turno.php", 
+		"url": "../contratos/consultas/activar_cargos.php", 
 		"method": "GET"		
 	}).done(function(respuesta){
-		//console.log(respuesta);
-		if(respuesta.pedir_efectivo){	
-		}else{
-			$("#efectivo_inicial").prop("readonly", true);
-			$("#efectivo_inicial").val(respuesta.efectivo_inicial);
-		}
-		//console.log(respuesta);
-		$("#id_turnos").val(respuesta.ultimo_turno);
-		$("#turno_span").text(respuesta.ultimo_turno);
+		
 		
 	});
 	

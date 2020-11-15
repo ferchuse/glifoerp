@@ -4,10 +4,10 @@ var boton, icono;
 
 function onLoad() {
 	console.log("onLoad");
-	$("#btn_nuevo").click(function nuevoCliente() {
-		console.log("nuevoCliente");
-		$('#form_contratos')[0].reset();
-		$("#modal_contratos").modal("show");
+	$("#btn_nuevo").click(function nuevo() {
+		console.log("nuevo");
+		$('#form_contrato')[0].reset();
+		$("#modal_contrato").modal("show");
 	});
 	
 	
@@ -20,7 +20,7 @@ function onLoad() {
 	$(".buscar").change(buscarFila);
 	
 	
-	$('#form_clientes').submit(guardarCliente);
+	$('#form_contrato').submit(guardarContrato);
 	
 }
 function listarRegistros(event) {
@@ -218,7 +218,7 @@ function editarCliente() {
 }
 
 
-function guardarCliente(event) {
+function guardarContrato(event) {
 	
 	event.preventDefault();
 	
@@ -229,17 +229,17 @@ function guardarCliente(event) {
 	icono.toggleClass("fa-save fa-spinner fa-spin");
 	
 	$.ajax({
-		url: "../clientes/guardar_clientes.php",
+		url: "consultas/guardar_contrato.php",
 		method: "POST",
 		dataType: "JSON",
-		data: $("#form_clientes").serialize()
+		data: $("#form_contrato").serialize()
 		
 		}).done(function (respuesta) {
 		console.log("respuesta", respuesta);
-		if (respuesta.status == "success") {
+		if (respuesta.status["contrato"] == "success") {
 			
 			alertify.success(respuesta.mensaje);
-			$("#modal_clientes").modal("hide");
+			$("#modal_contrato").modal("hide");
 			listarRegistros();
 		}
 		}).fail(function (xht, error, errnum) {

@@ -1,5 +1,5 @@
-<form id="form_contratos" autocomplete="off" class="was-validated">
-	<div id="modal_contratos" class="modal fade" role="dialog">
+<form id="form_contrato" autocomplete="off" class="was-validated">
+	<div id="modal_contrato" class="modal fade" role="dialog">
 		<div class="modal-dialog ">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -16,31 +16,31 @@
 							</div>
 							<div class="form-group">
 								<label for="concepto">Concepto:</label>
-								<input  class="form-control" type="text" name="concepto" id="concepto">
+								<input  class="form-control" type="text" name="concepto" id="concepto" value="Sistema Zitlalli.com ">
 							</div>
 							<div class="form-group">
-								<label for="importe_total">Importe:</label>
-								<input  class="form-control" type="number" step="any " name="importe_total" id="importe_total">
+								<label for="importe">Importe:</label>
+								<input  class="form-control" type="number" step="any " name="importe" id="importe" value="2000">
 							</div>
 							<div class="form-group">
 								<label for="fecha_inicial">Fecha Inicial:</label>
-								<input  class="form-control" type="date"  name="fecha_inicial" id="fecha_inicial">
+								<input  class="form-control" type="date"  name="fecha_inicial" id="fecha_inicial" value="2021-01-17">
 							</div>
 							<div class="form-group">
 								<label for="fecha_final">Fecha Final:</label>
-								<input  class="form-control" type="date"  name="fecha_final" id="fecha_final">
+								<input  class="form-control" type="date"  name="fecha_final" id="fecha_final" value="2021-12-17">
 							</div>
 							<div class="form-group">
 								<label for="periodicidad">Periodicidad:</label>
-								<select class="form-control" name="periodicidad" id="periodicidad">
+								<select class="form-control" name="periodicidad" id="periodicidad" >
 									<option >Semanal</option>
 									<option >Quincenal</option>
-									<option >Mensual</option>
+									<option selected >Mensual</option>
 								</select>
 							</div>
 							<div class="form-group">
 								<label for="telefono">Num de Pagos:</label>
-								<input   class="form-control" type="number" name="telefono" id="telefono">
+								<input   class="form-control" type="number" name="num_pagos" id="num_pagos" value="12">
 							</div>
 						</div>
 					</div>

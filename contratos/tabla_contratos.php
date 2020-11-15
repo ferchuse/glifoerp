@@ -1,10 +1,24 @@
-
 <?php
-	
 	include("../conexi.php");
 	$link = Conectarse();
 	
-	//TODO convertir en funcion
+	$meses = [
+	1 => "ENERO",
+	2 => "FEBRERO",
+	3 => "MARZO",
+	4 => "ABRIL",
+	5 => "MAYO",
+	6=> "JUNIO",
+	7 => "JULIO",
+	8 => "AGOSTO",
+	9 => "SEPTIEMBRE",
+	10 => "OCTUBRE",
+	11 => "NOVIEMBRE",
+	12 => "DICIEMBRE"
+	
+	];
+	
+	
 	$lista_clientes = [];
 	
 	$consulta = "
@@ -14,15 +28,30 @@
 	LEFT JOIN clientes USING(id_clientes)
 	
 	
-	WHERE 1 
 	";
 	
-	if($_GET["id_documento"] != ""){
-		$consulta.=  " AND id_documento = '{$_GET['id_documento']}' ";
+	for($i = 1; $i <= 12 ; $i++){
+		
+		$consulta.="
+		LEFT JOIN (
+		SELECT 
+		id_clientes,
+		importe as importe_$i,
+		estatus as estatus_$i,
+		fecha as fecha_$i
+		
+		FROM cargos
+		WHERE MONTH(fecha) = $i
+		AND YEAR(fecha) = 2021
+		
+		) as t_mes_$i
+		USING (id_clientes)
+		
+		";
+		
 	}
-	if($_GET["estatus"] != ""){
-		$consulta.=  " AND estatus = '{$_GET['estatus']}' ";
-	}
+	
+	
 	
 	
 	$consulta.="
@@ -38,44 +67,90 @@
 		$lista_clientes[] = $fila;
 	}
 ?>
-<pre hidden>
-	<?php echo $consulta; ?>
+<pre >
+	<?php
+		$importe_mes[$i]
+		
+		// echo $consulta; ?>
 </pre>
 
 <table class="table table-hover" id="tabla_registros">
-	<thead class=" text-white">
+	<thead class="">
 		<tr>
 			<th class="text-center"><a class="sort" href="#!" data-columna="razon_social_clientes">Cliente</a> </th>
-			<th class="text-center"><a class="sort" href="#!" data-columna="rfc_clientes">RFC</a> </th>
-		
-			<th class="text-center"><a class="sort" href="#!" data-columna="saldo">Saldo</a> </th>
+			
+			<?php
+				for($i = 1; $i <= 12 ; $i++){
+				?>
+				
+				<th class="text-center">
+					<?php echo $meses[$i] ?>
+				</th>
+				<?php
+				}
+			?>
+			
 			<th class="text-center">Acciones</th>
 		</tr>
 	</thead>
 	<tbody>
 		<?php
-			$total_deuda=0;
-			foreach ($lista_clientes as $i => $cliente) {
-				$total_deuda+=$cliente["saldo"];
+			$importe_mes=[];
+			foreach ($lista_clientes as $i_fila => $cliente) {
+				
 			?>
 			<tr class="text-center">
-				<td><?php echo $cliente["razon_social_clientes"]; ?></td>
-				<td><?php echo $cliente["rfc_clientes"]; ?></td>
-			
-				<td>$<?php echo number_format($cliente["saldo"]); ?></td>
 				<td>
-					<button class="btn btn-success btn_cargos" data-id_registro="<?php echo $cliente["id_clientes"] ?>" data-saldo="<?php echo $cliente["saldo"] ?>">
+					<?php echo $cliente["razon_social_clientes"] ?>
+				</td>
+				
+				
+				
+				<?php
+					for($i = 1; $i <= 12 ; $i++){
+					$importe_mes[$i] += $cliente["importe_$i"];
+					?>
+					<td>
+						$<?php 
+							
+							
+							echo number_format($cliente["importe_$i"])."<br>"; 
+							
+							switch($cliente["estatus_$i"]){
+								
+								case "Pendiente":
+								$badge = "danger";
+								break;
+								case "Inactivo":
+								$badge = "secondary";
+								break;
+								case "Pagado":
+								$badge = "success";
+								break;
+								
+							}
+							
+							echo "<span class='badge badge-$badge'>{$cliente["estatus_$i"]}</span>"; 
+							echo "<br>"; 
+							echo date("d/M", strtotime($cliente["fecha_$i"]))."<br>"; 
+							
+							
+							
+							
+						?>
+						
+						</td>
+						
+						<?php
+					}
+				?>
+				
+				
+				<td>
+				<button class="btn btn-success btn_cargos" data-id_registro="<?php echo $cliente["id_clientes"] ?>" data-saldo="<?php echo $cliente["saldo"] ?>">
 						+ <i class="fa fa-dollar-sign"></i> Cargo
 					</button>
-					<button class="btn btn-danger btn_abonos" data-id_registro="<?php echo $cliente["id_clientes"] ?>" data-saldo="<?php echo $cliente["saldo"] ?>">
-						- <i class="fa fa-dollar-sign"></i> Abono
-					</button>
-					<button class="btn btn-info btn_historial" data-id_registro="<?php echo $cliente["id_clientes"] ?>" data-nombre="<?php echo $cliente["nombre_clientes"] ?>">
-						<i class="fa fa-history"></i> Historial
-					</button>
-					<button class="btn btn-warning btn_editar" data-id_registro="<?php echo $cliente["id_clientes"] ?>">
-						<i class="fa fa-edit"></i> Editar
-					</button>
+					
 				</td>
 				
 			</tr>
@@ -86,11 +161,22 @@
 	<tfoot>
 		<tr class="text-center bg-info text-white h5">
 			
-			<td colspan="3" class="text-right">DEUDA TOTAL:</td>
+			<td  class=""> <?php echo count($lista_clientes); ?> </td>
 			
-			<td>$<?php echo number_format($total_deuda); ?></td>
+			<?php
+				
+				foreach ($importe_mes as $i => $total) {
+					echo "<td>$".number_format($total)."</td>";
+				}
+			?>
+			
+			
+			
 			<td></td>
 			
 		</tr>
 	</tfoot>
 </table>
+
+
+
