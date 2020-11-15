@@ -39,6 +39,7 @@
 		importe as importe_$i,
 		estatus as estatus_$i,
 		fecha as fecha_$i
+		link_pago as link_pago_$i
 		
 		FROM cargos
 		WHERE MONTH(fecha) = $i
@@ -133,6 +134,7 @@
 							echo "<span class='badge badge-$badge'>{$cliente["estatus_$i"]}</span>"; 
 							echo "<br>"; 
 							echo date("d/M", strtotime($cliente["fecha_$i"]))."<br>"; 
+							echo "<a href='{$cliente["link_pago_$i"]}' >Link</a>"; 
 							
 							
 							
