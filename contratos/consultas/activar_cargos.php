@@ -80,7 +80,7 @@
 		$preference->notification_url = "https://glifo.mx/app/webhook_mpago.php";
 		$preference->save();
 		
-		echo "<pre hidden>"; print_r($preference); echo "</pre>";
+		// echo "<pre hidden>"; print_r($preference); echo "</pre>";
 		// $preference->status();
 		$link_pago =  $preference->init_point;
 		
