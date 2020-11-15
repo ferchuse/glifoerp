@@ -38,7 +38,7 @@
 		id_clientes,
 		importe as importe_$i,
 		estatus as estatus_$i,
-		fecha as fecha_$i
+		fecha as fecha_$i,
 		link_pago as link_pago_$i
 		
 		FROM cargos
