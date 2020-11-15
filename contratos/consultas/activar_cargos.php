@@ -92,29 +92,29 @@
 		
 		
 		
-		// $consulta = "UPDATE cargos SET 
-		// estatus = 'Pendiente'
-		// link_pago = '$link_pago'
+		$consulta = "UPDATE cargos SET 
+		estatus = 'Pendiente'
+		link_pago = '$link_pago'
 		
-		// WHERE id_cargos = {$cargo["id_cargos"]}
+		WHERE id_cargos = {$cargo["id_cargos"]}
 		
-		// ";
+		";
 		
-		// $result = mysqli_query($link, $consulta);
+		$result = mysqli_query($link, $consulta);
 		
-		// $respuesta["consulta"] = $consulta;
+		$respuesta["consulta"] = $consulta;
 		
-		// if($result){
-			// $respuesta["status"] = "success";
-			// $respuesta["mensaje"] = "Guardado";
+		if($result){
+			$respuesta["status"] = "success";
+			$respuesta["mensaje"] = "Guardado";
 			
-			// $folio = mysqli_insert_id($link);
+			$folio = mysqli_insert_id($link);
 			
-		// }	
-		// else{
-			// $respuesta["status"] = "error";
-			// $respuesta["mensaje"] = "Error $consulta  ".mysqli_error($link);		
-		// }
+		}	
+		else{
+			$respuesta["status"] = "error";
+			$respuesta["mensaje"] = "Error $consulta  ".mysqli_error($link);		
+		}
 		
 		
 		
