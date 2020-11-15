@@ -75,12 +75,12 @@
 		
 		$preference->statement_descriptor =   $cargo["concepto"];
 		$preference->external_reference = $cargo["id_cargos"];
-		$preference->auto_return = "approved"; 
+		// $preference->auto_return = "approved"; 
 		$preference->items = array($item);
 		$preference->notification_url = "https://glifo.mx/app/webhook_mpago.php";
 		$preference->save();
 		
-		// echo "<pre hidden>"; print_r($preference); echo "</pre>";
+		echo "<pre hidden>"; print_r($preference); echo "</pre>";
 		// $preference->status();
 		$link_pago =  $preference->init_point;
 		
