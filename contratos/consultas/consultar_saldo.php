@@ -38,7 +38,7 @@
 		$respuesta["mensaje"] = "Error $consulta  ".mysqli_error($link);		
 	}
 	
-	
+		$respuesta["saldo_pendiente"] = $saldo_pendiente;
 	
 	echo json_encode($respuesta);
 ?>	
