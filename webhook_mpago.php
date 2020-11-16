@@ -91,11 +91,15 @@
 	
 	
 	echo "<pre >"; print_r($payment); echo "</pre>";
-	// echo "<pre >"; print_r($merchant_order); echo "</pre>";
+	echo "<pre >"; print_r($merchant_order); echo "</pre>";
 	
 	
 	
 	
 	//Enviar email de pago y desbloquear sistema
+	
+	
+	
+	
 	
 ?>
