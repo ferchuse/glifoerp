@@ -43,7 +43,7 @@
 		
 		FROM cargos
 		WHERE MONTH(fecha) = $i
-		AND YEAR(fecha) = 2021
+		AND YEAR(fecha) = '{$_GET["year"]}'
 		
 		) as t_mes_$i
 		USING (id_clientes)
