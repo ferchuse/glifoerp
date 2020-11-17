@@ -22,7 +22,12 @@
 	) AS t_ventas USING ( id_clientes )
 	
 	LEFT JOIN ( 
-	SELECT id_clientes, SUM( importe ) AS suma_cargos FROM cargos GROUP BY id_clientes 
+	SELECT id_clientes, SUM( importe ) AS suma_cargos
+	FROM cargos 
+	WHERE estatus = 'Activo'
+	OR estatus = 'Pendiente'
+	GROUP BY id_clientes 
+	
 	) AS t_cargos USING ( id_clientes )
 	
 	
@@ -101,7 +106,7 @@
 	<tfoot>
 		<tr class="text-center bg-info text-white h5">
 			
-			<td colspan="3" class="text-right">DEUDA TOTAL:</td>
+			<td colspan="2" class="text-right">DEUDA TOTAL:</td>
 			
 			<td>$<?php echo number_format($total_deuda); ?></td>
 			<td></td>

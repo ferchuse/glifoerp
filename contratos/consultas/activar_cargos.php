@@ -15,8 +15,8 @@
 	// $token = "TEST-3710248158721318-103003-8334d320761e1338f9c10925c43c1841-665671200"; //TEST MERCHENT
 	
 	$fecha_actual = date("Y-m-d");
-	$fecha_actual = date("2021-01-17");
-	$fecha_actual = "2021-01-17";
+	// $fecha_actual = date("2021-01-17");
+	// $fecha_actual = "2021-01-17";
 	
 	
 	

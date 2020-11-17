@@ -38,7 +38,12 @@
 				<div class="row col-12 mb-4">
 					<div class="col-12 col-sm-3" >
 						<input class="buscar  form-control float-left" type="search" placeholder="Buscar Cliente">
-						
+					</div>
+					<div class=" col-sm-3" >
+						<select class="form-control" >
+							<option >2020</option>
+							<option >2021</option>
+						</select>
 					</div>
 					<div class="col-sm-7">
 						<form class="form-inline" id="form_filtros">
@@ -59,7 +64,7 @@
 				</div>
 				<div class="text-center table-responsive" id="lista_registros" >
 					
-				</div>
+					</div>
 				
 			</div>
 		</div>

@@ -172,8 +172,8 @@
 						
 						// Es abono 
 						$abonos+=$transaccion["importe"]; 
-					$saldo-=$transaccion["importe"]; 
-					
+						$saldo-=$transaccion["importe"]; 
+						
 					?>
 					
 					<td>-</td>
@@ -192,6 +192,13 @@
 							<i class="fa fa-trash"></i>
 						</button>
 						
+						
+						<?php 
+							
+							echo ($transaccion["estatus"]);
+							
+							
+							?>
 					</td>
 					
 				</tr>
