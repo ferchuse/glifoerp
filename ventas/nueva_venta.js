@@ -678,7 +678,7 @@ function sumarImportes(event){
 function imprimirTicket(id_registro){
 	console.log("imprimirTicket()");
 	
-	document.title = "Venta " + id_registro + $("#id_clientes option:selected").text();
+	document.title = "Venta " + id_registro + " " + $("#id_clientes option:selected").text();
 	$.ajax({
 		url: "imprimir_ventas.php",
 		data:{

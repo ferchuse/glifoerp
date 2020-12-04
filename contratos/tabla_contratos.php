@@ -39,7 +39,7 @@
 		importe as importe_$i,
 		estatus as estatus_$i,
 		fecha as fecha_$i,
-		link_pago as link_pago_$i
+		COALESCE(link_pago , '') as link_pago_$i
 		
 		FROM cargos
 		WHERE MONTH(fecha) = $i
@@ -61,18 +61,22 @@
 	";
 	
 	
+	
 	$result = mysqli_query($link, $consulta) or die("<pre>Error en $consulta" . mysqli_error($link) . "</pre>");
 	
 	while ($fila = mysqli_fetch_assoc($result)) {
 		
-		$lista_clientes[] = $fila;
+		$lista_cargos[] = $fila;
 	}
 ?>
 <pre >
 	<?php
-		$importe_mes[$i]
-		
-		// echo $consulta; ?>
+		$importe_mes[$i];
+		if(!$result){
+			
+			echo mysqli_error($link);
+		}
+	// echo $consulta; ?>
 </pre>
 
 <table class="table table-hover" id="tabla_registros">
@@ -97,59 +101,62 @@
 	<tbody>
 		<?php
 			$importe_mes=[];
-			foreach ($lista_clientes as $i_fila => $cliente) {
+			foreach ($lista_cargos as $i_fila => $cargo) {
 				
 			?>
 			<tr class="text-center">
 				<td>
-					<?php echo $cliente["razon_social_clientes"] ?>
+					<?php echo $cargo["razon_social_clientes"] ?>
 				</td>
 				
 				
 				
 				<?php
 					for($i = 1; $i <= 12 ; $i++){
-					$importe_mes[$i] += $cliente["importe_$i"];
+						$importe_mes[$i] += $cargo["importe_$i"];
+						
+						
 					?>
 					<td>
-						$<?php 
-							
-							
-							echo number_format($cliente["importe_$i"])."<br>"; 
-							
-							switch($cliente["estatus_$i"]){
+						<?php 
+							if($cargo["importe_$i"] > 0){
 								
-								case "Pendiente":
-								$badge = "danger";
-								break;
-								case "Inactivo":
-								$badge = "secondary";
-								break;
-								case "Pagado":
-								$badge = "success";
-								break;
+								echo "$".number_format($cargo["importe_$i"])."<br>"; 
+								
+								switch($cargo["estatus_$i"]){
+									
+									case "Pendiente":
+									$badge = "danger";
+									break;
+									case "Inactivo":
+									$badge = "secondary";
+									break;
+									case "Pagado":
+									$badge = "success";
+									break;
+									
+								}
+								
+								echo "<span class='badge badge-$badge'>{$cargo["estatus_$i"]}</span>"; 
+								echo "<br>"; 
+								echo date("d/M", strtotime($cargo["fecha_$i"]))."<br>"; 
+								
+								echo "<a href='{$cargo["link_pago_$i"]}' >Link</a>"; 
+								
 								
 							}
 							
-							echo "<span class='badge badge-$badge'>{$cliente["estatus_$i"]}</span>"; 
-							echo "<br>"; 
-							echo date("d/M", strtotime($cliente["fecha_$i"]))."<br>"; 
-							echo "<a href='{$cliente["link_pago_$i"]}' >Link</a>"; 
-							
-							
-							
-							
 						?>
 						
-						</td>
-						
-						<?php
+					</td>
+					
+					<?php
 					}
 				?>
 				
 				
 				<td>
-				<button class="btn btn-success btn_cargos" data-id_registro="<?php echo $cliente["id_clientes"] ?>" data-saldo="<?php echo $cliente["saldo"] ?>">
+					<button class="btn btn-success btn_cargos" data-id_registro="<?php echo $cargo["id_clientes"] ?>" data-saldo="<?php echo $cargo["saldo"] ?>">
 						+ <i class="fa fa-dollar-sign"></i> Cargo
 					</button>
 					
