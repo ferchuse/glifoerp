@@ -55,8 +55,8 @@
 									<input placeholder="" required type="number" min="0" step=".01" class="form-control" id="costo_proveedor" name="costo_proveedor" >
 								</div>
 								<div class="form-group">
-									<label for="costo_proveedor">Factor(Piezas Incluidas):</label>
-									<input placeholder="" required type="number" min="1"  class="form-control" id="factor" name="factor" value="1">
+									<label for="costo_proveedor">Piezas:</label>
+									<input placeholder="" required type="number" min="1"  class="form-control" id="factor" name="piezas" value="1">
 								</div>
 								<div class="form-group">
 									<label for="costo_proveedor">Costo Unitario:</label>
@@ -69,12 +69,12 @@
 								</div>
 								<div class="form-group ">
 									<label>Precio de Venta:</label>
-									<input placeholder="PRECIO" required type="number" min="0" step=".01" class="form-control" id="precio_menudeo" name="precio_menudeo">
+									<input placeholder="PRECIO" required type="number" step="any" class="form-control" id="precio_menudeo" name="precio_menudeo">
 								</div>
 								<div class="form-group ">
 									<label for="precio_mayoreo">Precio Mayoreo:</label>
 									
-									<input placeholder="" type="number" min="0.1" step=".01" class="form-control" id="precio_mayoreo" name="precio_mayoreo">
+									<input placeholder="" type="number" step=".01" class="form-control" id="precio_mayoreo" name="precio_mayoreo">
 								</div>
 							</section>
 							<section id="almacen" >

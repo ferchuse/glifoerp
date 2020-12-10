@@ -12,7 +12,7 @@
 	}
 	
 	$consulta_inventario = "SELECT 
-	SUM(costo_proveedor * existencia_productos) AS costo_inventario,
+	SUM(costo_unitario * existencia_productos) AS costo_inventario,
 	SUM(precio_menudeo * existencia_productos) AS precio_venta
 	
 	FROM productos";
@@ -105,12 +105,12 @@
 						</form>
 						
 						<div class="row text-white font-weight-bold  p-2 m-1 border d-none d-sm-flex">
-							<div class="col-sm-4">
+							<div class="col-sm-3">
 								<a class="sort" href="#!" data-columna="descripcion_productos">
 									Descripción
 								</a>
 							</div>
-							<div class="col-sm-2">
+							<div class="col-sm-1">
 								<a class="sort" href="#!" data-columna="existencia_productos">
 									Existencia
 								</a>
@@ -120,7 +120,17 @@
 									Departamento
 								</a>
 							</div>
-							<div class="col-sm-2 " <?php echo $permiso; ?>>
+							<div class="col-sm-1 " >
+								<a class="sort" href="#!" data-columna="costo_proveedor">
+									Costo
+								</a>
+							</div>
+							<div class="col-sm-1 " >
+								<a class="sort" href="#!" data-columna="precio_menudeo">
+									Precio
+								</a>
+							</div>
+							<div class="col-sm-2 d-none" <?php echo $permiso; ?>>
 								<a class="sort" href="#!" data-columna="ubicacion">
 									Ubicación
 								</a>

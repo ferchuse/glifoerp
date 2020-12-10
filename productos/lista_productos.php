@@ -83,21 +83,24 @@
 		
 	?>
 	<div class="row p-2 m-1 border ">
-		<div class="col-8 col-sm-4">
+		<div class="col-8 col-sm-3">
 			<?php echo $producto["descripcion_productos"]?>
 			
 			<a class="btn_editar d-sm-none" data-id_producto="<?php echo $producto["id_productos"]?>">	<?php echo $producto["descripcion_productos"]?></a>
 		</div>
 		
-		<div class="col-4 h4 col-sm-2 text-center">
+		<div class="col-4 h4 col-sm-1 text-center">
 			<span class="badge  badge-<?php echo $badge?>">	<?php echo number_format($producto["existencia_productos"])?></span>
 		</div>
 		
 		<div class="col-sm-2 d-none <?php echo $permiso?>" >
 			<?php echo $producto["nombre_departamentos"]?> 
 		</div>
-		<div class="col-sm-2 d-none <?php echo $permiso?>" >
-			<?php echo $producto["ubicacion"]?> 
+		<div class="col-sm-1 d-none <?php echo $permiso?>" >
+			<?php echo $producto["costo_proveedor"]?> 
+		</div>
+		<div class="col-sm-1 d-none <?php echo $permiso?>" >
+			<?php echo $producto["precio_menudeo"]?> 
 		</div>
 		<div class="col-sm-2 d-none <?php echo $permiso?>">
 			<button class="btn btn-warning btn_editar" data-id_producto="<?php echo $producto["id_productos"]?>">

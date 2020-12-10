@@ -42,6 +42,11 @@
 					</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" href="../compras/index.php">
+						<i class="fas fa-dollar-sign"></i> Compras
+					</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link" href="../cotizaciones/index.php">
 						<i class="fas fa-dollar-sign"></i> Cotizaciones
 					</a>
@@ -74,6 +79,23 @@
 						</a>
 					</div>
 				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-chart-bar"></i> Catálogos
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						
+						<a class="dropdown-item" href="../inventarios/movimientos.php?tipo_movimiento=ENTRADA">
+							<i class="fas fa-arrow-left"></i> Departamentos
+						</a>
+						<a class="dropdown-item" href="../inventarios/movimientos.php?tipo_movimiento=SALIDA">
+							<i class="fas fa-arrow-right"></i> Proveedores
+						</a>
+						<a class="dropdown-item" href="../inventarios/inventarios.php">
+							<i class="fas fa-boxes"></i> Egresos
+						</a> 
+					</div>
+				</li>
 				
 				<li class="nav-item">
 					<a class="nav-link" href="../facturacion/facturas.php">
@@ -82,6 +104,7 @@
 						
 					</a>
 				</li>
+				
 				<li class="nav-item ">
 					<a class="nav-link" href="../usuarios/usuarios.php">
 						<i class="fas fa-user"></i> Usuarios

@@ -76,7 +76,9 @@
 			
 			echo mysqli_error($link);
 		}
-	// echo $consulta; ?>
+	echo $consulta;
+	
+	?>
 </pre>
 
 <table class="table table-hover" id="tabla_registros">
