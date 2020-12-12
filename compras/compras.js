@@ -525,7 +525,7 @@ function guardarProducto(event) {
 	// console.log("formulario: ", formulario)
 	// console.log("formulario: ", $(this).serialize())
 	$.ajax({
-		url: '../productos/guardar.php',
+		url: '../productos/guardar_productos.php',
 		dataType: 'JSON',
 		method: 'POST',
 		data: formulario
