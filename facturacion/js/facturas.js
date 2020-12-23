@@ -30,6 +30,14 @@ function cargarTabla(filtros) {
 
 var filtros = $("#form_filtros").serialize();
 
+function buscarCliente(event) {
+		var value = $(this).val().toLowerCase();
+		$("#lista_facturas tr").filter(function() {
+			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		});
+	}
+	
+
 
 $(document).ready(function() {
 	
@@ -51,12 +59,6 @@ $(document).ready(function() {
 		
 	});
 	
-	function buscarCliente(event) {
-		var value = $(this).val().toLowerCase();
-		$("#lista_facturas tr").filter(function() {
-			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-		});
-	}
 	
 	//--------FILTRO--------
 	
