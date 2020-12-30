@@ -33,7 +33,7 @@
 	}
 	
 	$emisor = getEmisor($link, 1);
-	
+	$respuesta["emisor"] = $emisor;
 	
 	setlocale(LC_ALL,"en_US"); 
 	
@@ -63,7 +63,7 @@
 	$id_emisores = 1;
 	// $rfc_emisores = $_SESSION["rfc_emisores"];
 	// $razon_social_emisores=  $_SESSION["razon_social_emisores"];
-	$razon_social_emisores=  $emisor["rezon_social_emisores"];
+	$razon_social_emisores=  $emisor["razon_social_emisores"];
 	$regimen_emisores=  $emisor["regimen_emisores"];
 	// $regimen_emisores= $_POST["regimen_emisores"];
 	// 612 Personas Físicas con Actividades Empresariales y Profesionales ---621 Incorporación Fiscal

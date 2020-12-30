@@ -294,7 +294,7 @@ function guardarPago(event){
 				if(respuesta.estatus_pdf){
 					alertify.success("Se ha guardado correctamente"); 
 					$("#modal_pago").modal("hide");
-					window.location.reaload();
+					window.location.reload();
 					
 				}
 				else{
