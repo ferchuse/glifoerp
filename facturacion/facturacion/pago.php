@@ -3,7 +3,7 @@
 	error_reporting(0);
 	session_start();
 	date_default_timezone_set('America/Mexico_City');
-	include_once("../conexi.php");
+	include_once("../../conexi.php");
 	require_once 'sdk2.php';
 	
 	
