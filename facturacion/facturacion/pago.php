@@ -24,7 +24,7 @@
 		$folio_facturas = date("dmY_Hi");
 	}
 	
-	$id_emisores = $_COOKIE["id_usuarios"];
+	$id_emisores = $_COOKIE["id_emisores"];
 	$rfc_emisores = $_COOKIE["rfc_emisores"];
 	$razon_social_emisores=  $_COOKIE["razon_social_emisores"];
 	$regimen_emisores= $_COOKIE["regimen_emisores"];
@@ -223,8 +223,7 @@
 				$folio_facturas++;
 				$update_folios = "UPDATE emisores
 				
-				SET serie_actual_emisores = '$folio_facturas',
-				folios_restantes_emisores = folios_restantes_emisores - 1
+				SET serie_actual_emisores = '$folio_facturas'
 				WHERE
 				id_emisores = '$id_emisores'";
 				
