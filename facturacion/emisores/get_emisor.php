@@ -5,7 +5,7 @@
 	$link = Conectarse();
 	$respuesta = [];
 	
-	$consulta = "SELECT * FROM emisores WHERE id_emisores = '{$_GET["id_emisores"]}'";
+	$consulta = "SELECT * FROM emisores WHERE id_emisores = '{$_COOKIE["id_emisores"]}'";
 	$respuesta["consulta"] = $consulta;
 	
 	$result = mysqli_query($link,$consulta) ;
