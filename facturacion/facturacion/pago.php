@@ -13,9 +13,9 @@
 	$conceptos = array();
 	
 	$id_facturas = $_POST["id_facturas"];
-	$rfc = $_SESSION["rfc_emisores"];
-	$pass_timbrado = $_SESSION["password"];
-	$clave_privada = $_SESSION["password"];
+	$rfc = $_COOKIE["rfc_emisores"];
+	$pass_timbrado = $_COOKIE["password"];
+	$clave_privada = $_COOKIE["password"];
 	$serie = $_POST["serie"];
 	$folio = $_POST["folio"];
 	$folio_facturas = $serie.$folio ;
@@ -24,10 +24,10 @@
 		$folio_facturas = date("dmY_Hi");
 	}
 	
-	$id_emisores = $_SESSION["id_usuarios"];
-	$rfc_emisores = $_SESSION["rfc_emisores"];
-	$razon_social_emisores=  $_SESSION["razon_social_emisores"];
-	$regimen_emisores= $_SESSION["regimen_emisores"];
+	$id_emisores = $_COOKIE["id_usuarios"];
+	$rfc_emisores = $_COOKIE["rfc_emisores"];
+	$razon_social_emisores=  $_COOKIE["razon_social_emisores"];
+	$regimen_emisores= $_COOKIE["regimen_emisores"];
 	
 	
 	//datos de la factura anterior
