@@ -217,20 +217,32 @@ function confirmarCancelacion() {
 	});
 	
 }
-
 function mostrarModalPago(){
-	var serie_actual = $("#serie_actual").val();
-	var serie = serie_actual[0];
-	var folio = serie_actual.substring(1, serie_actual.length );
 	
+	getEmisor().done(function(respuesta){
+		console.log("respuesta", respuesta);
+		if(!respuesta.datos.serie_pago){
+			$("#serie").val(respuesta.datos.serie_emisores); 
+			$("#folio").val(respuesta.datos.folio_emisores);
+		}
+		else{
+			
+			$("#serie").val(respuesta.datos.serie_pago); 
+			$("#folio").val(respuesta.datos.folio_pago);
+			
+			console.log("No hay serie de pago usar serie de facturas")
+			
+		}
+		
+		
+	})
 	
 	$("#modal_pago").modal("show");
 	$("#id_facturas").val($(this).data("id_facturas"));
 	$("#saldo_anterior").val($(this).data("saldo_actual"));
 	$("#abono").val($(this).data("saldo_actual"));
 	$("#saldo_restante").val("0");
-	$("#serie").val(serie); 
-	$("#folio").val(folio);
+	
 	
 	
 	$("#mensaje_error").addClass('hidden');	
@@ -238,6 +250,7 @@ function mostrarModalPago(){
 	$("#mensaje_pdf").addClass('alert-success hidden');	
 	
 }
+
 
 
 function guardarPago(event){

@@ -1,3 +1,15 @@
+ function getEmisor(){
+	console.log("getEmisor");
+	return $.ajax({
+		url: 'emisores/get_emisor.php',
+		data: {
+			"id_emisores" : $("#id_emisores").val()
+		}
+	});
+}
+
+ 
+ 
  // function dameFolios(){
 		// console.log("dameFolios");
 		// return $.ajax({
