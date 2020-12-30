@@ -55,7 +55,7 @@
 	$pdf_file = $dompdf->output();
 	
 	$pdf_path = "timbrados/".$datos_factura["rfc_emisores"]."_".$datos_factura["folio_facturas"].".pdf";
-	$respuesta["pdf_file"] = $pdf_file ;
+	// $respuesta["pdf_file"] = $pdf_file ;
 	$respuesta["pdf_path"] = $pdf_path ;
 	$respuesta["url_pdf"] = "timbrados/".$datos_factura["rfc_emisores"]."_".$datos_factura["folio_facturas"].".pdf";
 	$respuesta["url_xml"] = "timbrados/".$datos_factura["rfc_emisores"]."_".$datos_factura["folio_facturas"].".xml";
@@ -95,6 +95,7 @@
 		return $result;
 	}		
 	
+	// echo print_r($respuesta);
 	echo json_encode($respuesta);
 	
 ?>
