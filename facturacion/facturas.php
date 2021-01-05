@@ -37,6 +37,7 @@
 						<option <?php echo is_selected("2018", $year);?> value="2018">2018</option>
 						<option <?php echo is_selected("2019", $year);?> value="2019">2019</option>
 						<option <?php echo is_selected("2020", $year);?> value="2020">2020</option>
+						<option <?php echo is_selected("2021", $year);?> value="2021">2021</option>
 					</select>
 				</div>
 				<div class="form-group">
