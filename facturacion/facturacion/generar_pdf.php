@@ -24,7 +24,6 @@
 		while($fila = mysqli_fetch_assoc($result)){
 			$datos_factura = $fila;
 		}
-		
 	}
 	else{
 		$respuesta["consulta_facturas_estatus"] = "error";
