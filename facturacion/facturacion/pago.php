@@ -12,10 +12,20 @@
 	$datos = array();
 	$conceptos = array();
 	
+	$q_emisor = "SELECT * FROM emisores WHERE id_emisores = 1";
+	
+	$result_emisor = mysqli_query($link,$q_emisor );
+	
+	if($result_emisor){
+		while($fila = mysqli_fetch_assoc($result_emisor)){
+			$emisor = $fila;		
+		}		
+	}
+	
 	$id_facturas = $_POST["id_facturas"];
-	$rfc = $_COOKIE["rfc_emisores"];
-	$pass_timbrado = $_COOKIE["password"];
-	$clave_privada = $_COOKIE["password"];
+	$rfc = $emisor["rfc_emisores"];
+	$pass_timbrado = $emisor["password"];
+	$clave_privada = $emisor["password"];
 	$serie = $_POST["serie"];
 	$folio = $_POST["folio"];
 	$folio_facturas = $serie.$folio ;
@@ -24,10 +34,10 @@
 		$folio_facturas = date("dmY_Hi");
 	}
 	
-	$id_emisores = $_COOKIE["id_emisores"];
-	$rfc_emisores = $_COOKIE["rfc_emisores"];
-	$razon_social_emisores=  $_COOKIE["razon_social_emisores"];
-	$regimen_emisores= $_COOKIE["regimen_emisores"];
+	$id_emisores = 1;
+	$rfc_emisores = $emisor["rfc_emisores"];
+	$razon_social_emisores=  $emisor["razon_social_emisores"];
+	$regimen_emisores= $emisor["regimen_emisores"];
 	
 	
 	//datos de la factura anterior
