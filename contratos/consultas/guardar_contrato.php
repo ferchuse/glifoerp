@@ -82,6 +82,7 @@
 		fecha = '{$fecha_cargo}',
 		concepto = '{$concepto}',
 		importe = '{$_POST["importe"]}',
+		tipo_cargo = 'Recurrente',
 		estatus = 'Inactivo'
 		
 		";

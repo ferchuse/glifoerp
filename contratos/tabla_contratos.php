@@ -44,7 +44,7 @@
 		FROM cargos
 		WHERE MONTH(fecha) = $i
 		AND YEAR(fecha) = '{$_GET["year"]}'
-		
+		AND tipo_cargo = 'Recurrente'
 		) as t_mes_$i
 		USING (id_clientes)
 		
@@ -76,7 +76,7 @@
 			
 			echo mysqli_error($link);
 		}
-	echo $consulta;
+	// echo $consulta;
 	
 	?>
 </pre>
@@ -172,7 +172,7 @@
 	<tfoot>
 		<tr class="text-center bg-info text-white h5">
 			
-			<td  class=""> <?php echo count($lista_clientes); ?> </td>
+			<td  class=""> <?php echo count($lista_cargos); ?> Contratos</td>
 			
 			<?php
 				
