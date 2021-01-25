@@ -76,8 +76,8 @@
 			
 			echo mysqli_error($link);
 		}
-	// echo $consulta;
-	
+		// echo $consulta;
+		
 	?>
 </pre>
 
@@ -108,7 +108,8 @@
 			?>
 			<tr class="text-center">
 				<td>
-					<?php echo $cargo["razon_social_clientes"] ?>
+					<?php echo $cargo["razon_social_clientes"] ?><br>
+					<small > Contrato <?php echo $cargo["id_contratos"] ?></small >
 				</td>
 				
 				
