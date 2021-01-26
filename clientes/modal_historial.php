@@ -48,6 +48,8 @@
 	LEFT JOIN clientes USING(id_clientes)
 	WHERE id_clientes = '{$_GET["id_clientes"]}'
 	AND estatus <> 'Inactivo'
+	AND estatus <> 'Cancelado'
+	
 	
 	
 	UNION
