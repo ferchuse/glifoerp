@@ -24,8 +24,8 @@
 	LEFT JOIN ( 
 	SELECT id_clientes, SUM( importe ) AS suma_cargos
 	FROM cargos 
-	WHERE estatus = 'Activo'
-	OR estatus = 'Pendiente'
+	WHERE estatus <> 'Inactivo'
+	AND estatus <> 'Cancelado'
 	GROUP BY id_clientes 
 	
 	) AS t_cargos USING ( id_clientes )
