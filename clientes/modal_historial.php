@@ -47,6 +47,7 @@
 	cargos
 	LEFT JOIN clientes USING(id_clientes)
 	WHERE id_clientes = '{$_GET["id_clientes"]}'
+	AND estatus <> 'Inactivo'
 	
 	
 	UNION
@@ -91,7 +92,8 @@
 	if(count($lista_transacciones) > 0){
 	?>
 	
-	<h4 class="d-none d-print-block">Estado de Cuenta <?=$lista_transacciones[0]["razon_social_clientes"] ?>
+	<h4 class="d-none d-print-block">
+		Estado de Cuenta <?=$lista_transacciones[0]["razon_social_clientes"] ?>
 	</h4>
 	<div class="table-responsive">
 		<table class="table table-hover ">
@@ -101,6 +103,7 @@
 				<th class="text-center">Cargo</th>
 				<th class="text-center">Abono</th>
 				<th class="text-center">Saldo</th>
+				<th class="text-center">Estatus</th>
 				<th class="text-center d-print-none">Acciones</th>
 			</tr>
 			<?php 
@@ -184,6 +187,7 @@
 					?>
 					
 					<td>$<?php echo number_format($saldo);?></td>
+					<td><?php echo ($transaccion["estatus"]);?></td>
 					<td class="d-print-none">
 						<button class="btn btn-danger btn_borrar_transaccion" 
 						data-id_registro="<?php echo $transaccion["id_transaccion"]?>"
@@ -193,12 +197,7 @@
 						</button>
 						
 						
-						<?php 
-							
-							echo ($transaccion["estatus"]);
-							
-							
-							?>
+						
 					</td>
 					
 				</tr>

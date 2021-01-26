@@ -126,13 +126,9 @@
 			<input type="hidden" id="cookie_nombre_usuarios" value="<?php echo $_COOKIE["nombre_usuarios"]?>">
 			<input type="hidden" id="cookie_permiso_usuarios" value="<?php echo $_COOKIE["permiso_usuarios"]?>">
 			
+		
 			<li class="nav-item">
 				<a class="nav-link" href="../emisores/index.php">
-					<i class="fas fa-cog"></i>	Configuración
-				</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#1">
 					<i class="fas fa-user"></i>	<?php echo $_COOKIE["nombre_usuarios"]?>	
 				</a>
 			</li>
