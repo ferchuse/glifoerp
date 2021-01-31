@@ -35,7 +35,7 @@
 		$consulta.="
 		LEFT JOIN (
 		SELECT 
-		id_clientes,
+		id_contratos,
 		importe as importe_$i,
 		estatus as estatus_$i,
 		fecha as fecha_$i,
@@ -46,7 +46,7 @@
 		AND YEAR(fecha) = '{$_GET["year"]}'
 		AND tipo_cargo = 'Recurrente'
 		) as t_mes_$i
-		USING (id_clientes)
+		USING (id_contratos)
 		
 		";
 		
