@@ -18,6 +18,7 @@
 	id_vendedores = '{$_POST['id_vendedores']}',
 	id_clientes = '{$_POST['id_clientes']}',
 	descuento_total = '{$_POST['descuento_total']}',
+	subtotal = '{$_POST['subtotal']}',
 	total = '{$_POST['total']}',
 	anticipo = '{$_POST['anticipo']}',
 	saldo = '{$_POST['saldo']}',
