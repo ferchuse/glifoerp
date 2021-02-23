@@ -574,6 +574,7 @@ function guardarVenta(event){
 				articulos: $('#articulos').val(),
 				id_vendedores: $('#id_vendedores').val(),
 				id_clientes: $('#id_clientes').val(),
+				descuento_total: $("#descuento").val(),
 				total: $("#total").val(),
 				anticipo: $("#anticipo").val(),
 				saldo: $("#saldo").val(),

@@ -146,11 +146,15 @@
 					
 					
 					<div class="col-6  h3 text-right ">
+						<?php echo $filas[0]["descuento_total"] > 0 ? "Subtotal: " : ""?><br>
+						<?php echo $filas[0]["descuento_total"] > 0 ? "Descuento: " : ""?><br>
 						Total:<br>
 						Anticipo:<br>
 						Saldo:
 					</div>
 					<div class="col-2 col-sm-2 h3 text-right">
+						<?php echo $filas[0]["descuento_total"] > 0 ? number_format($filas[0]["subtotal"],2) : ""?><br>
+						<?php echo $filas[0]["descuento_total"] > 0 ? number_format($filas[0]["descuento_total"],2) : ""?><br>
 						<?php echo number_format($filas[0]["total"],2)?><br>
 						<?php echo number_format($filas[0]["anticipo"],2)?><br>
 						<?php echo number_format($filas[0]["saldo"],2)?>
@@ -165,13 +169,13 @@
 				<div class="text-center col-4 fixed-bottom">
 					<button class="btn btn-info btn-block d-print-none" type="button" onclick="window.print()">
 						<i class="fas fa-print"> </i> Imprimir
-					</button>
-				</div>
-			</div>
-			<pre hidden>
-				<?php print_r($filas)?>
-			</pre>
-			
+						</button>
+						</div>
+					</div>
+					<pre hidden>
+						<?php print_r($filas)?>
+					</pre>
+					
 		</div>
 	</body>
 	
