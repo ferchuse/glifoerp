@@ -36,6 +36,7 @@
 		LEFT JOIN (
 		SELECT 
 		id_contratos,
+		id_cargos,
 		importe as importe_$i,
 		estatus as estatus_$i,
 		fecha as fecha_$i,
@@ -130,21 +131,24 @@
 									
 									case "Pendiente":
 									$badge = "danger";
+									$checkbox = "";
 									break;
 									case "Inactivo":
 									$badge = "secondary";
+									$checkbox = "";
 									break;
 									case "Pagado":
 									$badge = "success";
+									$checkbox = "<input type='checkbox' data-id_registro='{$cargo["id_cargos"]}'>";
 									break;
 									
 								}
 								
-								echo "<span class='badge badge-$badge'>{$cargo["estatus_$i"]}</span>"; 
+								echo $checkbox."<span class='badge badge-$badge'>{$cargo["estatus_$i"]}</span>"; 
 								echo "<br>"; 
 								echo date("d/M", strtotime($cargo["fecha_$i"]))."<br>"; 
 								
-								echo "<a href='{$cargo["link_pago_$i"]}' >Link</a>"; 
+								echo "<a href='{$cargo["link_pago_$i"]}' >#{$cargo["id_cargos"]}</a>"; 
 								
 								
 							}
