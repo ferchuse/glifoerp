@@ -36,7 +36,7 @@
 		LEFT JOIN (
 		SELECT 
 		id_contratos,
-		id_cargos,
+		id_cargos AS id_cargos_$i,
 		importe as importe_$i,
 		estatus as estatus_$i,
 		fecha as fecha_$i,
@@ -148,7 +148,7 @@
 								echo "<br>"; 
 								echo date("d/M", strtotime($cargo["fecha_$i"]))."<br>"; 
 								
-								echo "<a href='{$cargo["link_pago_$i"]}' >#{$cargo["id_cargos"]}</a>"; 
+								echo "<a href='{$cargo["link_pago_$i"]}' >#{$cargo["id_cargos_$i"]}</a>"; 
 								
 								
 							}
