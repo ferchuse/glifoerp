@@ -78,6 +78,7 @@
 		$concepto = $_POST["concepto"] ." " .$meses[$i]. " ". date("Y", strtotime("+$i MONTH", strtotime($_POST["fecha_inicial"]))); 
 		
 		$consulta = "INSERT INTO cargos SET 
+		id_contratos = '$folio',
 		id_clientes = '{$_POST["id_clientes"]}',
 		fecha = '{$fecha_cargo}',
 		concepto = '{$concepto}',
