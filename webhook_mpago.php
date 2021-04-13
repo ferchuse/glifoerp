@@ -78,6 +78,8 @@
 	// print_r("Not paid yet. Do not release your item.");
 	// }
 	
+	// Si el pago esta aprovado actualizar sistema
+	
 	if ($payment->status == 'approved'){
 		$external_reference =$payment->external_reference;
 		
@@ -86,12 +88,46 @@
 		
 		$result_update = mysqli_query($link, $update);
 		
-		echo "result".$result_update;
-	}
+		
+		//Consulta abonos
+		
+		$consulta_cargo = "SELECT * FROM cargos WHERE id_cargos = '{$external_reference}'";
+		
+		$result_cargo = mysqli_query($link, $consulta_cargo);
+		
+		while($fila = mysqli_fetch_assoc($result_cargo)){
+			
+			$cargo = $fila;
+		}
+		
+		
+		if($cargo["estatus"] != "Pagado"){
+			
+			$insert_abono = "INSERT INTO abonos SET 
+			id_clientes = '{$cargo["id_clientes"]}',
+			fecha = CURDATE(),
+			importe = '{$cargo["importe"]}',
+			concepto = '{$cargo["concepto"]}',
+			referencia = '$external_reference'
+			"; 
+			
+			
+			$result_abono = mysqli_query($link, $insert_abono);
+			
+			
+			
+			echo "result_abono".$result_abono;
+		}
+		//Insertar Abono
+		
+		
+	} 
 	
 	
-	echo "<pre >"; print_r($payment); echo "</pre>";
-	echo "<pre >"; print_r($merchant_order); echo "</pre>";
+	// echo "<pre >"; print_r($payment); echo "</pre>";
+	// echo "<pre >"; print_r($merchant_order); echo "</pre>";
+	
+	
 	
 	
 	

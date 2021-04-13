@@ -37,7 +37,7 @@
 	
 	if(isset($_GET['mostrar_pruebas'])){
 		$query.=" AND  timbrado = '0' ";
-	}else{
+		}else{
 		$query.=" AND  timbrado = '1' ";
 	}
 	
@@ -81,13 +81,18 @@
 		<td class="text-center"><?php echo $razon_social_clientes;?></td>
 		<td class="text-center"><?php echo number_format($subtotal,2); ?></td>
 		<td class="text-center"><?php echo number_format($iva,2); ?></td>
-		<<td class="text-center"><?php echo number_format($total,2); ?></td>
+		<td class="text-center"><?php echo number_format($total,2); ?></td>
+		<td class="text-center">$<?php echo number_format($row["saldo_actual"],2);?></td>
 		<td class="text-center"><?php echo $cancelada == '1' ? $span_cancelado : $span_activo; ?></td>
 		<td class="text-center"><?php echo $timbrado == '1' ? $span_timbrado : $span_prueba; ?></td>
 		<td class="text-center hidden"><?php echo $cobrado == '1' ? $span_cobrado : $span_pendiente; ?></td>
 		<td class="text-center hidden-print"> 
 			<div class="btn-group">
+			<a class="btn btn-default btn_vista <?php echo $cancelada == '1' ? "hidden" : ''; ?>" target="_blank" title="Vista Previa"  href="facturacion/vista_previa.php?id_facturas=<?= $id_facturas;?>">
+						<i class="fa fa-eye" ></i>
+					</a>
 				<?php if($timbrado == 0){?>
+					
 					<button class="btn btn-danger btn_eliminar <?php echo $cancelada == '1' ? "hidden" : ''; ?>" type="button" title="Eliminar Factura" data-folio_facturas="<?php echo $folio_facturas; ?>" data-id_facturas="<?php echo $id_facturas; ?>">
 						<i class="fa fa-trash" ></i>
 					</button>

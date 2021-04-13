@@ -96,9 +96,9 @@
 											<th>Subtotal</th>
 											<th>IVA</th>
 											<th>Total</th>
+											<th>Saldo</th>
 											<th class="hidden-print">Estatus SAT</th>
 											<th class="hidden-print">Timbrado </th>
-											<th class="hidden-print">Cobrado </th>
 											<th class="hidden-print">Acciones</th>
 										</tr>
 									</thead>
