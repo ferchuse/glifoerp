@@ -86,7 +86,7 @@
 			<?php 
 				if($row["saldo_actual"] > 0){
 					
-					echo "<b><span class='text-danger' >$" number_format($row["saldo_actual"],2)."</span ></b>";
+					echo "<b><span class='text-danger' >$". number_format($row["saldo_actual"],2)."</span ></b>";
 				}
 				
 			?>
