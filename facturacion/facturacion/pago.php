@@ -234,7 +234,7 @@
 				$update_folios = "UPDATE emisores
 				
 				SET 
-					folio_emisores = folio_emisores + 1 
+					folio_pago = folio_pago + 1 
 				
 				WHERE
 				id_emisores = '$id_emisores'";
