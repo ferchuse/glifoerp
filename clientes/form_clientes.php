@@ -20,7 +20,7 @@
 							</div>
 							<div class="form-group">
 								<label for="rfc_clientes">RFC:</label>
-								<input  class="form-control" type="text" name="rfc_clientes" id="rfc_clientes">
+								<input  class="form-control" type="text" name="rfc_clientes" id="rfc_clientes" value="XAXX010101000">
 							</div>
 							
 							<div class="form-group">

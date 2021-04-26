@@ -73,7 +73,7 @@
 		</div>
 		
 		<?php include('../scripts.php'); ?>
-		<?php include('form_cargos.php'); ?>
+		<?php include('form_abonos.php'); ?>
 		<?php include('form_contratos.php'); ?>
 		<script src="contratos.js"></script>
 		<script src="cargos.js"></script>

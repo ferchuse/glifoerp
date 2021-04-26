@@ -10,10 +10,13 @@ function onLoad() {
 		$("#modal_contrato").modal("show");
 	});
 	
+	$("#lista_registros").on("click", ".badge-danger", mostrarAbono);
 	
 	$("#form_filtros").submit(listarRegistros);
 	
 	$("#form_filtros").submit();
+	
+	$("#form_abonos").submit(guardarAbono);
 	
 	
 	$(".buscar").keyup(buscarFila);
@@ -44,7 +47,7 @@ function alCargar(respuesta) {
 	
 	$('.buscar').prop("disabled", false);
 	
-	$('.btn_editar').click(editarCliente);
+	// $('.btn_editar').click(editarCliente);
 	$('.btn_historial').click(cargarHistorial);
 	$('.sort').click(ordenarTabla);
 	
@@ -74,6 +77,17 @@ function alCargar(respuesta) {
 	icono.toggleClass("fa-search fa-spinner fa-spin");
 	
 }
+
+
+function mostrarAbono(event) {
+	console.log("mostrarAbono()")
+	$("#id_cargos").val($(this).data("id_cargos"))
+	$("#abono_concepto").val($(this).data("concepto"))
+	$("#abono_importe").val($(this).data("importe"))
+	$("#abono_id_clientes").val($(this).data("id_clientes"))
+	$("#modal_abonos").modal("show")
+}	
+
 
 function ordenarTabla() {
 	$(this).toggleClass("asc desc");
@@ -175,42 +189,34 @@ function borrarTransaccion() {
 	
 	
 }
-function editarCliente() {
-	
-	let boton = $(this);
+
+function guardarAbono(event) {
+	event.preventDefault();
+	let boton = $(this).find(":submit");
 	let icono = boton.find(".fas");
-	let id_clientes = boton.data("id_registro");
 	
 	boton.prop("disabled", true);
-	icono.toggleClass("fa-edit fa-spinner fa-spin");
+	icono.toggleClass("fa-save fa-spinner fa-spin");
 	
 	$.ajax({
-		url: "../funciones/fila_select.php",
-		
+		url: "consultas/guardar_abono.php",
 		dataType: "JSON",
-		data: {
-			tabla: "clientes",
-			id_campo: "id_clientes",
-			id_valor: id_clientes
-			
-		}
+		method: "POST",
+		data: $("#form_abonos").serialize()
 		
 		}).done(function (respuesta) {
 		console.log("respuesta", respuesta);
-		if (respuesta.encontrado == 1) {
-			$.each(respuesta.data, function (name, value) {
-				$("#form_clientes #" + name).val(value);
-			});
+		if (respuesta["status"]["abono"] == "success") {
 			
-			$("#modal_clientes").modal("show");
-			
+			$("#modal_abonos").modal("hide");
+			$("#form_filtros").submit();
 		}
 		}).fail(function (xht, error, errnum) {
 		
 		alertify.error("Error", errnum);
 		}).always(function () {
 		boton.prop("disabled", false);
-		icono.toggleClass("fa-edit fa-spinner fa-spin");
+		icono.toggleClass("fa-save fa-spinner fa-spin");
 		
 	});
 	

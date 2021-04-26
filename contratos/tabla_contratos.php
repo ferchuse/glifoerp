@@ -36,8 +36,10 @@
 		LEFT JOIN (
 		SELECT 
 		id_contratos,
+		id_clientes,
 		id_cargos AS id_cargos_$i,
 		importe as importe_$i,
+		concepto as concepto_$i,
 		estatus as estatus_$i,
 		fecha as fecha_$i,
 		COALESCE(link_pago , '') as link_pago_$i
@@ -139,12 +141,12 @@
 									break;
 									case "Pagado":
 									$badge = "success";
-									$checkbox = "<input type='checkbox' data-id_registro='{$cargo["id_cargos"]}'>";
+									$checkbox = "<input type='checkbox' data-id_registro='{$cargo["id_cargos_$i"]}'>";
 									break;
 									
 								}
 								
-								echo $checkbox."<span class='badge badge-$badge'>{$cargo["estatus_$i"]}</span>"; 
+								echo $checkbox."<span data-id_clientes='{$cargo["id_clientes"]}' data-id_cargos='{$cargo["id_cargos_$i"]}' data-concepto='{$cargo["concepto_$i"]}' data-importe='{$cargo["importe_$i"]}' class='badge badge-$badge'>{$cargo["estatus_$i"]}</span>"; 
 								echo "<br>"; 
 								echo date("d/M", strtotime($cargo["fecha_$i"]))."<br>"; 
 								
