@@ -7,6 +7,7 @@ function onLoad(){
 	$('#form_remision').submit(guardarRemision);
 	$('.estatus_ventas').change(cambiarEstatus);
 	$('.convertir_a_salida').click(convertirASalida);
+	$("#lista_registros").on("click", '.btn_ticket' , imprimirTicket);
 	
 	listarRegistros();
 	
@@ -25,7 +26,36 @@ function nuevaRemisión(event){
 	
 }
 
-
+function imprimirTicket(){
+	
+	console.log("imprimirTicket()");
+	
+	var boton = $(this).prop("disabled",true);
+	var icono = boton.find(".fa");
+	var id_ventas = $(this).data("id_registro");
+	
+	icono.toggleClass("fa-ticket-alt fa-spinner fa-spin");
+	
+	$.ajax({
+		url: "imprimir_ticket.php" ,
+		data:{
+			"id_registro" : id_ventas
+		}
+		}).done(function (respuesta){
+		
+		
+		printService.submit({
+			'type': 'LABEL',
+			'raw_content': respuesta
+		});
+		}).always(function(){
+		
+		boton.prop("disabled", false);
+		icono.toggleClass("fa-ticket-alt fa-spinner fa-spin");
+		
+	});
+	
+}
 
 
 function convertirASalida(event){

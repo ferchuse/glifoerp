@@ -125,11 +125,9 @@
 					<i class="fas fa-edit" ></i>  
 				</a>
 				
-				<button class="btn btn-sm btn-secondary btn_egresos" type="button" 
-				data-id_registro="<?php echo $fila["id_ventas"]?>"
-			
-				>
-					 - <i class="fas fa-dollar-sign" ></i> 
+				<button class="btn btn-sm btn-default btn_ticket" type="button" 
+				data-id_registro="<?php echo $fila["id_ventas"]?>" >
+					 <i class="fas fa-ticket-alt" ></i> 
 				</button>
 				<button class="btn btn-sm btn-danger btn_borrar" type="button" 
 				data-id_registro="<?php echo $fila["id_ventas"]?>"
@@ -154,7 +152,7 @@
 			<td class="text-right"><b>$ <?= number_format($total,2);?></b></td>
 			<td class="text-right"><b>$ <?= number_format($total_egresos,2);?></b></td>
 			<td class="text-right"><b>$ <?= number_format($total_ganancia,2);?></b></td>
-			<td colspan="2"></td>
+			<td colspan="3"></td>
 		</tr>
 	</tfoot>
 </table>

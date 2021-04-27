@@ -57,7 +57,7 @@
 						</div>
 						<div class="form-group mr-2">
 							<label for="id_clientes">Cliente:</label>
-								<?php echo generar_select($link, "clientes", "id_clientes", "alias_clientes", true);?>
+							<?php echo generar_select($link, "clientes", "id_clientes", "alias_clientes", true);?>
 						</div>
 						<button  class="btn btn-primary">
 							<i class="fa fa-search"></i> Buscar
@@ -82,6 +82,11 @@
 		
 		<?php  include('../scripts.php'); ?>
 		<?php  include('../egresos/form_egresos.php'); ?>
+		<script src="../lib/websocket-printer.js" > </script>
+		<script >
+			var printService = new WebSocketPrinter();
+		</script>
+		
 		<script src="index.js?v=<?= date("d-m-Y-H-i-s")?>"></script>
 		<script src="../egresos/egresos.js?v=<?= date("d-m-Y-H-i-s")?>"></script>
 	</body>
