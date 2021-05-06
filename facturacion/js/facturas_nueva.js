@@ -479,12 +479,12 @@ function sumarImportes(){
 	
 	importe_total = subtotal + total_traslados - total_retenciones- descuento;
 	
-	$("#total_traslados").val(truncarString(total_traslados.toString(), 2));
-	$("#total_retenciones").val(truncarString(total_retenciones.toString(), 2));
+	$("#total_traslados").val((total_traslados.toFixed(2));
+	$("#total_retenciones").val((total_retenciones.toFixed(2));
 	
-	$("#subtotal").val(truncarString(subtotal.toString(), 2));
+	$("#subtotal").val((subtotal.toFixed(2));
 	$("#descuento_total").val(descuento);
-	$("#total").val(truncarString(importe_total.toString(), 2)); 
+	$("#total").val((importe_total.toFixed(2)); 
 }
 
 

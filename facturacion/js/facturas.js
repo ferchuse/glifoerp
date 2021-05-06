@@ -31,12 +31,12 @@ function cargarTabla(filtros) {
 var filtros = $("#form_filtros").serialize();
 
 function buscarCliente(event) {
-		var value = $(this).val().toLowerCase();
-		$("#lista_facturas tr").filter(function() {
-			$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-		});
-	}
-	
+	var value = $(this).val().toLowerCase();
+	$("#lista_facturas tr").filter(function() {
+		$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	});
+}
+
 
 
 $(document).ready(function() {
@@ -191,15 +191,16 @@ function confirmarCancelacion() {
 				id_facturas: id_facturas
 			}
 			}).done(function(respuesta){
-			if(respuesta.respuesta_pac.codigo_mf_numero == 0){
-				
-				alertify.success("CFDI Cancelado correctamente"); 
-				
-			}
-			else{
-				
-				alertify.error(respuesta.respuesta_pac.codigo_mf_texto)
-			}
+			alertify.success("CFDI Cancelado correctamente"); 
+			// if(respuesta.respuesta_pac.codigo_mf_numero == 0){
+			
+			// alertify.success("CFDI Cancelado correctamente"); 
+			
+			// }
+			// else{
+			
+			// alertify.error(respuesta.respuesta_pac.codigo_mf_texto)
+			// }
 			
 			
 			cargarTabla(filtros);
