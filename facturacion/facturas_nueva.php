@@ -712,7 +712,7 @@
 		
 		
 		<?php include("scripts.php");?>
-		<script src="js/facturas_nueva.js"></script>
+		<script src="js/facturas_nueva.js?v=<?= date("Y-m-d")?>"></script>
 		
 		
 	</body>
