@@ -275,7 +275,7 @@ $(document).ready(function(){
 		var base =  Number($(this).closest(".fila_impuesto").find(".base").val());;
 		var importe_impuesto = base * tasa;
 		
-		$(this).closest(".fila_impuesto").find(".impuesto_importe").val(importe_impuesto.toFixed(6));
+		$(this).closest(".fila_impuesto").find(".impuesto_importe").val(importe_impuesto.toFixed(2));
 		
 		sumarImportes();
 	});
@@ -479,12 +479,12 @@ function sumarImportes(){
 	
 	importe_total = subtotal + total_traslados - total_retenciones- descuento;
 	
-	$("#total_traslados").val((total_traslados.toFixed(2));
-	$("#total_retenciones").val((total_retenciones.toFixed(2));
+	$("#total_traslados").val(total_traslados.toFixed(2));
+	$("#total_retenciones").val(total_retenciones.toFixed(2));
 	
-	$("#subtotal").val((subtotal.toFixed(2));
+	$("#subtotal").val(subtotal.toFixed(2));
 	$("#descuento_total").val(descuento);
-	$("#total").val((importe_total.toFixed(2)); 
+	$("#total").val(importe_total.toFixed(2)); 
 }
 
 
