@@ -264,7 +264,7 @@ $(document).ready(function(){
 		var base =  Number($(this).closest(".fila_impuesto").find(".base").val());
 		var importe_impuesto = base * tasa;
 		
-		$(this).closest(".fila_impuesto").find(".impuesto_importe").val((importe_impuesto.toFixed(2));
+		$(this).closest(".fila_impuesto").find(".impuesto_importe").val(importe_impuesto.toFixed(2));
 		
 		sumarImportes();
 	});
