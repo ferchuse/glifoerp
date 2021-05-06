@@ -264,7 +264,7 @@ $(document).ready(function(){
 		var base =  Number($(this).closest(".fila_impuesto").find(".base").val());
 		var importe_impuesto = base * tasa;
 		
-		$(this).closest(".fila_impuesto").find(".impuesto_importe").val(truncarString(importe_impuesto.toString(), 2));
+		$(this).closest(".fila_impuesto").find(".impuesto_importe").val((importe_impuesto.toFixed(2));
 		
 		sumarImportes();
 	});
@@ -442,7 +442,7 @@ function sumarImportes(){
 		var tasa = Number($tasa.val());
 		var base =  Number($base.val());
 		var importe_impuesto =  base * tasa;
-		importe_impuesto = Number(truncarString(importe_impuesto.toString(), 2));
+		// importe_impuesto = Number((importe_impuesto.toString(), 2));
 		importe_impuesto = Number(importe_impuesto.toFixed(2));
 		
 		console.log("concepto_importe", concepto_importe);
