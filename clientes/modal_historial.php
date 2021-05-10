@@ -190,7 +190,7 @@
 					
 					<td>$<?php echo number_format($saldo);?></td>
 					<td><?php echo ($transaccion["estatus"]);?></td>
-					<td class="d-print-none">
+					<td class="d-print-none d-none">
 						<button class="btn btn-danger btn_borrar_transaccion" 
 						data-id_registro="<?php echo $transaccion["id_transaccion"]?>"
 						data-tipo="<?php echo $transaccion["tipo"]?>"
