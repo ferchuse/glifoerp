@@ -12,13 +12,13 @@
 	$link = Conectarse();
 	
 	// $content = json_encode($_POST);
-	$content = file_get_contents('php://input');
+	// $content = file_get_contents('php://input');
 	
-	$decoded = json_decode($content);
+	// $decoded = json_decode($content);
 	
-	$insert = "INSERT INTO webhooks SET content = '$content' , fecha = NOW()";
+	// $insert = "INSERT INTO webhooks SET content = '$content' , fecha = NOW()";
 	
-	$result = mysqli_query($link, $insert);
+	// $result = mysqli_query($link, $insert);
 	
 	
 	// curl_setopt($ch, CURLOPT_URL, $url); //url
@@ -84,10 +84,7 @@
 		$external_reference =$payment->external_reference;
 		
 		
-		$update = "UPDATE cargos SET estatus = 'Pagado' WHERE id_cargos = '{$external_reference}'";
-		
-		$result_update = mysqli_query($link, $update);
-		
+	
 		
 		//Consulta abonos
 		
@@ -118,7 +115,9 @@
 			
 			echo "result_abono".$result_abono;
 		}
-		//Insertar Abono
+			$update = "UPDATE cargos SET estatus = 'Pagado' WHERE id_cargos = '{$external_reference}'";
+		
+		$result_update = mysqli_query($link, $update);
 		
 		
 	} 
