@@ -15,6 +15,7 @@
 	$suma_subtotal = 0 ; 
 	$suma_iva = 0 ; 
 	$suma_total = 0; 
+	$suma_saldo = 0; 
 	
 	$query ="SELECT * FROM facturas 
 	LEFT JOIN emisores USING(id_emisores) 
@@ -85,7 +86,7 @@
 		<td class="text-center">
 			<?php 
 				if($row["saldo_actual"] > 0){
-					
+					$suma_saldo += $row["saldo_actual"];
 					echo "<b><span class='text-danger' >$". number_format($row["saldo_actual"],2)."</span ></b>";
 				}
 				
@@ -165,4 +166,8 @@
 	<td class="text-center">$<?php echo number_format($suma_subtotal, 2); ?></td>
 	<td class="text-center">$<?php echo  number_format($suma_iva, 2);?></td>
 	<td class="text-center">$<?php echo  number_format($suma_total, 2);?></td>
+	
+	<td class="text-center text-danger"><b>$<?php echo number_format($suma_saldo, 2); ?><b></td>
+		<td ></td>
+			<td ></td>	<td ></td>
 </tr>
