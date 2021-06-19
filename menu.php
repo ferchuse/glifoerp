@@ -115,7 +115,7 @@
 						<i class="fas fa-chart-bar"></i> Reportes
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="../reportes/comisiones.php">Comisiones</a>
+						<a class="dropdown-item" href="../reportes/abonos.php">Abonos</a>
 						<a class="dropdown-item" href="../reportes/cuentas_por_cobrar.php">Cuentas Por Cobrar</a>
 					</div>
 				</li>
