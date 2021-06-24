@@ -39,7 +39,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12">
-					<h3 class="text-center">Reporte de Comisiones</h3>
+					<h3 class="text-center">Reporte de Ingresos</h3>
 					<hr>
 				</div>
 			</div>

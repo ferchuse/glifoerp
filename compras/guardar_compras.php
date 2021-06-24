@@ -72,6 +72,7 @@
 		unidad_productos = '$producto[unidad_productos]',
 		cantidad = '$producto[cantidad]',
 		precio = '$producto[precio]',
+		num_serie = '$producto[num_serie]',
 		descripcion = '$producto[descripcion]',
 		importe = '$producto[importe]'
 		";

@@ -105,7 +105,7 @@
 			
 			<div class="row">
 				<div class="col-md-12">
-					<div class="tab-pane">
+					<div class="tab-pane table-responsive">
 						<table id="tabla_venta" class="table table-hover table-bordered table-condensed">
 							<thead class="bg-success text-white">
 								<tr>
@@ -117,6 +117,7 @@
 									<th class="text-center">Costo Compra</th>
 									<th class="text-center">Importe</th>
 									<th class="text-center">Existencia</th>
+									<th class="text-center">#Serie</th>
 									<th class="text-center">Acciones</th>
 								</tr>
 							</thead>

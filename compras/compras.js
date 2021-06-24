@@ -242,6 +242,9 @@ function agregarProducto(producto){
 		<td class="">	
 		<input class="existencia_anterior form-control" readonly  value='${producto['existencia_productos']}'> 
 		</td>
+		<td class="">	
+		<input class="form-control num_serie"  value='${producto['num_serie']}'> 
+		</td>
 		<td class="text-center">
 		<button title="Editar Producto" data-id_producto="${producto['id_productos']}" class="btn btn-warning btn_editar">
 		<i class="fa fa-edit"></i>
@@ -305,6 +308,7 @@ function guardarVenta(event){
 				"precio": $(item).find(".precio").val(),
 				"descripcion": $(item).find(".descripcion").val(),
 				"importe": $(item).find(".importe").val(),
+				"num_serie": $(item).find(".num_serie").val(),
 				"existencia_anterior": $(item).find(".existencia_anterior").val()
 				
 			})
@@ -327,7 +331,7 @@ function guardarVenta(event){
 			}).done(function(respuesta){
 			if(respuesta.estatus_venta == "success"){
 				alertify.success('Compra Guardada');
-				window.location.href="index.php";
+				// window.location.href="index.php";
 				
 				// imprimirTicket( respuesta.id_ventas)
 				
