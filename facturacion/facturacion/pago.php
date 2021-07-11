@@ -134,7 +134,7 @@
 	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['ImpSaldoAnt']= $saldo_anterior;
 	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['ImpPagado'] = $abono;
 	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['ImpSaldoInsoluto'] = $saldo_restante;
-	$datos['pagos10']['Pagos'][0]['FechaPago']= date('Y-m-d\TH:i:s', time() - 120);
+	$datos['pagos10']['Pagos'][0]['FechaPago']= date($_POST["fecha_pago"].'\TH:i:s', time() - 120);
 	$datos['pagos10']['Pagos'][0]['FormaDePagoP']= $forma_pago;
 	$datos['pagos10']['Pagos'][0]['MonedaP']= 'MXN';
 	$datos['pagos10']['Pagos'][0]['Monto']= $abono;
@@ -212,7 +212,7 @@
 		
 		$insert_pagos = "INSERT INTO pagos SET
 		id_facturas = '{$respuesta["id_factura_nueva"]}',
-		fecha_pago = CURDATE(),
+		fecha_pago = '{$_POST["fecha_pago"]}',
 		moneda_pago = 'MXN',
 		importe_pagado = '$abono',
 		forma_pago = '$forma_pago',
