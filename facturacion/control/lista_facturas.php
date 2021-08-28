@@ -85,7 +85,7 @@
 		<td class="text-center"><?php echo number_format($total,2); ?></td>
 		<td class="text-center">
 			<?php 
-				if($row["saldo_actual"] > 0){
+				if($row["saldo_actual"] > 0 && $cancelada != '1'){
 					$suma_saldo += $row["saldo_actual"];
 					echo "<b><span class='text-danger' >$". number_format($row["saldo_actual"],2)."</span ></b>";
 				}
