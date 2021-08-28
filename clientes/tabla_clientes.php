@@ -79,7 +79,7 @@
 				$total_deuda+=$cliente["saldo"];
 			?>
 			<tr class="text-center">
-				<td><?php echo $cliente["razon_social_clientes"]; ?></td>
+				<td><?php echo $cliente["razon_social_clientes"]; ?> (<?php echo $cliente["alias_clientes"]; ?> )</td>
 				<td><?php echo $cliente["rfc_clientes"]; ?></td>
 			
 				<td>$<?php echo number_format($cliente["saldo"]); ?></td>
