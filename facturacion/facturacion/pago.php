@@ -41,7 +41,9 @@
 	
 	
 	//datos de la factura anterior
-	$consulta_factura = "SELECT * FROM facturas LEFT JOIN clientes USING(id_clientes) WHERE id_facturas = '$id_facturas'";
+	$consulta_factura = "SELECT * FROM facturas 
+	LEFT JOIN clientes USING(id_clientes)
+	WHERE id_facturas IN ($id_facturas)";
 	$respuesta["consulta_factura"] = $consulta_factura;
 	$result_factura = mysqli_query($link, $consulta_factura);
 	
@@ -49,6 +51,8 @@
 	if($result_factura){
 		
 		while($fila_factura = mysqli_fetch_assoc($result_factura)){
+			
+			$dctos_relacionados[] = $fila_factura;
 			$id_clientes = $fila_factura["id_clientes"];
 			$rfc_clientes =  $fila_factura["rfc_clientes"];
 			$razon_social_clientes =  $fila_factura["razon_social_clientes"];
@@ -127,19 +131,24 @@
 	
 	
 	// Complemento de Pagos 1.0
-	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['IdDocumento'] = $uuid_dr;
-	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['MonedaDR'] = 'MXN';
-	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['MetodoDePagoDR'] = $metodo_pago_dr;
-	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['NumParcialidad'] = '1';
-	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['ImpSaldoAnt']= $saldo_anterior;
-	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['ImpPagado'] = $abono;
-	$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][0]['ImpSaldoInsoluto'] = $saldo_restante;
-	$datos['pagos10']['Pagos'][0]['FechaPago']= date($_POST["fecha_pago"].'\TH:i:s', time() - 120);
-	$datos['pagos10']['Pagos'][0]['FormaDePagoP']= $forma_pago;
-	$datos['pagos10']['Pagos'][0]['MonedaP']= 'MXN';
-	$datos['pagos10']['Pagos'][0]['Monto']= $abono;
-	
-	
+	foreach($dctos_relacionados as $i => $dcto_relacionado){
+		
+		
+		
+		
+		$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][$i]['IdDocumento'] = $dcto_relacionado["uuid"];
+		$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][$i]['MonedaDR'] = 'MXN';
+		$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][$i]['MetodoDePagoDR'] =  $dcto_relacionado["metodo_pago"];
+		$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][$i]['NumParcialidad'] = $_POST["num_parcialidad"];
+		$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][$i]['ImpSaldoAnt']= $dcto_relacionado["saldo_actual"];
+		$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][$i]['ImpPagado'] = $dcto_relacionado["saldo_actual"];
+		$datos['pagos10']['Pagos'][0]['DoctoRelacionado'][$i]['ImpSaldoInsoluto'] = $saldo_restante;
+		$datos['pagos10']['Pagos'][0]['FechaPago']= date($_POST["fecha_pago"].'\TH:i:s', time() - 120);
+		$datos['pagos10']['Pagos'][0]['FormaDePagoP']= $forma_pago;
+		$datos['pagos10']['Pagos'][0]['MonedaP']= 'MXN';
+		$datos['pagos10']['Pagos'][0]['Monto']= $abono;
+		
+	}
 	
 	
 	
@@ -174,6 +183,9 @@
 	
 	// Se ejecuta el SDK
 	$respuesta["datos"]= $datos;
+	
+	
+	
 	$respuesta["timbrado"]= mf_genera_cfdi($datos);
 	
 	
@@ -209,64 +221,67 @@
 		$respuesta["result_factura"] = mysqli_query($link, $insert_facturas);
 		$respuesta["id_factura_nueva"] = mysqli_insert_id($link);
 		
-		
-		$insert_pagos = "INSERT INTO pagos SET
-		id_facturas = '{$respuesta["id_factura_nueva"]}',
-		fecha_pago = '{$_POST["fecha_pago"]}',
-		moneda_pago = 'MXN',
-		importe_pagado = '$abono',
-		forma_pago = '$forma_pago',
-		num_parcialidad = '{$_POST['num_parcialidad']}',
-		saldo_anterior = '$saldo_anterior',
-		saldo_restante = '$saldo_restante',
-		uuid_dr = '$uuid_dr',
-		metodo_pago_dr = '$metodo_pago_dr'
-		
-		";
-		if(mysqli_query($link, $insert_pagos)){
-			
-			$respuesta["result_pagos"] = "OK";
+		foreach($dctos_relacionados as $i => $dcto_relacionado){
 			
 			
-			//Actualiza Folios
-			if($folio_facturas != ""){
-				$folio_facturas++;
-				$update_folios = "UPDATE emisores
+			$insert_pagos = "INSERT INTO pagos SET
+			id_facturas = '{$respuesta["id_factura_nueva"]}',
+			fecha_pago = '{$_POST["fecha_pago"]}',
+			moneda_pago = 'MXN',
+			importe_pagado = '{$dcto_relacionado["saldo_actual"]}',
+			forma_pago = '$forma_pago',
+			num_parcialidad = '{$_POST['num_parcialidad']}',
+			saldo_anterior = '{$dcto_relacionado["saldo_actual"]}',
+			saldo_restante = '$saldo_restante',
+			uuid_dr = '{$dcto_relacionado["uuid"]}',
+			metodo_pago_dr = '$metodo_pago_dr'
+			
+			";
+			if(mysqli_query($link, $insert_pagos)){
 				
-				SET 
+				$respuesta["result_pagos"] = "OK";
+				
+				
+				//Actualiza Folios
+				if($folio_facturas != ""){
+					$folio_facturas++;
+					$update_folios = "UPDATE emisores
+					
+					SET 
 					folio_pago = folio_pago + 1 
-				
-				WHERE
-				id_emisores = '$id_emisores'";
-				
-				
-				$result = mysqli_query($link, $update_folios); 
-				
-				if($result){
-					$respuesta["update_folios_estatus"]  = "success";
-					$respuesta["update_folios_mensaje"]  = "Folios Actualizados";
+					
+					WHERE
+					id_emisores = '$id_emisores'";
+					
+					
+					$result = mysqli_query($link, $update_folios); 
+					
+					if($result){
+						$respuesta["update_folios_estatus"]  = "success";
+						$respuesta["update_folios_mensaje"]  = "Folios Actualizados";
+						
+					}
+					else{
+						$respuesta["update_folios_estatus"]  = "error";
+						$respuesta["update_folios_mensaje"]  = mysqli_error($link);
+						
+					}
+					$respuesta["update_folios"]  = $update_folios;
+					$respuesta["folio_facturas"]  = $folio_facturas;
 					
 				}
-				else{
-					$respuesta["update_folios_estatus"]  = "error";
-					$respuesta["update_folios_mensaje"]  = mysqli_error($link);
-					
-				}
-				$respuesta["update_folios"]  = $update_folios;
-				$respuesta["folio_facturas"]  = $folio_facturas;
+				
 				
 			}
 			
-			
-		}
-		
-		else{
-			$respuesta["result_pagos"] = mysqli_error($link);
-			
+			else{
+				$respuesta["result_pagos"] = mysqli_error($link);
+				
+			}
 		}
 		
 		//Actualiza Saldo Actual de DR
-		$update_saldo = "UPDATE facturas SET saldo_actual = $saldo_restante WHERE id_facturas = '$id_facturas'";
+		$update_saldo = "UPDATE facturas SET saldo_actual = $saldo_restante WHERE id_facturas IN ($id_facturas)";
 		
 		if(mysqli_query($link, $update_saldo)){
 			
@@ -279,7 +294,7 @@
 			
 		}
 		
-	}
+		}
 	
 	
 	

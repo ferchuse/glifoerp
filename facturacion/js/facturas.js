@@ -1,45 +1,17 @@
 
-function cargarTabla(filtros) {
-	var cargador = "<tr><td class='text-center' colspan='10'><i class='fa fa-spinner fa-spin fa-3x'></i></td></tr>";
-	$('#lista_facturas').html(cargador);
-	$.ajax({
-		url: 'control/lista_facturas.php',
-		method: 'GET',
-		data: filtros
-		}).done(function(respuesta) {
-		$('#lista_facturas').html(respuesta);
-		
-		$('.btn_cancelar').click(confirmarCancelacion);
-		
-		$('.btn_eliminar').click(confirmaEliminar);
-		$('.btn_pago').click(mostrarModalPago);
-		$("#buscar_cliente").keyup(buscarCliente);
-		
-		$('.btn_correo').click(function modal_correo() {
-			console.log("modal_correo()");
-			$("#correo").val($(this).data("correo"));
-			$("#url_xml").val($(this).data("url_xml"));
-			$("#url_pdf").val($(this).data("url_pdf"));
-			
-			$("#modal_correo").modal("show");
-			
-		});
-		
-	});
-}
-
-var filtros = $("#form_filtros").serialize();
-
-function buscarCliente(event) {
-	var value = $(this).val().toLowerCase();
-	$("#lista_facturas tr").filter(function() {
-		$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-	});
-}
-
 
 
 $(document).ready(function() {
+	
+	$('#lista_facturas').on("click", ".seleccionar",  contarSeleccionados);
+	$('#check_all').on("click",  checkAll);
+	$('#btn_pagar_varios').click(function(){
+		var id_facturas = $("#folios_seleccionados").val();
+		var saldo =  $(this).data("saldo");
+		
+		mostrarModalPago(id_facturas, saldo);
+		
+	});
 	
 	cargarTabla(filtros);
 	
@@ -125,6 +97,100 @@ $(document).ready(function() {
 		
 	});
 });
+
+
+
+function cargarTabla(filtros) {
+	var cargador = "<tr><td class='text-center' colspan='10'><i class='fa fa-spinner fa-spin fa-3x'></i></td></tr>";
+	$('#lista_facturas').html(cargador);
+	$.ajax({
+		url: 'control/lista_facturas.php',
+		method: 'GET',
+		data: filtros
+		}).done(function(respuesta) {
+		$('#lista_facturas').html(respuesta);
+		
+		$('.btn_cancelar').click(confirmarCancelacion);
+		
+		$('.btn_eliminar').click(confirmaEliminar);
+		$('.btn_pago').click(function(){
+			var id_facturas = $(this).data("id_facturas");
+			var saldo =  $(this).data("saldo_actual");
+			
+			mostrarModalPago(id_facturas, saldo);
+			
+		});
+		
+		$("#buscar_cliente").keyup(buscarCliente);
+		
+		$('.btn_correo').click(function modal_correo() {
+			console.log("modal_correo()");
+			$("#correo").val($(this).data("correo"));
+			$("#url_xml").val($(this).data("url_xml"));
+			$("#url_pdf").val($(this).data("url_pdf"));
+			
+			$("#modal_correo").modal("show");
+			
+		});
+		
+	});
+}
+
+var filtros = $("#form_filtros").serialize();
+
+function buscarCliente(event) {
+	var value = $(this).val().toLowerCase();
+	$("#lista_facturas tr").filter(function() {
+		$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+	});
+}
+
+
+
+function checkAll(){
+	console.log("checkAll");
+	if($(this).prop("checked")){
+		$(".seleccionar").prop("checked", true);
+	}
+	else{
+		
+		$(".seleccionar").prop("checked", false);
+		
+	}
+	contarSeleccionados();
+	
+}
+
+function contarSeleccionados(){
+	console.log( ("contarSeleccionados()"));
+	
+	var suma_saldo= 0;
+	var folios = $(".seleccionar:checked").map(function(){
+		
+		saldo = Number($(this).closest("tr").find(".saldo_actual").val());
+		
+		suma_saldo+= saldo;
+		
+		return $(this).val();
+	}).get().join(",");
+	
+	
+	$("#folios_seleccionados").val(folios);
+	console.log( ("folios") , folios);	
+	console.log( ("suma_saldo") , suma_saldo);	
+	
+	if($(".seleccionar:checked").length > 0 ){
+		$("#btn_pagar_varios").prop("disabled", false);
+	}
+	else{
+		$("#btn_pagar_varios").prop("disabled", true);
+	}
+	
+	$("#btn_pagar_varios").data({"saldo" : suma_saldo});
+	
+	$("#cant_seleccionados").text( suma_saldo.toLocaleString("es-MX", { style: 'currency', currency: 'MXN' }) );
+	
+}
 
 
 function confirmaEliminar() {
@@ -218,7 +284,11 @@ function confirmarCancelacion() {
 	});
 	
 }
-function mostrarModalPago(){
+
+
+function mostrarModalPago(id_facturas, saldo){
+	console.log("id_facturas, saldo", id_facturas, saldo)
+	
 	
 	getEmisor().done(function(respuesta){
 		console.log("respuesta", respuesta);
@@ -234,17 +304,15 @@ function mostrarModalPago(){
 			console.log("No hay serie de pago usar serie de facturas")
 			
 		}
-		
-		
 	})
 	
 	$("#modal_pago").modal("show");
-	$("#id_facturas").val($(this).data("id_facturas"));
-	$("#saldo_anterior").val($(this).data("saldo_actual"));
-	$("#abono").val($(this).data("saldo_actual"));
+	
+	
+	$("#id_facturas").val(id_facturas);
+	$("#saldo_anterior").val(saldo);
+	$("#abono").val(saldo);
 	$("#saldo_restante").val("0");
-	
-	
 	
 	$("#mensaje_error").addClass('hidden');	
 	$("#mensaje_timbrado").addClass('alert-success hidden');	
@@ -312,6 +380,8 @@ function guardarPago(event){
 				
 			});
 			}else{
+			
+			alert(respuesta.timbrado.codigo_mf_texto)
 			$("#mensaje_timbrado").toggleClass('alert-success alert-danger');	
 			$("#mensaje_timbrado").find(".fa").removeClass('fa-spinner fa-spin');	
 			$("#mensaje_timbrado").find(".fa").addClass('fa-times');	
@@ -319,6 +389,8 @@ function guardarPago(event){
 		}
 		}).always(function(){
 		
+		icono.toggleClass("fa-save fa-spinner fa-spin");
+		boton.prop('disabled', false);
 	});
 	
 }

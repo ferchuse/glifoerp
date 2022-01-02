@@ -65,11 +65,11 @@
 ?>
 
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-    <title>Factura</title>
-    <link rel="stylesheet" href="https://phptopdf.com/bootstrap.css">
-    <style>
+	<head>
+		<meta charset="utf-8">
+		<title>Factura</title>
+		<link rel="stylesheet" href="https://phptopdf.com/bootstrap.css">
+		<style>
 			body { 
 			font-family: DejaVu Sans, sans-serif; 
 			font-size: 11px;
@@ -111,17 +111,19 @@
 			}
 		</style>
 	</head>
-  
-  <body>
-    <div class="container-fluid">
+	
+	<body>
+		<div class="container-fluid">
 			<?php if($_POST["orden_pago"] == 1){ ?>
 				<center><h4>ORDEN DE PAGO</h4></center>
 				
 				<?php
 				}	
+				
+				// echo var_dump($pagos);
 			?>
-      <div class="row">
-        <div class="col-xs-2">
+			<div class="row">
+				<div class="col-xs-2">
 					<?php 
 						if($_POST["url_logo"] != ''){
 							echo "<img src='".$_POST["url_logo"]."' class='img-responsive'>";
@@ -151,18 +153,18 @@
 					</div>
 				</div>
 			</div>
-      <div class="row">
+			<div class="row">
 				
-        <div class="col-xs-5  ">
-          <div class="panel panel-default">
-            <div class="panel-heading">
+				<div class="col-xs-5  ">
+					<div class="panel panel-default">
+						<div class="panel-heading">
 							Receptor:
 						</div>
-            <div class="panel-body">
-              <p>
+						<div class="panel-body">
+							<p>
 								<b>Nombre: </b> <?php echo $_POST["razon_social_clientes"];?> <br>
-               	<b> RFC: </b> <?php echo $_POST["rfc_clientes"];?> <br>
-                
+								<b> RFC: </b> <?php echo $_POST["rfc_clientes"];?> <br>
+								
 								<?php if($_POST["rfc_clientes"] == 'IMS421231I45'){
 									
 									echo "<b>Dirección: </b>Avenida Paseo de la Reforma No. 476, Colonia Juárez, </br> C.P. 06600, Delegación Cuauhtémoc, Ciudad de México.  ";
@@ -176,12 +178,12 @@
 					</div>
 				</div>
 				<div class="col-xs-5 ">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              Datos de Pago:
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							Datos de Pago:
 						</div>
-            <div class="panel-body">
-              
+						<div class="panel-body">
+							
 							Tipo de Comprobante: <?php echo $_POST["tipo_comprobante"]."-".$cat_tipo_comprobante[$_POST["tipo_comprobante"]];?> <br>
 							Lugar de Expedición: <?php echo $_POST["lugar_expedicion"];?><br>
 							Forma de Pago: <?php echo $_POST["forma_pago"]."-".$cat_forma_pago[$_POST["forma_pago"]];?><br>
@@ -190,66 +192,66 @@
 					</div>
 				</div>
 			</div>
-      <!-- / Datos factura y receptor -->
+			<!-- / Datos factura y receptor -->
 			
 			
 			<div class="">
-			<table border="1" class="table">
-				<tr class="text-center">
-					<th>
-						Cantidad
-					</th>
-					<th>
-						Unidad 
-					</th>
-					<th>
-						Descripción
-					</th>
-					<th>
-						Precio
-					</th>
-					<th>
-						Importe
-					</th>
-				</tr>
-				<?php 
-					foreach($conceptos as $index => $concepto){?>
-					<tr >
-						<td class="col-xs-1 text-center">
-							<?php echo $concepto["cantidad"];?>
-						</td>
-						<td class="col-xs-1 text-center">
-							Clave: <?php echo $concepto["clave_unidad"]."<br>".$concepto["unidad"];?>
-						</td>
-						<td class="col-xs-4">
-							<?php echo $concepto["clave_productos"]."<br>".nl2br($concepto["descripcion"]);?>
-						</td>
-						<td class="col-xs-1  ">$<?php echo $concepto["precio"];?></td>
-						<td class="col-xs-1">$<?php echo $concepto["importe"];?></td>
+				<table border="1" class="table">
+					<tr class="text-center">
+						<th>
+							Cantidad
+						</th>
+						<th>
+							Unidad 
+						</th>
+						<th>
+							Descripción
+						</th>
+						<th>
+							Precio
+						</th>
+						<th>
+							Importe
+						</th>
 					</tr>
-					
 					<?php 
-						IF($index == 8){
-							
-							// echo "<div style='page-break-after: always;'></div>";
+						foreach($conceptos as $index => $concepto){?>
+						<tr >
+							<td class="col-xs-1 text-center">
+								<?php echo $concepto["cantidad"];?>
+							</td>
+							<td class="col-xs-1 text-center">
+								Clave: <?php echo $concepto["clave_unidad"]."<br>".$concepto["unidad"];?>
+							</td>
+							<td class="col-xs-4">
+								<?php echo $concepto["clave_productos"]."<br>".nl2br($concepto["descripcion"]);?>
+							</td>
+							<td class="col-xs-1  ">$<?php echo $concepto["precio"];?></td>
+							<td class="col-xs-1">$<?php echo $concepto["importe"];?></td>
+						</tr>
+						
+						<?php 
+							IF($index == 8){
+								
+								// echo "<div style='page-break-after: always;'></div>";
+							}
 						}
-					}
-				?>
-				
-				<tfoot>
+					?>
 					
-				</tfoot>
-			</table>
+					<tfoot>
+						
+					</tfoot>
+				</table>
 			</div>
 			<div class="row ">
 				
-        <div class="col-xs-5 ">
+				<div class="col-xs-5 ">
 					Observaciones: 
 					<?php echo $_POST["observaciones"]?> 
 				</div>
 				<div class="col-xs-2  text-right">
-          <p>
-            <strong>
+					<p>
+						<strong>
 							Subtotal : <br>
 							Descuento :  <br>
 							Traslados IVA: <br>
@@ -259,8 +261,8 @@
 						</strong>
 					</p>
 				</div>
-        <div class="col-xs-2 text-right">
-          <strong>
+				<div class="col-xs-2 text-right">
+					<strong>
 						$ <?php echo number_format($_POST["subtotal"],2);?> <br>
 						$ <?php echo number_format($_POST["descuento"],2);?> <br>
 						$ <?php echo number_format($_POST["total_traslados"],2);?> <br>
@@ -300,15 +302,22 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><?php echo $pagos[0]["uuid_dr"]?></td>
-							<td><?php echo $pagos[0]["fecha_pago"]?></td>
-							<td><?php echo $cat_forma_pago[$pagos[0]["forma_pago"]]?></td>
-							<td><?php echo $pagos[0]["num_parcialidad"]?></td>
-							<td><?php echo $pagos[0]["saldo_anterior"]?></td>
-							<td><?php echo $pagos[0]["importe_pagado"]?></td>
-							<td><?php echo $pagos[0]["saldo_restante"]?></td>
-						</tr>
+						<?php 
+							foreach($pagos as $i => $pago){ ?>
+							<tr>
+								<td><?php echo $pago["uuid_dr"]?></td>
+								<td><?php echo $pago["fecha_pago"]?></td>
+								<td><?php echo $cat_forma_pago[$pago["forma_pago"]]?></td>
+								<td><?php echo $pago["num_parcialidad"]?></td>
+								<td><?php echo $pago["saldo_anterior"]?></td>
+								<td><?php echo $pago["importe_pagado"]?></td>
+								<td><?php echo $pago["saldo_restante"]?></td>
+							</tr>
+							
+							<?php 
+								
+							}
+						?>
 					</tbody>
 				</table>
 				
@@ -320,13 +329,13 @@
 				<div class="lead text-center <?php echo $_POST["timbrado"] == "1" ? "hidden" : "" ?>">
 					<?php
 						if($_POST["orden_pago"] == 1){
-							echo "ORDEN DE PAGO";
-						}
-						else{
-							//echo "ORDEN DE PAGO";
-						}
-					?>
-					
+						echo "ORDEN DE PAGO";
+					}
+					else{
+					//echo "ORDEN DE PAGO";
+					}
+				?>
+				
 				</div>
 				
 				<div class="row <?php echo $_POST["timbrado"] == "0" ? "" : "" ?>">

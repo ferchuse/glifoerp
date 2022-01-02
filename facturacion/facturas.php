@@ -68,19 +68,25 @@
 				</div>
 			</form>
 			<div class="pull-right">
-				<a class="btn btn-success " href="facturas_nueva.php" >
+				<a class="btn btn-success btn-sm" href="facturas_nueva.php" >
 					<i class="fa fa-plus" ></i> Nueva Factura
 				</a>	
-				<button class="btn btn-primary exportar">
+				<button class="btn btn-primary btn-sm exportar">
 					<i class="fa fa-arrow-right" ></i> Exportar
 				</button>	
-				<button class="btn btn-info" onclick="window.print()">
+				<button class="btn btn-info btn-sm" onclick="window.print()">
 					<i class="fa fa-print" ></i> Imprimir
 				</button>	
+				<input type="hidden" id="folios_seleccionados" name="folios" form="form_pago" >
+				<button disabled id="btn_pagar_varios"   type="button"  class="btn btn-warning btn-sm">
+					<i class="fa fa-dollar"></i> Pagar <span id="cant_seleccionados"></span>
+				</button>
 			</div>
 			
 		</div>
 		<hr>
+		
+		
 		<div class="container-fluid"  > 
 			<div class="row">
 				<div class="col-sm-12" >
@@ -90,7 +96,12 @@
 								<table class="table table-bordered " id="tabla_reporte">
 									<thead> 
 										<tr>
-											<th>Folio</th>
+											<th>
+												<label>
+													Folio
+													<input type="checkbox" id="check_all">
+												</label>
+											</th>
 											<th>Fecha</th>
 											<th>Razon Social</th>
 											<th>Subtotal</th>

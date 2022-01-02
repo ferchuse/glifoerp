@@ -58,7 +58,7 @@
 						</select>
 					</div>
 					<div class="checkbox">
-						<label for="id_niveles">
+						<label >
 							<input  type="checkbox" name="modo_pruebas" id="modo_pruebas"  >
 							Modo Pruebas 
 						</label>
