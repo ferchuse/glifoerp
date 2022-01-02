@@ -77,7 +77,13 @@
 		
 	?>
 	<tr>
-		<td class="text-center"><?php echo $folio_facturas; ?></td>
+		<td class="text-center">
+			<label>
+				<input type="checkbox" class="seleccionar" value='<?php echo $row['id_facturas']?>'>
+				<?php echo $folio_facturas; ?>
+			</label>
+			
+		</td>
 		<td class="text-center"><?php echo $fecha_facturas;?></td>
 		<td class="text-center"><?php echo $razon_social_clientes;?></td>
 		<td class="text-center"><?php echo number_format($subtotal,2); ?></td>
@@ -91,6 +97,7 @@
 				}
 				
 			?>
+			<input hidden type="number" value="<?php echo $row["saldo_actual"]?>" class="saldo_actual">
 		</td>
 		<td class="text-center"><?php echo $cancelada == '1' ? $span_cancelado : $span_activo; ?></td>
 		<td class="text-center"><?php echo $timbrado == '1' ? $span_timbrado : $span_prueba; ?></td>
@@ -151,23 +158,23 @@
 						<?php	
 						}
 					}
-				?>
-			</div>
-		</td>
-	</tr>
-	<?php
-	}
-?>
-
-<tr>
-	<td ></td>
-	<td ></td>
-	<td ></td>
-	<td class="text-center">$<?php echo number_format($suma_subtotal, 2); ?></td>
-	<td class="text-center">$<?php echo  number_format($suma_iva, 2);?></td>
-	<td class="text-center">$<?php echo  number_format($suma_total, 2);?></td>
-	
-	<td class="text-center text-danger"><b>$<?php echo number_format($suma_saldo, 2); ?><b></td>
-		<td ></td>
-			<td ></td>	<td ></td>
-</tr>
+					?>
+					</div>
+				</td>
+			</tr>
+			<?php
+			}
+		?>
+		
+		<tr>
+			<td ></td>
+			<td ></td>
+			<td ></td>
+			<td class="text-center">$<?php echo number_format($suma_subtotal, 2); ?></td>
+			<td class="text-center">$<?php echo  number_format($suma_iva, 2);?></td>
+			<td class="text-center">$<?php echo  number_format($suma_total, 2);?></td>
+			
+			<td class="text-center text-danger"><b>$<?php echo number_format($suma_saldo, 2); ?><b></td>
+				<td ></td>
+				<td ></td>	<td ></td>
+			</tr>				
