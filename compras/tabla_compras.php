@@ -72,6 +72,8 @@
 									<th class="text-center"> Fecha</th>
 									<th class="text-center"> Proveedor</th>
 									<th class="text-center"> Importe Total</th>
+									<th class="text-center"> Estatus</th>
+									<th class="text-center"> Articulos</th>
 									<th class="text-center"> Acciones</th>
 								</tr>
 								
@@ -79,21 +81,36 @@
 								<?php
 									
 									
-									$consultaVentas = "SELECT * FROM compras LEFT JOIN proveedores USING(id_proveedores) WHERE date(fecha_compras) BETWEEN '$fa_inicial' AND '$fa_final' ORDER BY (fecha_compras) DESC";
+									$consultaVentas = "SELECT * , 
+									GROUP_CONCAT(compras_detalle.descripcion SEPARATOR '<br>') AS productos 
+									FROM compras 
+									LEFT JOIN compras_detalle USING(id_compras) 
+									LEFT JOIN proveedores 
+									USING(id_proveedores) 
+									WHERE date(fecha_compras) 
+									BETWEEN '$fa_inicial' AND '$fa_final' 
+									GROUP BY id_compras
+									ORDER BY (fecha_compras) DESC";
+									
 									$resultadoVentas = mysqli_query($link, $consultaVentas);
 									
 									while ($row_ventas = mysqli_fetch_assoc($resultadoVentas)) {
 										extract($row_ventas);
 										
+										$suma_compras+= $total_compras; 
+										
 										switch($estatus_compras){
 											case "CANCELADA":
 											$color = "danger";
+											
 											break;	
 											case "PENDIENTE":
 											$color = "warning";
 											break;
 											default:
 											$color = "success";
+											
+											
 											break;
 										}
 										
@@ -106,11 +123,13 @@
 												echo $nombre_proveedores;
 											?>
 										</td>
-										<td class="text-center">
+										<td class="text-right">
 											<?php
-												echo '$' . $total_compras;
+												echo '$' . number_format($total_compras);
 											?>
 										</td>
+										<td class="text-center"> <?php echo $estatus_compras ;?></td>
+										<td class="text-center"> <?php echo $productos ;?></td>
 										
 										<!-- Columna Acciones -->
 										<td class="text-center">
@@ -133,6 +152,21 @@
 									<?php
 									}
 								?>
+								
+								<tr class="bg-dark text-white">
+									<td ></td>
+									<td ></td>
+									<td ></td>
+									
+									<td class="text-right"> 
+										$ <?php echo number_format($suma_compras); ?>
+									</td>
+									
+										<td ></td>
+									<td ></td>
+									<td ></td>
+									
+								</tr>
 								
 							</table>
 						</h4>
